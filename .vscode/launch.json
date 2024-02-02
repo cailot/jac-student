@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-JaeApplication<example>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "hyung.jin.seo.jae.JaeApplication",
+            "projectName": "example",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

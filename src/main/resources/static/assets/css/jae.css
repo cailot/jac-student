@@ -1,0 +1,138 @@
+.copyright-font-color {
+	
+	color: #716aca;
+	text-decoration : none;
+	position: relative;
+	display: inline-block;
+}
+
+.jae-background-color {
+	background-color: #212529;
+}
+
+
+.menu-style {
+	padding-top: 10px; 
+	padding-left: 10px;
+	display: inline-block;
+}
+
+.nav-link {
+	display: block !important;
+	padding: 0.5rem 1.5em !important;
+}
+.navbar_logo {
+    font-size: 25px;
+	padding-left: 50px;
+    color: white;
+}
+.navbar_icon{
+	color: white;
+	font-size: 25px;
+	list-style: none;
+	display: flex;
+	padding-right: 10px;
+}
+.menu-nav{
+    color: white !important;
+    font-size: 1.3em !important;
+    text-decoration:none;
+}
+
+.menu-inactive{
+    color: grey !important;
+    font-size: 1.3em !important;
+    text-decoration:none;
+}
+    
+.menu-a:hover{
+	color: white !important;
+	text-decoration:none;
+}    
+      
+.menu-tooltip{
+	pointer-events: none;
+}	
+.menu-tooltip-inner {
+   background-color: #007bff !important;
+  	max-width: 800px;
+}
+.menu-tooltip.bs-tooltip-right .arrow:before {
+    border-right-color: #007bff !important;
+}
+.menu-tooltip.bs-tooltip-left .arrow:before {
+    border-right-color: #007bff !important;
+}
+.menu-tooltip.bs-tooltip-bottom .arrow:before {
+    border-right-color: #007bff !important;
+}
+.menu-tooltip.bs-tooltip-top .arrow:before {
+    border-right-color: #007bff !important;
+}
+
+.menu-active {
+	color: #007bff !important;
+}
+
+.label-form {
+	font-size: 13px; 
+	margin-bottom: 0.1rem;
+	color : #000000;
+}
+
+.label-form-add {
+	font-size: 13px; 
+	margin-bottom: 0.1rem;
+	color : #0000FF;
+}
+
+.label-form-white {
+	font-size: 13px; 
+	margin-bottom: 0.1rem;
+	color : #FFFFFF;
+}
+
+.admin-form-row {
+	margin-bottom: 0.5rem;
+}
+
+.hidden-column{
+    display: none !important;
+}
+
+.deactived-user{
+	color: red !important;
+}
+
+.alert-dialog-display{
+	display: flex !important; 
+	align-items: center !important;
+}
+
+td a i.fa-trash {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+}
+
+.fieldset {
+	position: relative;
+	border: 2px solid #ddd;
+	padding: 10px;
+  }
+
+
+.fieldset header {
+	position: absolute;
+	top: -5;
+	font-size: 1.7rem;
+	line-height: 1;
+	margin: -10px 0 0; /* half of font-size */
+	background: #fff;
+	padding: 0 10px;
+  } 
+
+.smaller-table-font {
+	font-size: smaller;
+}

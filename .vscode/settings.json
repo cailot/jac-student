@@ -1,0 +1,46 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "cailot.hopto.org",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "Jae",
+            "database": "jae",
+            "username": "javacoffee",
+            "password": "J@va1973M"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "local",
+            "database": "jae",
+            "username": "javacoffee",
+            "password": "J@va1973M"
+        }
+    ],
+    "liveServer.settings.port": 5501,
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.debug.settings.exceptionBreakpoint.skipClasses": [],
+    "eslint.validate": [
+        "javascript"
+    ],
+    "eslint.options": {
+        "rules": {
+            "semi": "error"
+        }
+    },
+    "typescript.validate.enable": false,
+    "javascript.validate.enable": false,
+    "javascript.format.enable": false,
+    "java.format.settings.url": ".vscode/java-formatter.xml"
+}
