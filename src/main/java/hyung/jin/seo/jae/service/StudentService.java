@@ -36,4 +36,6 @@ public interface StudentService {
 	Student activateStudent(Long id);
 	
 	void deleteStudent(Long id);
+
+	void updatePassword(Student std);
 }

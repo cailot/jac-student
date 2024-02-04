@@ -3,87 +3,22 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-	<definition name="base.definition" template="/WEB-INF/layouts/classic.jsp">
-		<put-attribute name="title" value="" />
-		<put-attribute name="menu" value="/WEB-INF/layouts/tiles/menu.jsp" />
-		<put-attribute name="body" value="" />
-	</definition>
-
-	<!--Student -->
-	<definition name="studentAdminPage" extends="base.definition">
-		<put-attribute name="title" value="Administrator Staff Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/studentAdmin.jsp" />
-	</definition>
-	<definition name="studentListPage" extends="base.definition">
-		<put-attribute name="title" value="Student List" />
-		<put-attribute name="body" value="/WEB-INF/layouts/student/studentList.jsp" />
-	</definition>
-	<definition name="studentInvoicePage" extends="base.definition">
-		<put-attribute name="title" value="Student Payment History" />
-		<put-attribute name="body" value="/WEB-INF/layouts/student/studentInvoice.jsp" />
-	</definition>
-	<definition name="studentAttendancePage" extends="base.definition">
-		<put-attribute name="title" value="Student Attendance" />
-		<put-attribute name="body" value="/WEB-INF/layouts/student/studentAttendance.jsp" />
-	</definition>
-
-	<!--Course -->
-	<definition name="courseListPage" extends="base.definition">
-		<put-attribute name="title" value="Course List" />
-		<put-attribute name="body" value="/WEB-INF/layouts/course/courseList.jsp" />
-	</definition>
-
-	<!--Class -->
-	<definition name="classListPage" extends="base.definition">
-		<put-attribute name="title" value="Class List" />
-		<put-attribute name="body" value="/WEB-INF/layouts/course/classList.jsp" />
-	</definition>
-
-	<!--Academic Cycle -->
-	<definition name="cyclePage" extends="base.definition">
-		<put-attribute name="title" value="Academic Cycle" />
-		<put-attribute name="body" value="/WEB-INF/layouts/setting/cycle.jsp" />
-	</definition>
-
-	<!--Branch -->
-	<definition name="branchPage" extends="base.definition">
-		<put-attribute name="title" value="Branch List" />
-		<put-attribute name="body" value="/WEB-INF/layouts/setting/branch.jsp" />
-	</definition>
-
-	<!--Teacher -->
-	<definition name="teacherListPage" extends="base.definition">
-		<put-attribute name="title" value="Teacher List" />
-		<put-attribute name="body" value="/WEB-INF/layouts/teacher/teacherList.jsp" />
-	</definition>
-
-	
-
 	<!-- Single Page Base -->
 	<definition name="single.definition" template="/WEB-INF/layouts/singlePage.jsp">
 		<put-attribute name="title" value="" />
 		<put-attribute name="body" value="" />
 	</definition>
 
-	<!-- Receipt from Single Base -->
-	<definition name="receiptPage" extends="single.definition">
-		<put-attribute name="title" value="James An College Receipt Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/invoice/receipt.jsp" />
+	<!-- Login Page -->
+	<definition name="loginPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Login Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/login.jsp" />
 	</definition>
 	
-	<!-- Invoice from Single Base -->
-	<definition name="invoicePage" extends="single.definition">
-		<put-attribute name="title" value="James An College Invoice Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/invoice/invoice.jsp" />
+	<!-- Online Page -->
+	<definition name="onlinePage" extends="single.definition">
+		<put-attribute name="title" value="James An College Online Course Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/onlineCourse.jsp" />
 	</definition>
-
-
-
-	<!-- Setting : Student -->
-	<definition name="settingPage" extends="single.definition">
-		<put-attribute name="title" value="Lecture" />
-		<put-attribute name="body" value="/WEB-INF/layouts/setting/adminSetting.jsp" />
-	</definition>
-
 
 </tiles-definitions>

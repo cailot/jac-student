@@ -160,6 +160,7 @@ public class StudentServiceImpl implements StudentService {
 		existing.setState(newState);
 		String newBranch = StringUtils.defaultString(newStudent.getBranch());
 		existing.setBranch(newBranch);
+		// existing.setActive(newStudent.getActive());
 		LocalDate newRegisterDate = newStudent.getRegisterDate();
 		existing.setRegisterDate(newRegisterDate);
 		String newMemo = StringUtils.defaultString(newStudent.getMemo());
@@ -188,6 +189,7 @@ public class StudentServiceImpl implements StudentService {
 			if(end.isPresent()){
 				Student std = end.get();
 				std.setEndDate(null);
+				std.setActive(JaeConstants.ACTIVE);
 				student = studentRepository.save(std);
 			}
 			return student;
@@ -198,6 +200,7 @@ public class StudentServiceImpl implements StudentService {
 	}
 	
 	@Override
+	@Transactional
 	public void deactivateStudent(Long id) {
 		try {
 			// studentRepository.deleteById(id);
@@ -205,6 +208,7 @@ public class StudentServiceImpl implements StudentService {
 			if(!end.isPresent()) return; // if not found, terminate.
 			Student std = end.get();
 			std.setEndDate(LocalDate.now());
+			std.setActive(JaeConstants.INACTIVE);
 			studentRepository.save(std);
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to discharge");
@@ -221,6 +225,20 @@ public class StudentServiceImpl implements StudentService {
 
 	}
 
-	
+	@Override
+	@Transactional
+	public void updatePassword(Student std) {
+		Long username = std.getId();
+		String password = std.getPassword();
+		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		// String encodedPassword = passwordEncoder.encode(password);
+		// int result = 0;
+		try{
+			studentRepository.updatePassword(username, password);
+		}catch(Exception e){
+			System.out.println("No student found");
+		}	
+		// return result;
+	}
 
 }
