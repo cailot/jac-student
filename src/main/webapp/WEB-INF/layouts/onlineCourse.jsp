@@ -1,3 +1,7 @@
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <script>
     var academicYear;
     var academicWeek;
@@ -152,10 +156,18 @@ function clearPassword() {
             <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Jac-eLearning Student Lecture</span>           
         </div>
-        <div class="card-body bg-primary text-right">
-            <span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(130603)">Dylan Quach</span>
-            <a href="#" class="btn btn-primary"><i class="bi bi-box-arrow-right custom-icon"></i></a>
-        </div>
+		<sec:authorize access="isAuthenticated()">
+			<div class="card-body bg-primary text-right">
+				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(130603)">Dylan Quach</span>
+				
+				<form:form action="${pageContext.request.contextPath}/logout" method="POST" id="logout">
+					<button class="btn">
+					<i class="bi bi-box-arrow-right custom-icon"></i>
+					</button>	
+				</form:form>
+
+			</div>
+		</sec:authorize>
         <!-- HTML with additional container -->
 		<div class="iframe-container">
 			<iframe id="lessonVideo" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
