@@ -19,20 +19,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.BranchDTO;
-import hyung.jin.seo.jae.dto.ClazzDTO;
-import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Branch;
-import hyung.jin.seo.jae.model.Clazz;
-import hyung.jin.seo.jae.model.Course;
-import hyung.jin.seo.jae.model.Cycle;
 import hyung.jin.seo.jae.model.State;
 import hyung.jin.seo.jae.service.CodeService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Controller
 @RequestMapping("code")
-public class JaeCodeController {
+public class CodeController {
 
 	@Autowired
 	private CodeService codeService;
@@ -50,6 +45,14 @@ public class JaeCodeController {
 	@ResponseBody
 	List<SimpleBasketDTO> listBranch() {
 		List<SimpleBasketDTO> dtos = codeService.loadBranch();
+		return dtos;
+	}
+
+	// list grade
+	@GetMapping("/grade")
+	@ResponseBody
+	List<SimpleBasketDTO> listGrade() {
+		List<SimpleBasketDTO> dtos = codeService.loadGrade();
 		return dtos;
 	}
 

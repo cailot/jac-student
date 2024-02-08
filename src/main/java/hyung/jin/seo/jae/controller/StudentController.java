@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.controller;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -111,5 +112,24 @@ public class StudentController {
 		return "studentListPage";
 	}
 
+	// list student list with state, branch, grade
+	@GetMapping("/upgrade")
+	public String gradeStudents(@RequestParam(value="listState", required=false) String state, @RequestParam(value="listBranch", required=false) String branch, @RequestParam(value="listCurrentGrade", required=false) String grade, Model model) {
+		List<StudentDTO> dtos = studentService.showGradeStudents(state, branch, grade);
+		if(dtos==null || dtos.isEmpty()){
+			model.addAttribute(JaeConstants.UPGRADE_LIST, null);
+		}else{
+			model.addAttribute(JaeConstants.UPGRADE_LIST, dtos);			
+		}
+		return "studentGradePage";
+	}
+
+	@PostMapping("/updateGrade/{listTo}")
+	public String updateGrade(@PathVariable("listTo") String listTo, @RequestBody List<Long> ids, Model model) {
+		String grade = listTo;
+		studentService.batchUpdateGrade(ids, grade);
+		return "studentGradePage";
+	}
+	
 
 }
