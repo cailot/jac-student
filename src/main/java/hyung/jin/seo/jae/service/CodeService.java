@@ -3,9 +3,11 @@ package hyung.jin.seo.jae.service;
 import java.util.List;
 
 import hyung.jin.seo.jae.dto.BranchDTO;
+import hyung.jin.seo.jae.dto.GradeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StateDTO;
 import hyung.jin.seo.jae.model.Branch;
+import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.State;
 
 public interface CodeService {
@@ -42,5 +44,23 @@ public interface CodeService {
 
 	// delete branch
 	void deleteBranch(Long id);
+
+	// list all grade
+	List<GradeDTO> allGrades();
+
+	// list for initial grade value
+	List<SimpleBasketDTO> loadGrade();
+
+	// get grade
+	Grade getGrade(Long id);
+
+	// add grade
+	Grade addGrade(Grade grade);
+
+	// update grade
+	Grade updateGrade(Grade newGrade, Long id);
+
+	// delete grade
+	void deleteGrade(Long id);
 
 }

@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import hyung.jin.seo.jae.dto.BranchDTO;
+import hyung.jin.seo.jae.dto.GradeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StateDTO;
 import hyung.jin.seo.jae.model.Branch;
+import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.State;
 import hyung.jin.seo.jae.repository.BranchRepository;
+import hyung.jin.seo.jae.repository.GradeRepository;
 import hyung.jin.seo.jae.repository.StateRepository;
 import hyung.jin.seo.jae.service.CodeService;
 
@@ -22,6 +25,9 @@ public class CodeServiceImpl implements CodeService {
 
 	@Autowired
 	private BranchRepository branchRepository;
+
+	@Autowired
+	private GradeRepository gradeRepository;
 
 	@Override
 	public List<StateDTO> allStates() {
@@ -162,6 +168,76 @@ public class CodeServiceImpl implements CodeService {
 			System.out.println("No branch found");
 		}
 		return dto;
+	}
+
+	@Override
+	public List<GradeDTO> allGrades() {
+		List<GradeDTO> dtos = new ArrayList<>();
+		try{
+			List<Grade> grades = gradeRepository.findAll();
+			for(Grade grade : grades){
+				GradeDTO dto = new GradeDTO(grade);
+				dtos.add(dto);
+			}
+		}catch(Exception e){
+			System.out.println("No state found");
+		}
+		return dtos;
+	}
+
+	@Override
+	public List<SimpleBasketDTO> loadGrade() {
+		List<Object[]> objects = new ArrayList<>();
+		try{
+			objects = gradeRepository.loadGrade();
+		}catch(Exception e){
+			System.out.println("No state found");
+		}
+		List<SimpleBasketDTO> dtos = new ArrayList<>();
+		for(Object[] object : objects){
+			SimpleBasketDTO dto = new SimpleBasketDTO(object);
+			dtos.add(dto);
+		}
+		return dtos;
+	}
+
+	@Override
+	public Grade getGrade(Long id) {
+		Grade grade = null;
+		try {
+			grade = gradeRepository.findById(id).get();
+		} catch (Exception e) {
+			System.out.println("No grade found");
+		}
+		return grade;	
+	}
+
+	@Override
+	public Grade addGrade(Grade grade) {
+		Grade gr = gradeRepository.save(grade);
+		return gr;
+	}
+
+	@Override
+	public Grade updateGrade(Grade newGrade, Long id) {
+		Grade grade = gradeRepository.findById(id).map(gr -> {
+			gr.setCode(newGrade.getCode());
+			gr.setName(newGrade.getName());
+			return gradeRepository.save(gr);
+		}).orElseGet(() -> {
+			newGrade.setId(id);
+			return gradeRepository.save(newGrade);
+		});
+		return grade;
+	}
+
+	@Override
+	public void deleteGrade(Long id) {
+		try {
+			gradeRepository.deleteById(id);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			System.out.println("Nothing to delete");
+		}
 	}
 
 }

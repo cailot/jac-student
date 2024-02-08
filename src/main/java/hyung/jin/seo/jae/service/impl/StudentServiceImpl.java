@@ -232,13 +232,33 @@ public class StudentServiceImpl implements StudentService {
 		String password = std.getPassword();
 		// BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		// String encodedPassword = passwordEncoder.encode(password);
-		// int result = 0;
 		try{
 			studentRepository.updatePassword(username, password);
 		}catch(Exception e){
 			System.out.println("No student found");
 		}	
-		// return result;
+	}
+
+	@Override
+	public List<StudentDTO> showGradeStudents(String state, String branch, String grade) {
+		String stateParam = StringUtils.equalsIgnoreCase(state, JaeConstants.ALL) ? "%" : state;
+		String branchParam = StringUtils.equalsIgnoreCase(branch, JaeConstants.ALL) ? "%" : branch;
+		String gradeParam = StringUtils.equalsAnyIgnoreCase(grade, JaeConstants.ALL) ? "%" : grade;
+		
+		List<StudentDTO> dtos = null;
+		dtos = studentRepository.listActiveStudent(stateParam, branchParam, gradeParam);
+		
+		return dtos;
+	}
+
+	@Override
+	@Transactional
+	public void batchUpdateGrade(List<Long> ids, String grade) {
+		if(ids!=null && ids.size()>0 && StringUtils.isNotBlank(grade)) {
+			for(Long id : ids) {
+				studentRepository.updateGrade(id, grade);
+			}
+		}
 	}
 
 }
