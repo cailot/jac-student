@@ -163,7 +163,7 @@ function clearPassword() {
         </div>
 		<sec:authorize access="isAuthenticated()">
 			<div class="card-body bg-primary text-right">
-				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(130603)">Dylan Quach</span>
+				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(130055)">Dylan Quach</span>
 				
 				<form:form action="${pageContext.request.contextPath}/logout" method="POST" id="logout">
 					<button class="btn">
