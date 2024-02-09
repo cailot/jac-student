@@ -6,32 +6,37 @@
     var academicYear;
     var academicWeek;
 
-    $(function() {
-            // make an AJAX call on page load
-            // to get the academic year and week
-            $.ajax({
-                url : '${pageContext.request.contextPath}/class/academy',
-                method: "GET",
-                success: function(response) {
-                // save the response into the variable
-                academicYear = response[0];
-                academicWeek = response[1];
+$(function() {
+	// make an AJAX call on page load
+	// to get the academic year and week
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/academy',
+		method: "GET",
+		success: function(response) {
+		// save the response into the variable
+		academicYear = response[0];
+		academicWeek = response[1];
 
-                // update the value of the academicYear span element
-                // document.getElementById("academicYear").innerHTML = academicYear;
-                // update the value of the academicWeek span element
-                document.getElementById("academicWeek").innerHTML = academicWeek;
-                document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
-                document.getElementById("academicMinusTwoWeek").innerHTML = academicWeek-2;             
-            },
-                error: function(jqXHR, textStatus, errorThrown) {
-                console.log('Error : ' + errorThrown);
-                }
-            });
-    });
-    // initialise state list when loading
-    listState('#editState');
+		// update the value of the academicYear span element
+		// document.getElementById("academicYear").innerHTML = academicYear;
+		// update the value of the academicWeek span element
+		document.getElementById("academicWeek").innerHTML = academicWeek;
+		document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
+		document.getElementById("academicMinusTwoWeek").innerHTML = academicWeek-2;             
+	},
+		error: function(jqXHR, textStatus, errorThrown) {
+		console.log('Error : ' + errorThrown);
+		}
+	});
+
+	// initialise state list when loading
+	listState('#editState');
     listBranch('#editBranch');
+	listGrade('#editGrade');
+});
+
+
+
 	
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +242,7 @@ function clearPassword() {
 							</div>
 							<div class="col-md-2">
 								<label for="editGrade" class="label-form">Grade</label> <select class="form-control" id="editGrade" name="editGrade" disabled>
-									<option value="p2">P2</option>
+									<!-- <option value="p2">P2</option>
 									<option value="p3">P3</option>
 									<option value="p4">P4</option>
 									<option value="p5">P5</option>
@@ -255,7 +260,7 @@ function clearPassword() {
 									<option value="srw6">SRW6</option>
 									<option value="srw8">SRW8</option>
 									<option value="jmss">JMSS</option>
-									<option value="vce">VCE</option>
+									<option value="vce">VCE</option> -->
 								</select>
 							</div>
 						</div>

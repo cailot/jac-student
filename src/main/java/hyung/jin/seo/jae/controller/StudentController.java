@@ -130,6 +130,4 @@ public class StudentController {
 		studentService.batchUpdateGrade(ids, grade);
 		return "studentGradePage";
 	}
-	
-
 }
