@@ -65,8 +65,21 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
         "SELECT cyc.id FROM Cycle cyc WHERE cyc.year = :year))")
 	List<StudentDTO> listInactiveStudent(@Param("state") String state, @Param("branch") String branch, @Param("grade") String grade, @Param("year") int year);
 
+        
+        
+        
+        
+        
+        
         @Query(value = "UPDATE Student s SET s.password = ?2 WHERE s.id = ?1 AND ACTIVE = 0", nativeQuery = true)
         void updatePassword(Long id, String password);    
+
+        @Query(value = "SELECT s.id, s.password, s.firstName, s.lastName, s.active, s.grade FROM Student s WHERE s.id =?1 AND ACTIVE = 0", nativeQuery = true)   
+	Object[] checkStudentAccount(Long id);
+
+
+
+
 
         @Query(value = "UPDATE Student s SET s.grade = ?2 WHERE s.id = ?1", nativeQuery = true)
         void updateGrade(Long id, String grade);    
