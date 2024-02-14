@@ -94,7 +94,7 @@ function clearFormData(elementId) {
 //	List state
 function listState(selectElementId) {
 	$.ajax({
-		url: '/code/state',
+		url: getContextPath() + '/code/state',
 		type: 'GET',
 		success: function (data) {
 			// Update display info
@@ -113,7 +113,7 @@ function listState(selectElementId) {
 //	List branch
 function listBranch(selectElementId) {
 	$.ajax({
-		url: '/code/branch',
+		url: getContextPath() + '/code/branch',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
@@ -130,7 +130,7 @@ function listBranch(selectElementId) {
 //	List grade
 function listGrade(selectElementId) {
 	$.ajax({
-		url: '/code/grade',
+		url: getContextPath() + '/code/grade',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
@@ -170,4 +170,11 @@ function  gradeName(value){
 		case '20': gradeText = 'VCE'; 
 	}
 	return gradeText;
+}
+
+
+// get the context path dynamically
+function getContextPath(){
+	var contextPath = window.location.pathname.split('/')[1];
+	return '/'  + contextPath;
 }

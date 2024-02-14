@@ -162,8 +162,25 @@ function clearPassword() {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Jac-eLearning Student Lecture</span>           
         </div>
 		<sec:authorize access="isAuthenticated()">
+
+			<sec:authentication var="role" property='principal.authorities'/>
+			<sec:authentication var="id" property="principal.username"/>
+			<sec:authentication var="firstName" property="principal.firstName"/>
+			<sec:authentication var="lastName" property="principal.lastName"/>
+			
+		
 			<div class="card-body bg-primary text-right">
-				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(130055)">Dylan Quach</span>
+				
+				<script>
+					var role = '${role}';
+					var numericPart = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
+					var grade = gradeName(numericPart);
+					document.write('<span class="card-text" name="studentGrade" style="color: white;">Grade: ' + grade + '</span>   ');
+       
+				</script>
+
+
+				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(${id})">${firstName} ${lastName}</span>
 				
 				<form:form action="${pageContext.request.contextPath}/logout" method="POST" id="logout">
 					<button class="btn">

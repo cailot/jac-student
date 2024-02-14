@@ -92,9 +92,6 @@ public class CourseServiceImpl implements CourseService {
 		// update name
 		String newName = course.getName();
 		existing.setName(newName);
-		// update price
-		double newPrice = course.getPrice();
-		existing.setPrice(newPrice);
 		// update online
 		boolean newOnline = course.isOnline();
 		existing.setOnline(newOnline);
@@ -107,4 +104,3 @@ public class CourseServiceImpl implements CourseService {
 		return dto;
 	}
 }
-

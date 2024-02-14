@@ -30,7 +30,7 @@ import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping("class")
-public class JaeClazzController {
+public class ClazzController {
 
 	@Autowired
 	private ClazzService clazzService;
@@ -70,7 +70,7 @@ public class JaeClazzController {
 	// get online course Id
 	@GetMapping("/id")
 	@ResponseBody
-	Long getId(@RequestParam("grade") String grade, @RequestParam("year") int year) {
+	Long getOnlineId(@RequestParam("grade") String grade, @RequestParam("year") int year) {
 		Long id = clazzService.getOnlineId(grade, year);
 		return id;
 	}
@@ -135,7 +135,7 @@ public class JaeClazzController {
 			for (CourseDTO dto : dtos) {
 				CourseDTO next = dto.clone();
 				next.setYear(year + 1);
-				next.setPrice(next.getPrice() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE);
+				// next.setPrice(next.getPrice() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE);
 				next.setDescription(next.getDescription() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX);
 				nexts.add(next);
 			}
@@ -166,8 +166,6 @@ public class JaeClazzController {
 	@ResponseBody
 	List<ClazzDTO> getClassesByGrade(@RequestParam("courseId") Long courseId, @RequestParam("year") int year,
 			@RequestParam("state") String state, @RequestParam("branch") String branch) {
-		// List<ClazzDTO> dtos = clazzService.findClazzForCourseIdNCycle(courseId,
-		// year);
 		List<ClazzDTO> dtos = clazzService.findClazzForCourseIdNCycleNStateNBranch(courseId, year, state, branch);
 		return dtos;
 	}

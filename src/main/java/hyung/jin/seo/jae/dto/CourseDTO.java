@@ -32,8 +32,6 @@ public class CourseDTO implements Serializable, Cloneable{
     
     private String grade;
 
-	private double price;
-
 	private int year;
 
 	private boolean online;
@@ -51,7 +49,6 @@ public class CourseDTO implements Serializable, Cloneable{
     	this.description = (course.getDescription()!=null) ? course.getDescription() : "";
     	this.registerDate = (course.getRegisterDate()!=null) ? course.getRegisterDate().toString() : "";
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
-		this.price = (course.getPrice()!=0) ? course.getPrice() : 0;
 		this.online = course.isOnline();
     }
     
@@ -62,17 +59,15 @@ public class CourseDTO implements Serializable, Cloneable{
     	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
     	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
-		if(price!=0) course.setPrice(this.price);
 		course.setOnline(this.online);
     	return course;
     }
 
-	public CourseDTO(long id, String name, String description, String grade, double price, boolean online){
+	public CourseDTO(long id, String name, String description, String grade, boolean online){
 		this.id = Long.toString(id);
 		this.name = name;
 		this.description = description;
 		this.grade = grade;
-		this.price = price;
 		this.online = online;		
 	}
 
