@@ -182,7 +182,7 @@ function clearPassword() {
 
 				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(${id})">${firstName} ${lastName}</span>
 				
-				<form:form action="${pageContext.request.contextPath}/logout" method="POST" id="logout">
+				<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
 					<button class="btn">
 					<i class="bi bi-box-arrow-right custom-icon"></i>
 					</button>	

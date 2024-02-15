@@ -11,7 +11,7 @@
 
 	<!-- Online Login Page -->
 	<definition name="onlineLogin" extends="single.definition">
-		<put-attribute name="title" value="James An College Login Page" />
+		<put-attribute name="title" value="James An College Online Course Login Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/online/login.jsp" />
 	</definition>
 	
@@ -19,6 +19,18 @@
 	<definition name="onlinePage" extends="single.definition">
 		<put-attribute name="title" value="James An College Online Course Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/online/onlineCourse.jsp" />
+	</definition>
+
+	<!-- Connected Login Page -->
+	<definition name="connectedLogin" extends="single.definition">
+		<put-attribute name="title" value="James An College Connected Class Login Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/login.jsp" />
+	</definition>
+	
+	<!-- Connected Class Page -->
+	<definition name="connectedPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/connectedClass.jsp" />
 	</definition>
 
 </tiles-definitions>
