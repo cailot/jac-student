@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="row h-100 justify-content-center align-items-center bg m-5">
 	<div class="card">
-		<h4 class="card-header">Login</h4>
+		<h4 class="card-header">Online Login</h4>
 		<div class="card-body">
-			<form:form  action="${pageContext.request.contextPath}/processLogin" method="POST">
+			<form:form  action="${pageContext.request.contextPath}/online/processLogin" method="POST">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="form-group">

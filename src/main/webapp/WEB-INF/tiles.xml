@@ -9,16 +9,16 @@
 		<put-attribute name="body" value="" />
 	</definition>
 
-	<!-- Login Page -->
-	<definition name="loginPage" extends="single.definition">
+	<!-- Online Login Page -->
+	<definition name="onlineLogin" extends="single.definition">
 		<put-attribute name="title" value="James An College Login Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/login.jsp" />
+		<put-attribute name="body" value="/WEB-INF/layouts/online/login.jsp" />
 	</definition>
 	
 	<!-- Online Page -->
 	<definition name="onlinePage" extends="single.definition">
 		<put-attribute name="title" value="James An College Online Course Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/onlineCourse.jsp" />
+		<put-attribute name="body" value="/WEB-INF/layouts/online/onlineCourse.jsp" />
 	</definition>
 
 </tiles-definitions>
