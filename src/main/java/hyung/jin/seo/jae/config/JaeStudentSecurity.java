@@ -37,21 +37,14 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
         http
                 .authorizeRequests(requests -> requests
-                        // .antMatchers("/dashboard").hasAnyRole(allRoles)
-                        // .antMatchers("/summary").hasAnyRole(allRoles)
-                        // .antMatchers("/detail").hasAnyRole(allRoles)
-                        // //.antMatchers("/detail").hasAnyRole(noViewerRoles)
-                        // .antMatchers("/audit").hasAnyRole(allRoles)
-                        // .antMatchers("/user").hasAnyRole(allRoles)
-                        // .antMatchers("/document").hasAnyRole(allRoles)
-                        .antMatchers("/", "static/**", "/login").permitAll())
+                       .antMatchers("/", "/online/static/**", "/online/login").permitAll())
                 .formLogin(login -> login
-                        .loginPage("/login") // login page link
-                        .loginProcessingUrl("/processLogin")
-                        .defaultSuccessUrl("/online")// redirect link after login
+                        .loginPage("/online/login") // login page link
+                        .loginProcessingUrl("/online/processLogin")
+                        .defaultSuccessUrl("/online/lesson")// redirect link after login
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login")// redirect url after logout
+                        .logoutSuccessUrl("/online/login")// redirect url after logout
                         .invalidateHttpSession(true)// make session unavailable
                         .permitAll());
 		

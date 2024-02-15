@@ -44,7 +44,7 @@ $(function() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveStudentInfo(std) {
 	$.ajax({
-		url : '${pageContext.request.contextPath}/std/get/' + std,
+		url : '${pageContext.request.contextPath}/online/get/' + std,
 		type : 'GET',
 		success : function(student) {
 			$('#editStudentModal').modal('show');
@@ -100,7 +100,7 @@ function updatePassword() {
 	}
 	// send query to controller
 	$.ajax({
-		url : '${pageContext.request.contextPath}/std/updatePassword/' + id + '/' + confirmPwd,
+		url : '${pageContext.request.contextPath}/online/updatePassword/' + id + '/' + confirmPwd,
 		type : 'PUT',
 		success : function(data) {
 			$('#success-alert .modal-body').html('<b>Password</b> is now updated');

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class JaeController {
 
 
-	@GetMapping("/login")
-	public String showLoginPage() {
-		return "loginPage";
+	@GetMapping("/online/login")
+	public String showOnlineLogin() {
+		return "onlineLogin";
 	}
 
-	@GetMapping("/online")
+	@GetMapping("/online/lesson")
 	public String populateOnlineCourse() {
 		return "onlinePage";
 	}
