@@ -159,7 +159,7 @@ function clearPassword() {
     <div class="col-lg-12">
         <div class="card-body bg-primary text-center">
             <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Jac-eLearning Student Lecture</span>           
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Connected Class</span>           
         </div>
 		<sec:authorize access="isAuthenticated()">
 
@@ -182,7 +182,7 @@ function clearPassword() {
 
 				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(${id})">${firstName} ${lastName}</span>
 				
-				<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
+				<form:form action="${pageContext.request.contextPath}/connected/logout" method="POST" id="logout">
 					<button class="btn">
 					<i class="bi bi-box-arrow-right custom-icon"></i>
 					</button>	
