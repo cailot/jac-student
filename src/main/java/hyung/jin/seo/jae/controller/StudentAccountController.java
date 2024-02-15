@@ -13,7 +13,7 @@ import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.service.StudentAccountService;
 
 @Controller
-@RequestMapping("student")
+@RequestMapping("std")
 public class StudentAccountController {
 
 	@Autowired
