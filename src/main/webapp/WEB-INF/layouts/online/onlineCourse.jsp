@@ -8,29 +8,18 @@
 <sec:authentication var="id" property="principal.username"/>
 <sec:authentication var="firstName" property="principal.firstName"/>
 <sec:authentication var="lastName" property="principal.lastName"/>
-
-
-
 	<script>
 		var role = '${role}';
 		var numericGrade = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
-		var grade = gradeName(numericGrade);
 		var studentId = '${id}';
 		var firstName = '${firstName}';
 		var lastName = '${lastName}';
 		var academicYear;
     	var academicWeek;
 	</script>
-
-
 </sec:authorize>
 
-
-
-
 <script>
-    
-
 $(function() {
 	// to get the academic year and week
 	$.ajax({
@@ -48,6 +37,9 @@ $(function() {
 			// update online url
 			getOnline(numericGrade, academicWeek, 'onlineLesson');
 			getOnline(numericGrade, academicWeek-1, 'recordAcademicMinusOneWeek');
+
+			//console.log(numericGrade + '.  ' + grade);
+
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			console.log('Error : ' + errorThrown);
@@ -60,18 +52,12 @@ $(function() {
 	listGrade('#editGrade');
 });
 
-
-
-	
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Student Info
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function retrieveStudentInfo() {
-	debugger;
-	var std = ${studentId};
 	$.ajax({
-		url : '${pageContext.request.contextPath}/online/get/' + std,
+		url : '${pageContext.request.contextPath}/online/get/' + studentId,
 		type : 'GET',
 		success : function(student) {
 			$('#editStudentModal').modal('show');
@@ -154,7 +140,7 @@ function getOnline(grade, week, elementId) {
 		type : 'GET',
 		success : function(address) {
 			var url = address;
-			console.log(grade + ' : ' + week + ' : ' + url);
+			//console.log(grade + ' : ' + week + ' : ' + url);
 			// set the data-video-urlf attribute of the specified element
 			$('#' + elementId).attr('data-video-url', url);
 		},
@@ -166,13 +152,21 @@ function getOnline(grade, week, elementId) {
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 			Display grade
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+function displayGrade() {
+	var numericPart = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
+	var grade = gradeName(numericPart);
+	return grade;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Clear password fields
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function clearPassword() {
 	$("#newPassword").val('');
 	$("#confirmPassword").val('');
 }
-
 
 </script>    
 
@@ -212,13 +206,10 @@ function clearPassword() {
 		<sec:authorize access="isAuthenticated()">
 			<div class="card-body jae-background-color text-right">
 				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
-				<span class="card-text" name="studentGrade" style="color: white;">&nbsp;&nbsp;${role}</span>
-				<!-- <script>
-					var role = '${role}';
-					var numericPart = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
-					var grade = gradeName(numericPart);
-					document.write('<span class="card-text" name="studentGrade" style="color: white;">&nbsp;&nbsp;[' + grade + '] </span>');       
-				</script> -->
+				<span class="card-text" id="studentGrade" name="studentGrade" style="color: white;"></span>
+				<script>
+					document.getElementById("studentGrade").textContent = displayGrade();       
+				</script>
 				
 				<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
 					<button class="btn">
