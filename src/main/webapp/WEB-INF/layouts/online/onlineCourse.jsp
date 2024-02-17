@@ -2,30 +2,55 @@
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<sec:authorize access="isAuthenticated()">
+
+<sec:authentication var="role" property='principal.authorities'/>
+<sec:authentication var="id" property="principal.username"/>
+<sec:authentication var="firstName" property="principal.firstName"/>
+<sec:authentication var="lastName" property="principal.lastName"/>
+
+
+
+	<script>
+		var role = '${role}';
+		var numericGrade = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
+		var grade = gradeName(numericGrade);
+		var studentId = '${id}';
+		var firstName = '${firstName}';
+		var lastName = '${lastName}';
+		var academicYear;
+    	var academicWeek;
+	</script>
+
+
+</sec:authorize>
+
+
+
+
 <script>
-    var academicYear;
-    var academicWeek;
+    
 
 $(function() {
-	// make an AJAX call on page load
 	// to get the academic year and week
 	$.ajax({
 		url : '${pageContext.request.contextPath}/class/academy',
 		method: "GET",
 		success: function(response) {
-		// save the response into the variable
-		academicYear = response[0];
-		academicWeek = response[1];
+			// save the response into the variable
+			academicYear = response[0];
+			academicWeek = response[1];
 
-		// update the value of the academicYear span element
-		// document.getElementById("academicYear").innerHTML = academicYear;
-		// update the value of the academicWeek span element
-		document.getElementById("academicWeek").innerHTML = academicWeek;
-		document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
-		document.getElementById("academicMinusTwoWeek").innerHTML = academicWeek-2;             
-	},
+			// update the value of the academicWeek span element
+			document.getElementById("academicWeek").innerHTML = academicWeek;
+			document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
+
+			// update online url
+			getOnline(numericGrade, academicWeek, 'onlineLesson');
+			getOnline(numericGrade, academicWeek-1, 'recordAcademicMinusOneWeek');
+		},
 		error: function(jqXHR, textStatus, errorThrown) {
-		console.log('Error : ' + errorThrown);
+			console.log('Error : ' + errorThrown);
 		}
 	});
 
@@ -117,6 +142,27 @@ function updatePassword() {
 	}); 
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve Online Course Url
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function getOnline(grade, week, elementId) {
+	$.ajax({
+		url : '${pageContext.request.contextPath}/class/getOnlineAddress/' + grade + '/' + week,
+		type : 'GET',
+		success : function(address) {
+			var url = address;
+			console.log(grade + ' : ' + week + ' : ' + url);
+			// set the data-video-urlf attribute of the specified element
+			$('#' + elementId).attr('data-video-url', url);
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Clear password fields
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +176,7 @@ function clearPassword() {
 
 <style>
 
-	p#onlineLesson:hover, p#recordAcademicWeek:hover, p#recordAcademicMinusOneWeek:hover, p#recordAcademicMinusTwoWeek:hover, span#studentName:hover {
+	p#onlineLesson:hover, p#recordAcademicWeek:hover, p#recordAcademicMinusOneWeek:hover, span#studentName:hover {
         cursor: pointer;
     }
 	
@@ -157,30 +203,30 @@ function clearPassword() {
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card-body bg-primary text-center">
+        <div class="card-body jae-background-color text-center">
             <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Jac-eLearning Student Lecture</span>           
         </div>
 		<sec:authorize access="isAuthenticated()">
 
-			<sec:authentication var="role" property='principal.authorities'/>
+			<!-- <sec:authentication var="role" property='principal.authorities'/>
 			<sec:authentication var="id" property="principal.username"/>
 			<sec:authentication var="firstName" property="principal.firstName"/>
-			<sec:authentication var="lastName" property="principal.lastName"/>
+			<sec:authentication var="lastName" property="principal.lastName"/> -->
 			
 		
-			<div class="card-body bg-primary text-right">
+			<div class="card-body jae-background-color text-right">
 				
-				<script>
+				
+
+				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(${studentId})">${firstName} ${lastName}</span>
+				<span class="card-text" name="studentGrade" style="color: white;">&nbsp;&nbsp;${grade}</span>
+				<!-- <script>
 					var role = '${role}';
 					var numericPart = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
 					var grade = gradeName(numericPart);
-					document.write('<span class="card-text" name="studentGrade" style="color: white;">Grade: ' + grade + '</span>   ');
-       
-				</script>
-
-
-				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(${id})">${firstName} ${lastName}</span>
+					document.write('<span class="card-text" name="studentGrade" style="color: white;">&nbsp;&nbsp;[' + grade + '] </span>');       
+				</script> -->
 				
 				<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
 					<button class="btn">
@@ -198,27 +244,18 @@ function clearPassword() {
 		<div class="card-body">
             <div class="alert alert-info" role="alert">
                 <p><strong>Week</strong> <span id="academicWeek"></span></p>
-                <p id="onlineLesson" data-video-url="https://us02web.zoom.us/rec/play/ma2pfFazOsXqFla1dreILhb5Xjffq-85oAksTr9TgxjNdPfHDRKQMz7hcxuJrbpUaE6ofpw0wQ0WCt4s.qQEHvpWXF4BWgnru?canPlayFromShare=true&from=share_recording_detail&startTime=1706506287000&componentName=rec-play&originRequestUrl=https%3A%2F%2Fus02web.zoom.us%2Frec%2Fshare%2FmnB4w4HZI80oTYn_UyQCkveSxmITcw0Xs-Myw9pN4DUx4Dv-HrOaosI4si2jeOmr.32ShDyR6f2WnTe3j%3FstartTime%3D1706506287000">
+                <p id="onlineLesson" data-video-url="">
                     <span style="margin-left: 30px;"> 
                         Online Weekly Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
                     </span>
                 </p>
-                <p id="recordAcademicWeek" data-video-url="https://us02web.zoom.us/j/81323157192">
-                    <span style="margin-left: 30px;">Recorded Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i></span>
-                </p> 
             </div>   
             <div class="alert alert-primary" role="alert">
                 <p><strong>Week</strong> <span id="academicMinusOneWeek"></span></p>
-                <p id="recordAcademicMinusOneWeek">
+                <p id="recordAcademicMinusOneWeek" data-video-url="">
                     <span style="margin-left: 30px;">Recorded Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i></span>    
                 </p>
             </div>
-            <div class="alert alert-success" role="alert">
-                <p><strong>Week</strong> <span id="academicMinusTwoWeek"></span></p>
-                <p id="recordAcademicMinusTwoWeek">
-                    <span style="margin-left: 30px;">Recorded Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i></span>
-                </p>
-            </div>    
         </div>
     </div>
 </div>
@@ -259,25 +296,6 @@ function clearPassword() {
 							</div>
 							<div class="col-md-2">
 								<label for="editGrade" class="label-form">Grade</label> <select class="form-control" id="editGrade" name="editGrade" disabled>
-									<!-- <option value="p2">P2</option>
-									<option value="p3">P3</option>
-									<option value="p4">P4</option>
-									<option value="p5">P5</option>
-									<option value="p6">P6</option>
-									<option value="s7">S7</option>
-									<option value="s8">S8</option>
-									<option value="s9">S9</option>
-									<option value="s10">S10</option>
-									<option value="s10e">S10E</option>
-									<option value="tt6">TT6</option>
-									<option value="tt8">TT8</option>
-									<option value="tt8e">TT8E</option>
-									<option value="srw4">SRW4</option>
-									<option value="srw5">SRW5</option>
-									<option value="srw6">SRW6</option>
-									<option value="srw8">SRW8</option>
-									<option value="jmss">JMSS</option>
-									<option value="vce">VCE</option> -->
 								</select>
 							</div>
 						</div>
@@ -376,7 +394,7 @@ function clearPassword() {
 		</div>
 	</div>
 </div>
-<!-- Your HTML code -->
+
 <script>
     // get the online lesson element and the video iframe element
     const onlineLesson = document.getElementById('onlineLesson');
@@ -417,25 +435,6 @@ function clearPassword() {
         $('#mediaWarning').modal('hide');
 	}
 
-
-
-
-
-
-
-// Add an event listener to the timeupdate event
-lessonVideo.addEventListener("timeupdate", function() {
-  // If the video is loaded and duration is known
-  if (!isNaN(this.duration)) {
-    // Calculate the percentage of the video that the user has watched
-    var percentComplete = (this.currentTime / this.duration) * 100;
-    // Display the percentage as a progress bar or as a number
-    // You can use CSS to style the progress bar
-    console.log("Percentage complete: " + percentComplete + "%");
-  }
-});
-
-     
 </script>
 
 <!-- Video Warning Modal -->
