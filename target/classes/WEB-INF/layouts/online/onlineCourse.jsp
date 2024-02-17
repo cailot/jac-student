@@ -67,7 +67,9 @@ $(function() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Student Info
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function retrieveStudentInfo(std) {
+function retrieveStudentInfo() {
+	debugger;
+	var std = ${studentId};
 	$.ajax({
 		url : '${pageContext.request.contextPath}/online/get/' + std,
 		type : 'GET',
@@ -176,7 +178,7 @@ function clearPassword() {
 
 <style>
 
-	p#onlineLesson:hover, p#recordAcademicWeek:hover, p#recordAcademicMinusOneWeek:hover, span#studentName:hover {
+	p#onlineLesson:hover, p#recordAcademicMinusOneWeek:hover, span#studentName:hover {
         cursor: pointer;
     }
 	
@@ -208,19 +210,9 @@ function clearPassword() {
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Jac-eLearning Student Lecture</span>           
         </div>
 		<sec:authorize access="isAuthenticated()">
-
-			<!-- <sec:authentication var="role" property='principal.authorities'/>
-			<sec:authentication var="id" property="principal.username"/>
-			<sec:authentication var="firstName" property="principal.firstName"/>
-			<sec:authentication var="lastName" property="principal.lastName"/> -->
-			
-		
 			<div class="card-body jae-background-color text-right">
-				
-				
-
-				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo(${studentId})">${firstName} ${lastName}</span>
-				<span class="card-text" name="studentGrade" style="color: white;">&nbsp;&nbsp;${grade}</span>
+				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
+				<span class="card-text" name="studentGrade" style="color: white;">&nbsp;&nbsp;${role}</span>
 				<!-- <script>
 					var role = '${role}';
 					var numericPart = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
@@ -398,7 +390,7 @@ function clearPassword() {
 <script>
     // get the online lesson element and the video iframe element
     const onlineLesson = document.getElementById('onlineLesson');
-    const recordAcademicWeek = document.getElementById('recordAcademicWeek');
+    //const recordAcademicWeek = document.getElementById('recordAcademicWeek');
     const lessonVideo = document.getElementById('lessonVideo');
 
     // function to show the media warning modal
@@ -414,12 +406,12 @@ function clearPassword() {
         showMediaWarningModal();
     });
 
-    recordAcademicWeek.addEventListener('click', () => {
-        // set the videoUrl to the hidden input field
-		document.getElementById("videoUrl").value = recordAcademicWeek.getAttribute('data-video-url');
-        // Show confirmation dialog before calling handleLessonClick
-        showMediaWarningModal();
-    });
+    // recordAcademicWeek.addEventListener('click', () => {
+    //     // set the videoUrl to the hidden input field
+	// 	document.getElementById("videoUrl").value = recordAcademicWeek.getAttribute('data-video-url');
+    //     // Show confirmation dialog before calling handleLessonClick
+    //     showMediaWarningModal();
+    // });
 
 
 	function displayMedia(){
