@@ -385,43 +385,47 @@ function clearPassword() {
     const lessonVideo = document.getElementById('lessonVideo');
 
     // function to show the media warning modal
-    function showMediaWarningModal() {
-        $('#mediaWarning').modal('show');
+    function showRealtimeWarningModal() {
+        $('#realtimeWarning').modal('show');
     }
-
+	// function to show the media warning modal
+	function showRecordWarningModal() {
+        $('#recordWarning').modal('show');
+    }
     // add event listeners to the online lesson and recordAcademicWeek elements
     onlineLesson.addEventListener('click', () => {
 		// set the videoUrl to the hidden input field
-		document.getElementById("videoUrl").value = onlineLesson.getAttribute('data-video-url');
+		document.getElementById("realtimeVideoUrl").value = onlineLesson.getAttribute('data-video-url');
         // Show confirmation dialog before calling handleLessonClick
-        showMediaWarningModal();
+        showRealtimeWarningModal();
     });
 
-    // recordAcademicWeek.addEventListener('click', () => {
-    //     // set the videoUrl to the hidden input field
-	// 	document.getElementById("videoUrl").value = recordAcademicWeek.getAttribute('data-video-url');
-    //     // Show confirmation dialog before calling handleLessonClick
-    //     showMediaWarningModal();
-    // });
+    recordAcademicMinusOneWeek.addEventListener('click', () => {
+        // set the videoUrl to the hidden input field
+		document.getElementById("recordVideoUrl").value = recordAcademicMinusOneWeek.getAttribute('data-video-url');
+        // Show confirmation dialog before calling handleLessonClick
+        showRecordWarningModal();
+    });
 
 
-	function displayMedia(){
+	function displayMedia(videoUrl){
 		// remove iframe inital background
 		lessonVideo.style.background = 'none';
 		// get the videoUrl from the hidden input field
-		const videoUrl = document.getElementById("videoUrl").value;
+		//const videoUrl = realtime ? document.getElementById("realtimeVideoUrl").value : document.getElementById("recordVideoUrl").value;
+		const videoUrl = document.getElementById(videoUrl).value; 
 		// set the video URL as the iframe's src attribute
 		lessonVideo.setAttribute('src', videoUrl);
 		// show the video by setting the iframe's display to block
 		lessonVideo.style.display = 'block';
 		// Hide the media warning modal
-        $('#mediaWarning').modal('hide');
+        $('#realtimeWarning').modal('hide');
 	}
 
 </script>
 
-<!-- Video Warning Modal -->
-<div class="modal fade" id="mediaWarning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<!-- Realtime Video Warning Modal -->
+<div class="modal fade" id="realtimeWarning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning" style="display: block;">
@@ -452,15 +456,40 @@ function clearPassword() {
                     </li>
                 </ol>
             </div>
-            <input type="hidden" id="videoUrl" name="videoUrl" value="">
+            <input type="hidden" id="realtimeVideoUrl" name="realtimeVideoUrl" value="">
             <div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="agreeMediaWarning" onclick="displayMedia()">I agree</button>
+				<button type="button" class="btn btn-primary" id="agreeMediaWarning" onclick="displayMedia('realtimeVideoUrl')">I agree</button>
             	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Record Video Warning Modal -->
+<div class="modal fade" id="recordWarning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning" style="display: block;">
+				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger">3</span></strong></span></p>
+			</div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="${pageContext.request.contextPath}/image/warning.png" style="width: 150px; height: 150px; border-radius: 5%;">
+                </div>
+                <!-- Add your warning message or content here -->
+                <p><strong>Class Time:</strong> Every Monday, 4:30 - 7:30 PM</p>
+				<p>
+					Please note that the recorded video is available only for <span class="text-danger"><strong>a week</strong></span> until the following online lesson.
+				</p>
+            </div>
+            <input type="hidden" id="recordVideoUrl" name="recordVideoUrl" value="">
+            <div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="agreeMediaWarning" onclick="displayMedia('recordVideoUrl')">I agree</button>
+            	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Success Alert -->
 <div id="success-alert" class="modal fade">
