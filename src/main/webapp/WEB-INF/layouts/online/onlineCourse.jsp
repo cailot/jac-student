@@ -381,7 +381,7 @@ function clearPassword() {
 <script>
     // get the online lesson element and the video iframe element
     const onlineLesson = document.getElementById('onlineLesson');
-    //const recordAcademicWeek = document.getElementById('recordAcademicWeek');
+    const recordLesson = document.getElementById('recordAcademicMinusOneWeek');
     const lessonVideo = document.getElementById('lessonVideo');
 
     // function to show the media warning modal
@@ -400,9 +400,9 @@ function clearPassword() {
         showRealtimeWarningModal();
     });
 
-    recordAcademicMinusOneWeek.addEventListener('click', () => {
+    recordLesson.addEventListener('click', () => {
         // set the videoUrl to the hidden input field
-		document.getElementById("recordVideoUrl").value = recordAcademicMinusOneWeek.getAttribute('data-video-url');
+		document.getElementById("recordVideoUrl").value = recordLesson.getAttribute('data-video-url');
         // Show confirmation dialog before calling handleLessonClick
         showRecordWarningModal();
     });
@@ -413,13 +413,14 @@ function clearPassword() {
 		lessonVideo.style.background = 'none';
 		// get the videoUrl from the hidden input field
 		//const videoUrl = realtime ? document.getElementById("realtimeVideoUrl").value : document.getElementById("recordVideoUrl").value;
-		const videoUrl = document.getElementById(videoUrl).value; 
+		const videoAddress = document.getElementById(videoUrl).value; 
 		// set the video URL as the iframe's src attribute
-		lessonVideo.setAttribute('src', videoUrl);
+		lessonVideo.setAttribute('src', videoAddress);
 		// show the video by setting the iframe's display to block
 		lessonVideo.style.display = 'block';
 		// Hide the media warning modal
         $('#realtimeWarning').modal('hide');
+        $('#recordWarning').modal('hide');
 	}
 
 </script>
@@ -479,7 +480,7 @@ function clearPassword() {
                 <!-- Add your warning message or content here -->
                 <p><strong>Class Time:</strong> Every Monday, 4:30 - 7:30 PM</p>
 				<p>
-					Please note that the recorded video is available only for <span class="text-danger"><strong>a week</strong></span> until the following online lesson.
+					Please note that the recorded video is available only for <span class="text-danger text-uppercase"><strong>a week</strong></span> until the following online lesson.
 				</p>
             </div>
             <input type="hidden" id="recordVideoUrl" name="recordVideoUrl" value="">
