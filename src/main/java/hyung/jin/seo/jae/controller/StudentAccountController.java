@@ -8,8 +8,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hyung.jin.seo.jae.dto.OnlineSessionDTO;
 import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.service.EnrolmentService;
+import hyung.jin.seo.jae.service.OnlineSessionService;
 import hyung.jin.seo.jae.service.StudentAccountService;
 
 @Controller
@@ -19,6 +22,12 @@ public class StudentAccountController {
 	@Autowired
 	private StudentAccountService studentAccountService;
 		
+	@Autowired
+	private EnrolmentService enrolmentService;
+
+	@Autowired
+	private OnlineSessionService onlineSessionService;
+
 	// search student by ID
 	@GetMapping("/get/{id}")
 	@ResponseBody
@@ -35,5 +44,18 @@ public class StudentAccountController {
 	public void updatePassword(@PathVariable Long id, @PathVariable String pwd) {
 		studentAccountService.updatePassword(id, pwd);
 	}
+
+	// get online course url
+	@GetMapping("/getSession/{id}/{year}/{week}")
+	@ResponseBody
+	public OnlineSessionDTO getOnlineCourse(@PathVariable("id") long id, @PathVariable("year") int year, @PathVariable("week") int week) {	
+		// 1. get clazzId via Enrolment with parameters - studentId, year, week, online
+		Long clazzId = enrolmentService.findClazzId4OnlineSession(id, year, week);
+		// 2. get OnlineSession by clazzId, week
+		OnlineSessionDTO dto = onlineSessionService.findSessionByClazzNWeek(clazzId, week);
+		// 4. return OnlineSessionDTO
+		return dto;
+	}
+
 	
 }

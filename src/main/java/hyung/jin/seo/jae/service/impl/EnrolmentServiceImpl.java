@@ -2,6 +2,7 @@ package hyung.jin.seo.jae.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -286,5 +287,18 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 			System.out.println("No student found");
 		}
 		return number;
+	}
+
+	@Override
+	public Long findClazzId4OnlineSession(long studentId, int year, int week) {
+		Optional<Long> optionalId = null;
+		Long clazzId = 0L;
+		try{
+			optionalId = enrolmentRepository.findClazzId4fOnlineSession(studentId, year, week);
+			clazzId = optionalId.orElse(0L);
+		}catch(Exception e){
+			System.out.println("No class found");
+		}
+		return clazzId;
 	}
 }
