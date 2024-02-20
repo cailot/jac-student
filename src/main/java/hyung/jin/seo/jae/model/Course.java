@@ -45,9 +45,6 @@ public class Course{
     @Column(length = 400, nullable = false)
     private String description;
 
-    @Column(columnDefinition = "DECIMAL(10,2)")
-	private double price;
-
 	@Column
 	private boolean online;
     

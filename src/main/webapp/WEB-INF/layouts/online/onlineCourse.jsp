@@ -35,10 +35,15 @@ $(function() {
 			document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
 
 			// update online url
-			getOnline(numericGrade, academicWeek, 'onlineLesson');
-			getOnline(numericGrade, academicWeek-1, 'recordAcademicMinusOneWeek');
+			getOnline(studentId, academicYear, academicWeek, 'onlineLesson');
+			getOnline(studentId, academicYear,  academicWeek-1, 'recordAcademicMinusOneWeek');
 
 			//console.log(numericGrade + '.  ' + grade);
+			// fillMicColor();
+			// Call fillMicColor after updating data-video-url
+			// $('#onlineLesson').on('data-video-url-updated', function () {
+        	// 	fillMicColor();
+    		// });
 
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
@@ -132,17 +137,23 @@ function updatePassword() {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Retrieve Online Course Url
+//		Retrieve Online Session Info
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function getOnline(grade, week, elementId) {
+function getOnline(studentId, year, week, elementId) {
 	$.ajax({
-		url : '${pageContext.request.contextPath}/class/getOnlineAddress/' + grade + '/' + week,
+		url : '${pageContext.request.contextPath}/online/getSession/' + studentId + '/' + year + '/' + week,
 		type : 'GET',
-		success : function(address) {
-			var url = address;
-			//console.log(grade + ' : ' + week + ' : ' + url);
+		success : function(data) {
+			// console.log(data);
+			var url = data.address;
 			// set the data-video-urlf attribute of the specified element
 			$('#' + elementId).attr('data-video-url', url);
+			$('#' + elementId + 'Day').text(data.day);
+			$('#' + elementId + 'Start').text(data.startTime);
+			$('#' + elementId + 'End').text(data.endTime);	
+			
+			// update mic color
+			fillMicColor();
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -150,6 +161,18 @@ function getOnline(grade, week, elementId) {
 	});
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 			Color mic icon
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+function fillMicColor() {
+	var micUrl = document.getElementById('onlineLesson').getAttribute('data-video-url');
+	var micIcon = $('#micIcon');
+	if (micUrl && micUrl.indexOf('zoom.us/rec/play/') !== -1) {
+		micIcon.removeClass('text-danger').addClass('text-secondary');
+	}else{
+		micIcon.removeClass('text-secondary').addClass('text-danger');
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display grade
@@ -201,22 +224,20 @@ function clearPassword() {
     <div class="col-lg-12">
         <div class="card-body jae-background-color text-center">
             <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light h2">Jac-eLearning Student Lecture</span>           
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light align-middle h1">Jac-eLearning Student Lecture</span>           
         </div>
 		<sec:authorize access="isAuthenticated()">
-			<div class="card-body jae-background-color text-right">
-				<span class="card-text text-warning font-weight-bold font-italic" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
-				<span class="card-text" id="studentGrade" name="studentGrade" style="color: white;"></span>
-				<script>
-					document.getElementById("studentGrade").textContent = displayGrade();       
-				</script>
-				
+			<div class="card-body jae-background-color text-right" style="display: flex; align-items: center; justify-content: space-between; padding-top: 0px;">
+				<div>
+					<span class="card-text text-warning font-weight-bold font-italic h5" style="margin-left: 25px;" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
+					<span style="color: white;">&nbsp;&nbsp;(</span>
+					<span class="card-text" id="studentGrade" name="studentGrade" style="color: white;"></span>
+					<span style="color: white;">)  </span>
+					<script>document.getElementById("studentGrade").textContent = displayGrade();</script>
+				</div>
 				<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
-					<button class="btn">
-					<i class="bi bi-box-arrow-right custom-icon"></i>
-					</button>	
+					<button class="btn" style="margin-right: 20px;"><i class="bi bi-box-arrow-right custom-icon text-warning" title="Log Out"></i></button>
 				</form:form>
-
 			</div>
 		</sec:authorize>
         <!-- HTML with additional container -->
@@ -226,13 +247,15 @@ function clearPassword() {
 		
 		<div class="card-body">
             <div class="alert alert-info" role="alert">
-                <p><strong>Week</strong> <span id="academicWeek"></span></p>
+                <p><strong>Week</strong> <span id="academicWeek"></span>&nbsp;&nbsp;
+				<i id="micIcon" name="micIcon" class="bi bi-mic-fill h5" title="Live"></i>
+				</p>
                 <p id="onlineLesson" data-video-url="">
                     <span style="margin-left: 30px;"> 
                         Online Weekly Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
                     </span>
                 </p>
-            </div>   
+            </div>
             <div class="alert alert-primary" role="alert">
                 <p><strong>Week</strong> <span id="academicMinusOneWeek"></span></p>
                 <p id="recordAcademicMinusOneWeek" data-video-url="">
@@ -423,6 +446,17 @@ function clearPassword() {
         $('#recordWarning').modal('hide');
 	}
 
+
+
+
+
+
+	
+
+
+
+
+
 </script>
 
 <!-- Realtime Video Warning Modal -->
@@ -430,14 +464,17 @@ function clearPassword() {
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning" style="display: block;">
-				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger">3</span></strong></span></p>
+				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger" id="onlineGrade" name="onlineGrade"></span></strong></span></p>
+				<script>
+					document.getElementById("onlineGrade").textContent = displayGrade();       
+				</script>
 			</div>
             <div class="modal-body">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <img src="${pageContext.request.contextPath}/image/warning.png" style="width: 150px; height: 150px; border-radius: 5%;">
                 </div>
                 <!-- Add your warning message or content here -->
-                <p ><strong>Class Time:</strong> Every Monday, 4:30 - 7:30 PM</p>
+                <p ><strong>Class Time:</strong> Every <span id="onlineLessonDay" name="onlineLessonDay"></span>, <span id="onlineLessonStart" name="onlineLessonStart"></span> - <span id="onlineLessonEnd" name="onlineLessonEnd"></span></p>
                 <ol>
                     <li>Each set should be completed prior to the 'online class'.</li>
                     <li><span class="text-danger"><strong>Do not turn on your Camera.</strong></span></li>
@@ -471,14 +508,17 @@ function clearPassword() {
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header bg-warning" style="display: block;">
-				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger">3</span></strong></span></p>
+				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger" id="recordGrade" name="recordGrade"></span></strong></span></p>
+				<script>
+					document.getElementById("recordGrade").textContent = displayGrade();       
+				</script>
 			</div>
             <div class="modal-body">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <img src="${pageContext.request.contextPath}/image/warning.png" style="width: 150px; height: 150px; border-radius: 5%;">
                 </div>
                 <!-- Add your warning message or content here -->
-                <p><strong>Class Time:</strong> Every Monday, 4:30 - 7:30 PM</p>
+                <p><strong>Class Time:</strong> Every  <span id="recordAcademicMinusOneWeekDay" name="recordAcademicMinusOneWeekDay"></span>, <span id="recordAcademicMinusOneWeekStart" name="recordAcademicMinusOneWeekStart"></span> - <span id="recordAcademicMinusOneWeekEnd" name="recordAcademicMinusOneWeekEnd"></span></p></p>
 				<p>
 					Please note that the recorded video is available only for <span class="text-danger text-uppercase"><strong>a week</strong></span> until the following online lesson.
 				</p>

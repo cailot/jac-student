@@ -69,4 +69,7 @@ public interface EnrolmentService {
 	// get student number by clazz id & week
 	Integer getStudentNumberByClazz(Long clazzId, int week);
 
+	// return clazz Id for online session search
+	Long findClazzId4OnlineSession(long studentId, int year, int week);
+
 }

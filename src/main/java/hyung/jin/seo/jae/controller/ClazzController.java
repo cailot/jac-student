@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.dto.CycleDTO;
+import hyung.jin.seo.jae.dto.OnlineSessionDTO;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.Cycle;
@@ -372,16 +373,5 @@ public class ClazzController {
 		return dtos;
 	}
 
-	// get online course url
-	@GetMapping("/getOnlineAddress/{grade}/{week}")
-	@ResponseBody
-	public String getOnlineCourse(@PathVariable("grade") int grade, @PathVariable("week") int week) {	
-		// 1. get URL from stored data by administrator
-		String info = "https://us02web.zoom.us/rec/play/ma2pfFazOsXqFla1dreILhb5Xjffq-85oAksTr9TgxjNdPfHDRKQMz7hcxuJrbpUaE6ofpw0wQ0WCt4s.qQEHvpWXF4BWgnru?canPlayFromShare=true&from=share_recording_detail&startTime=1706506287000&componentName=rec-play&originRequestUrl=https%3A%2F%2Fus02web.zoom.us%2Frec%2Fshare%2FmnB4w4HZI80oTYn_UyQCkveSxmITcw0Xs-Myw9pN4DUx4Dv-HrOaosI4si2jeOmr.32ShDyR6f2WnTe3j%3FstartTime%3D1706506287000";
-		info ="https://us02web.zoom.us/rec/share/pBvQsJ7smzy0kGHPyB8Hpp5Z1gwIsEl7EIeLDr-FvxX6CpFaC24FhU12j1Hc6wIF.t-Su391-4i26Htif?startTime=1707715876000";
-		// System.out.println(grade + " : " +  week);
-		// 3. return info
-		return info;
-	}
-
+	
 }
