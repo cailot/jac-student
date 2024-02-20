@@ -3,6 +3,7 @@ package hyung.jin.seo.jae.service.impl;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -54,7 +55,6 @@ public class ClazzServiceImpl implements ClazzService {
 		} catch (Exception e) {
 			System.out.println("No class found");
 		}
-		// clazzRepository.findClassForGradeNCycle(grade, year);
 		return dtos;
 	}
 
@@ -85,7 +85,6 @@ public class ClazzServiceImpl implements ClazzService {
 		} catch (Exception e) {
 			System.out.println("No class found");
 		}
-		// clazzRepository.findById(id).get();
 		return clazz;
 	}
 
@@ -110,6 +109,9 @@ public class ClazzServiceImpl implements ClazzService {
 		// day
 		String newDay = clazz.getDay();
 		existing.setDay(newDay);
+		// price
+		double newPrice = clazz.getPrice();
+		existing.setPrice(newPrice);
 		// active
 		boolean newActive = clazz.isActive();
 		existing.setActive(newActive);
@@ -123,7 +125,7 @@ public class ClazzServiceImpl implements ClazzService {
 	}
 
 	@Override
-	public List<ClazzDTO> listClazz(String state, String branch, String grade, String year, String active) {
+	public List<ClazzDTO> listClazz(String state, String branch, String grade, String year) {
 		List<ClazzDTO> dtos = null;
 		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
 			dtos = clazzRepository.findClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
@@ -252,6 +254,35 @@ public class ClazzServiceImpl implements ClazzService {
 			dtos = clazzRepository.findOnSiteClassForStateNBranchNGrade(state, branch, grade);
 		}
 		return dtos;
+	}
+
+	@Override
+	public List<ClazzDTO> listOnsiteClazz(String state, String branch, String grade, String year) {
+		List<ClazzDTO> dtos = null;
+		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
+			dtos = clazzRepository.findOnsiteClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
+		} else {
+			dtos = clazzRepository.findOnsiteClassForStateNBranchNGrade(state, branch, grade);
+		}
+		return dtos;
+	}
+
+	@Override
+	public List<ClazzDTO> listOnlineClazz(String state, String branch, String grade, String year) {
+		List<ClazzDTO> dtos = null;
+		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
+			dtos = clazzRepository.findOnlineClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
+		} else {
+			dtos = clazzRepository.findOnlineClassForStateNBranchNGrade(state, branch, grade);
+		}
+		return dtos;
+	}
+
+	@Override
+	public Clazz getOnlineByGradeNYear(String grade, int year) {
+		Optional<Clazz> option = clazzRepository.getClazz4OnlineSession(grade, year);
+		Clazz clazz = option.orElse(null);
+		return clazz;
 	}
 
 }

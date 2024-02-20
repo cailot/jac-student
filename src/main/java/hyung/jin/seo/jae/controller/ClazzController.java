@@ -2,6 +2,8 @@ package hyung.jin.seo.jae.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,6 @@ import hyung.jin.seo.jae.service.ClazzService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.CourseService;
 import hyung.jin.seo.jae.utils.JaeConstants;
-import io.micrometer.core.instrument.util.StringUtils;
 
 @Controller
 @RequestMapping("class")
@@ -75,19 +76,52 @@ public class ClazzController {
 		return id;
 	}
 
-	// bring all courses in database
+	// bring all classes in database
 	@GetMapping("/listClass")
 	public String listClasses(@RequestParam(value = "listState", required = false) String state,
 			@RequestParam(value = "listBranch", required = false) String branch,
 			@RequestParam(value = "listGrade", required = false) String grade,
 			@RequestParam(value = "listYear", required = false) String year,
-			@RequestParam(value = "listActive", required = false) String active, Model model) {
-		// System.out.println(state + "\t" + branch + "\t" + grade + "\t" + year + "\t" + active + "\t");
-		List<ClazzDTO> dtos = clazzService.listClazz(state, branch, grade, year, active);
+			@RequestParam(value = "listType", required = false) String type, Model model) {
+		List<ClazzDTO> dtos = new ArrayList();
+		String clazzType = StringUtils.defaultString(type);
+		if(JaeConstants.ONSITE.equalsIgnoreCase(clazzType)){
+			dtos = clazzService.listOnsiteClazz(state, branch, grade, year);
+		}else if(JaeConstants.ONLINE.equalsIgnoreCase(clazzType)){
+			dtos = clazzService.listOnlineClazz(state, branch, grade, year);
+		}else{
+			dtos = clazzService.listClazz(state, branch, grade, year);
+		}
 		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
 		return "classListPage";
 	}
 
+	// // bring onsite classes in database
+	// @GetMapping("/listOnsiteClass")
+	// public String listOnsiteClasses(@RequestParam(value = "listState", required = false) String state,
+	// 		@RequestParam(value = "listBranch", required = false) String branch,
+	// 		@RequestParam(value = "listGrade", required = false) String grade,
+	// 		@RequestParam(value = "listYear", required = false) String year,
+	// 		@RequestParam(value = "listActive", required = false) String active, Model model) {
+	// 	// System.out.println(state + "\t" + branch + "\t" + grade + "\t" + year + "\t" + active + "\t");
+	// 	List<ClazzDTO> dtos = clazzService.listOnsiteClazz(state, branch, grade, year);
+	// 	model.addAttribute(JaeConstants.CLASS_LIST, dtos);
+	// 	return "classListPage";
+	// }
+
+	// // bring online classes in database
+	// @GetMapping("/listOnlineClass")
+	// public String listOnlineClasses(@RequestParam(value = "listState", required = false) String state,
+	// 		@RequestParam(value = "listBranch", required = false) String branch,
+	// 		@RequestParam(value = "listGrade", required = false) String grade,
+	// 		@RequestParam(value = "listYear", required = false) String year,
+	// 		@RequestParam(value = "listActive", required = false) String active, Model model) {
+	// 	// System.out.println(state + "\t" + branch + "\t" + grade + "\t" + year + "\t" + active + "\t");
+	// 	List<ClazzDTO> dtos = clazzService.listOnlineClazz(state, branch, grade, year);
+	// 	model.addAttribute(JaeConstants.CLASS_LIST, dtos);
+	// 	return "classListPage";
+	// }
+	
 	// bring all classes in database
 	@GetMapping("/listCycle")
 	public String listCycle(@RequestParam(value = "listYear", required = true) String year, Model model) {
@@ -147,7 +181,7 @@ public class ClazzController {
 		return dtos;
 	}
 
-	// bring all courses based on grade
+	// bring onsite courses based on grade
 	@GetMapping("/listCoursesByGrade")
 	@ResponseBody
 	public List<CourseDTO> listCoursesByGrade(@RequestParam(value = "grade", required = true) String grade) {
@@ -337,7 +371,6 @@ public class ClazzController {
 		List<ClazzDTO> dtos = clazzService.filterOnSiteClazz(state, branch, grade, year);
 		return dtos;
 	}
-
 
 	// get online course url
 	@GetMapping("/getOnlineAddress/{grade}/{week}")

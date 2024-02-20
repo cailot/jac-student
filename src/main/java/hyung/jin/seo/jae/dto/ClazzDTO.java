@@ -25,7 +25,7 @@ public class ClazzDTO implements Serializable{
 
 	private String branch;
     
-    private String fee;
+    //private String fee;
 
 	private String name;
    
@@ -36,6 +36,8 @@ public class ClazzDTO implements Serializable{
 	private String startDate;
 
 	private boolean active;
+
+	private double price;
 
    	private String courseId;
 
@@ -48,11 +50,11 @@ public class ClazzDTO implements Serializable{
 
 	private String year; // Cycle.year
 
-	public ClazzDTO(long id, String state, String branch, double fee, String day, String name, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, boolean online, String description, int year) {
+	public ClazzDTO(long id, String state, String branch, double price, String day, String name, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, boolean online, String description, int year) {
 		this.id = Long.toString(id);
 		this.state = state;
 		this.branch = branch;
-		this.fee = Double.toString(fee);
+		this.price = price;
 		this.day = day;
 		this.name = name;
 		this.startDate = startDate.toString();
@@ -77,6 +79,7 @@ public class ClazzDTO implements Serializable{
 		this.grade = clazz.getCourse().getGrade();
 		this.description = clazz.getCourse().getDescription();
 		this.year = Integer.toString(clazz.getCycle().getYear());
+		this.price = clazz.getPrice();
 	}
 
 
@@ -89,6 +92,7 @@ public class ClazzDTO implements Serializable{
 		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
 		clazz.setActive(this.active);
+		clazz.setPrice(this.price);
     	return clazz;
     }
 
