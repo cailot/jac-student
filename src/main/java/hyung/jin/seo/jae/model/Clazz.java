@@ -46,8 +46,8 @@ public class Clazz{ // bridge table between Course & Cycle
 	@JoinColumn(name = "cycleId")
 	private Cycle cycle;
 	
-    // @Column(columnDefinition = "DECIMAL(10,2)")
-	// private double fee;
+    @Column(columnDefinition = "DECIMAL(10,2)")
+	private double price;
 
 	@CreationTimestamp
     private LocalDate registerDate;

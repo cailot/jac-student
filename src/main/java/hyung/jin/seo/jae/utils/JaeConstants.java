@@ -7,6 +7,10 @@ public interface JaeConstants {
 	String CURRENT = "Current";
 	
 	String STOPPED = "Stopped";
+
+	String ONSITE = "Onsite";
+
+	String ONLINE = "Online";
 	
 	///////////////////////////////////////////////////////////////////////
 	//
@@ -88,6 +92,8 @@ public interface JaeConstants {
 	String BRANCH_LIST = "BranchList";
 	
 	String TEACHER_LIST = "TeacherList";
+
+	String ONLINE_LIST = "OnlineList";
 	
 	String VSSE = "VSSE";
 
@@ -95,7 +101,9 @@ public interface JaeConstants {
 
 	int ACADEMIC_START_COMMING_WEEKS = 29;
 	
-	String ACADEMIC_NEXT_YEAR_COURSE_SUFFIX = " (From New Academic Year)";
+	String ACADEMIC_NEXT_YEAR_COURSE_SUFFIX = "<span class='text-success'> (Next Year)</span>";
+
+	// String ACADEMIC_NEXT_YEAR_COURSE_SUFFIX = " (Next Year)";
 
 	int ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE = 3;
 
@@ -147,6 +155,8 @@ public interface JaeConstants {
 
 	String INVOICE_INFO = "invoiceInfo";
 
+	String INVOICE_PAID_AMOUNT = "invoicePaidAmount";
+
 	String STUDENT_INFO = "studentInfo";
 
 	String CRITERIA_INFO = "criteriaInfo";
@@ -190,5 +200,13 @@ public interface JaeConstants {
 	int ACTIVE = 0;
 
 	int INACTIVE = 1;
+
+	////////////////////////////////////
+	//
+	//	Student Default Password
+	//
+	////////////////////////////////////
+
+	String DEFAULT_PASSWORD = "123";
 
 }
