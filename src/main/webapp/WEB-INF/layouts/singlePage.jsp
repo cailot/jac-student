@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/jquery-ui.theme.min.css">
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jae.js"></script>
+
 <script src="${pageContext.request.contextPath}/js/jquery-3.6.0.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/jquery-ui-1.13.2.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/bootstrap-4.3.1.min.js"></script>
