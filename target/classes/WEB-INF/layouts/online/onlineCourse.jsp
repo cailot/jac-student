@@ -67,7 +67,7 @@ function retrieveStudentInfo() {
 		success : function(student) {
 			$('#editStudentModal').modal('show');
 			// Update display info
-			 console.log(student);
+			//  console.log(student);
 			$("#editId").val(student.id);
 			$("#editFirstName").val(student.firstName);
 			$("#editLastName").val(student.lastName);

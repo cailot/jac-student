@@ -27,20 +27,57 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	public void configure(WebSecurity web) {
-		web.ignoring().antMatchers("/assets/css/**","/assets/js/**","/assets/fonts/**","/assets/images/**"); // excluding folders list
+		web.ignoring().antMatchers(
+                        "/assets/css/**",
+                        "/assets/js/**",
+                        "/assets/fonts/**",
+                        "/assets/images/**",
+                        "/js/**",
+                        "/fonts/**",
+                        "/css/**",
+                        "/image/**"
+                        ); // excluding folders list
 	}
 
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	// @Override
+	// protected void configure(HttpSecurity http) throws Exception {
 
-                http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
+        //         http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
+        //                 // disable CSRF protection
+        //         http.csrf().disable();
+        //         http
+        //                 .antMatcher("/online/**")
+        //                 .authorizeRequests(requests -> requests
+        //                 .antMatchers("/online/", "/online/login").permitAll()
+        //                 .antMatchers("/online/lesson").authenticated())
+        //                 .formLogin(login -> login
+        //                         .loginPage("/online/login") // login page link
+        //                         .loginProcessingUrl("/online/processLogin")
+        //                         .defaultSuccessUrl("/online/lesson")// redirect link after login
+        //                         .permitAll())
+        //                 .logout(logout -> logout
+        //                         .logoutUrl("/online/logout") // specify logout URL
+        //                         .logoutSuccessUrl("/online/login")// redirect url after logout
+        //                         .invalidateHttpSession(true)// make session unavailable
+        //                         .permitAll());
+		
+	// }
+
+        @Configuration
+        @Order(1)
+        public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
+
+                @Override
+                protected void configure(HttpSecurity http) throws Exception {
+                        http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
                         // disable CSRF protection
-                http.csrf().disable();
-                http
+                        http.csrf().disable();
+                        http
                         .antMatcher("/online/**")
                         .authorizeRequests(requests -> requests
-                        .antMatchers("/online/", "/online/login").permitAll()
-                        .antMatchers("/online/lesson").authenticated())
+                                .antMatchers("/online/", "/online/login").permitAll())
+                                // .antMatchers("/css/bootstrap-icons.min.css").permitAll() // Allow access to bootstrap-icons.min.css; otherwise it doesn't work, why ??
+                                // .anyRequest().authenticated())
                         .formLogin(login -> login
                                 .loginPage("/online/login") // login page link
                                 .loginProcessingUrl("/online/processLogin")
@@ -51,65 +88,38 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                                 .logoutSuccessUrl("/online/login")// redirect url after logout
                                 .invalidateHttpSession(true)// make session unavailable
                                 .permitAll());
-		
-	}
+                }
+        }
 
-        // @Configuration
-        // @Order(1)
-        // public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
+
+
+        @Configuration
+        @Order(2)
+        public static class ConnectedSecurityConfig extends WebSecurityConfigurerAdapter {
  
-        //         @Override
-        //         protected void configure(HttpSecurity http) throws Exception {
+                @Override
+                protected void configure(HttpSecurity http) throws Exception {
 
-        //                 http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
-        //                         // disable CSRF protection
-        //                 http.csrf().disable();
-        //                 http
-        //                         .antMatcher("/online/**")
-        //                         .authorizeRequests(requests -> requests
-        //                         .antMatchers("/online/", "/online/login").permitAll())
-        //                         .formLogin(login -> login
-        //                                 .loginPage("/online/login") // login page link
-        //                                 .loginProcessingUrl("/online/processLogin")
-        //                                 .defaultSuccessUrl("/online/lesson")// redirect link after login
-        //                                 .permitAll())
-        //                         .logout(logout -> logout
-        //                                 .logoutUrl("/online/logout") // specify logout URL
-        //                                 .logoutSuccessUrl("/online/login")// redirect url after logout
-        //                                 .invalidateHttpSession(true)// make session unavailable
-        //                                 .permitAll());
+                        http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
+                                // disable CSRF protection
+                        http.csrf().disable();
+                        http
+                                .antMatcher("/connected/**")
+                                .authorizeRequests(requests -> requests
+                                .antMatchers("/connected/", "/connected/login").permitAll())
+                                .formLogin(login -> login
+                                        .loginPage("/connected/login") // login page link
+                                        .loginProcessingUrl("/connected/processLogin")
+                                        .defaultSuccessUrl("/connected/lesson")// redirect link after login
+                                        .permitAll())
+                                .logout(logout -> logout
+                                        .logoutUrl("/connected/logout") // specify logout URL
+                                        .logoutSuccessUrl("/connected/login")// redirect url after logout
+                                        .invalidateHttpSession(true)// make session unavailable
+                                        .permitAll());
                         
-        //         }
-        // }
-
-        
-        // @Configuration
-        // @Order(2)
-        // public static class ConnectedSecurityConfig extends WebSecurityConfigurerAdapter {
- 
-        //         @Override
-        //         protected void configure(HttpSecurity http) throws Exception {
-
-        //                 http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
-        //                         // disable CSRF protection
-        //                 http.csrf().disable();
-        //                 http
-        //                         .antMatcher("/connected/**")
-        //                         .authorizeRequests(requests -> requests
-        //                         .antMatchers("/connected/", "/connected/login").permitAll())
-        //                         .formLogin(login -> login
-        //                                 .loginPage("/connected/login") // login page link
-        //                                 .loginProcessingUrl("/connected/processLogin")
-        //                                 .defaultSuccessUrl("/connected/lesson")// redirect link after login
-        //                                 .permitAll())
-        //                         .logout(logout -> logout
-        //                                 .logoutUrl("/connected/logout") // specify logout URL
-        //                                 .logoutSuccessUrl("/connected/login")// redirect url after logout
-        //                                 .invalidateHttpSession(true)// make session unavailable
-        //                                 .permitAll());
-                        
-        //         }
-        // }
+                }
+        }
 
         
         

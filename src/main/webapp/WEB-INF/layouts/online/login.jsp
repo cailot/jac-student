@@ -3,7 +3,7 @@
 
 <div class="row h-100 justify-content-center align-items-center bg m-5">
 	<div class="card">
-		<h4 class="card-header">Online Login</h4>
+		<h4 class="card-header">Jac-eLearning Login</h4>
 		<div class="card-body">
 			<form:form  action="${pageContext.request.contextPath}/online/processLogin" method="POST">
 				<div class="row">
