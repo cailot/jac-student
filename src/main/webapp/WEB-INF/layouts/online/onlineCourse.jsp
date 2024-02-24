@@ -32,10 +32,10 @@ $(function() {
 
 			// update the value of the academicWeek span element
 			document.getElementById("academicWeek").innerHTML = academicWeek;
-			document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
+			// document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
 
 			// update online url
-			getOnline(studentId, academicYear, academicWeek, 'onlineLesson');
+			getOnlineLive(studentId, academicYear, academicWeek);
 			// getOnline(studentId, academicYear,  academicWeek-1, 'recordAcademicMinusOneWeek');
 
 			//console.log(numericGrade + '.  ' + grade);
@@ -141,7 +141,7 @@ function updatePassword() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //		Retrieve Online Session Info
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function getOnline(studentId, year, week, elementId) {
+function getOnlineLive(studentId, year, week) {
 	$.ajax({
 		url : '${pageContext.request.contextPath}/online/getSession/' + studentId + '/' + year + '/' + week,
 		type : 'GET',
@@ -149,18 +149,15 @@ function getOnline(studentId, year, week, elementId) {
 			console.log(data);
 			var url = data.address;
 			// set the data-video-urlf attribute of the specified element
-			$('#' + elementId).attr('data-video-url', url);
-			$('#' + elementId + 'Day').text(data.day);
-			$('#' + elementId + 'Start').text(data.startTime);
-			$('#' + elementId + 'End').text(data.endTime);	
+			$('#onlineLesson').attr('data-video-url', url);
+			$('#onlineLessonDay').text(data.day);
+			$('#onlineLessonStart').text(data.startTime);
+			$('#onlineLessonEnd').text(data.endTime);	
 			// set title elements
-			$('#' + elementId + 'DayTitle').text(data.day);
-			$('#' + elementId + 'StartTitle').text(data.startTime);
-			$('#' + elementId + 'EndTitle').text(data.endTime);	
-			
-			
-
-			// checkTime
+			$('#onlineLessonDayTitle').text(data.day);
+			$('#onlineLessonStartTitle').text(data.startTime);
+			$('#onlineLessonEndTitle').text(data.endTime);	
+			// check recorded session
 			determineLiveOrRecordedLesson();
 		},
 		error : function(xhr, status, error) {
@@ -169,6 +166,29 @@ function getOnline(studentId, year, week, elementId) {
 	});
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Retrieve Recorded Session Info
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function getRecordedSession(studentId, year, week) {
+	$.ajax({
+		url : '${pageContext.request.contextPath}/online/getSession/' + studentId + '/' + year + '/' + week,
+		type : 'GET',
+		success : function(data) {
+			console.log(data);
+			var url = data.address;
+			// set the data-video-urlf attribute of the specified element
+			$('#recordAcademicMinusOneWeek').attr('data-video-url', url);
+			$('#recordAcademicMinusOneWeekDay').text(data.day);
+			$('#recordAcademicMinusOneWeekStart').text(data.startTime);
+			$('#recordAcademicMinusOneWeekEnd').text(data.endTime);	
+			// display block
+			document.getElementById("recordAcademicMinusOneWeekBlock").style.display = "block";
+		},
+		error : function(xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display grade
@@ -187,8 +207,6 @@ function clearPassword() {
 	$("#confirmPassword").val('');
 }
 
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Determine Online live/ Recorded lession
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -199,23 +217,38 @@ function determineLiveOrRecordedLesson() {
   var lessonDay = document.getElementById("onlineLessonDayTitle").textContent;
   var lessonStart = document.getElementById("onlineLessonStartTitle").textContent;
   var lessonEnd = document.getElementById("onlineLessonEndTitle").textContent;
-  console.log(lessonDay + ' : ' + lessonStart + ' : ' + lessonEnd);
+  //console.log(lessonDay + ' : ' + lessonStart + ' : ' + lessonEnd);
   // Convert the times to Date objects for comparison
   var lessonStartDate = getTimeForDayAndTime(lessonDay, lessonStart);
   var lessonEndDate = getTimeForDayAndTime(lessonDay, lessonEnd);
   // Compare the current time with the lesson times
-  console.log(now.getTime() + ':' + lessonStartDate + ' : ' + lessonEndDate);
+  //console.log(now.getTime() + ':' + lessonStartDate + ' : ' + lessonEndDate);
 
   if (now.getTime() >= lessonStartDate && now.getTime() <= lessonEndDate) {
-    // turn on mic
+    console.log("Onair");
+	// 1. turn on mic
     var micIcon = $('#micIcon');
     micIcon.removeClass('text-secondary').addClass('text-danger');
-
-    console.log("Onair");
+	// 2. disappear previous div
+	document.getElementById("recordAcademicMinusOneWeekBlock").style.display = "none";  
   } else if (now.getTime() < lessonStartDate) {
     console.log("Before Onair");
+	// 1. disable link
+	document.getElementById("onlineLesson").setAttribute('data-video-url', '');
+	// 2. enable recorded session
+	getRecordedSession(studentId, academicYear, academicWeek-1);
+	// 3. update label in recordedSessionBlock
+	document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
+	document.getElementById("recordedLessonInfo").textContent = 'Available until this ' + lessonDay + ', ' + lessonStart;
   } else {
     console.log("After onair");
+	// 1. disable link
+	document.getElementById("onlineLesson").setAttribute('data-video-url', '');
+	// 2. enable recorded session
+	getRecordedSession(studentId, academicYear, academicWeek);
+	// 3. update label in recordedSessionBlock
+	document.getElementById("academicMinusOneWeek").innerHTML = academicWeek;
+	document.getElementById("recordedLessonInfo").textContent = 'Available until next ' + lessonDay + ', ' + lessonStart;
   }
 }
 
@@ -226,29 +259,22 @@ function determineLiveOrRecordedLesson() {
 function getTimeForDayAndTime(day, time) {
   // Create an array of days to map them to corresponding indices
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
   // Get the current date
   const currentDate = new Date();
-
   // Find the index of the specified day
   const dayIndex = daysOfWeek.indexOf(day);
-
   if (dayIndex === -1) {
     console.error("Invalid day provided");
     return null;
   }
-
   // Calculate the difference between the current day and the specified day
   var dayOnMondayBase = currentDate.getDay();
   dayOnMondayBase = (dayOnMondayBase===0) ? 6 : dayOnMondayBase-1;
   let dayDifference = dayIndex - dayOnMondayBase;
-
   currentDate.setDate(currentDate.getDate() + dayDifference);
-
   // Parse the time string and set the hours and minutes
   const [hours, minutes] = time.split(':');
   currentDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
-
   // Return the getTime() value
   return currentDate.getTime();
 }
@@ -313,9 +339,9 @@ function getTimeForDayAndTime(day, time) {
 					&nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
 				</p>
             </div>
-            <div class="alert alert-primary" role="alert">
+            <div id="recordAcademicMinusOneWeekBlock"class="alert alert-primary" role="alert">
                 <p id="recordAcademicMinusOneWeek" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
-                    Recorded Lesson &nbsp;(<strong>Set</strong> <span id="academicMinusOneWeek"></span> available until ...day)
+                    Recorded Lesson &nbsp;<strong>Set</strong> <span id="academicMinusOneWeek"></span>&nbsp;(<span id="recordedLessonInfo"></span>)
 					<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>    
                 </p>
             </div>
