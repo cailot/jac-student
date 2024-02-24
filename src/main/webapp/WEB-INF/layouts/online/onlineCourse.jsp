@@ -36,7 +36,7 @@ $(function() {
 
 			// update online url
 			getOnline(studentId, academicYear, academicWeek, 'onlineLesson');
-			getOnline(studentId, academicYear,  academicWeek-1, 'recordAcademicMinusOneWeek');
+			// getOnline(studentId, academicYear,  academicWeek-1, 'recordAcademicMinusOneWeek');
 
 			//console.log(numericGrade + '.  ' + grade);
 			// fillMicColor();
@@ -55,6 +55,8 @@ $(function() {
 	listState('#editState');
     listBranch('#editBranch');
 	listGrade('#editGrade');
+
+	
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,16 +146,22 @@ function getOnline(studentId, year, week, elementId) {
 		url : '${pageContext.request.contextPath}/online/getSession/' + studentId + '/' + year + '/' + week,
 		type : 'GET',
 		success : function(data) {
-			// console.log(data);
+			console.log(data);
 			var url = data.address;
 			// set the data-video-urlf attribute of the specified element
 			$('#' + elementId).attr('data-video-url', url);
 			$('#' + elementId + 'Day').text(data.day);
 			$('#' + elementId + 'Start').text(data.startTime);
 			$('#' + elementId + 'End').text(data.endTime);	
+			// set title elements
+			$('#' + elementId + 'DayTitle').text(data.day);
+			$('#' + elementId + 'StartTitle').text(data.startTime);
+			$('#' + elementId + 'EndTitle').text(data.endTime);	
 			
-			// update mic color
-			fillMicColor();
+			
+
+			// checkTime
+			determineLiveOrRecordedLesson();
 		},
 		error : function(xhr, status, error) {
 			console.log('Error : ' + error);
@@ -161,18 +169,6 @@ function getOnline(studentId, year, week, elementId) {
 	});
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 			Color mic icon
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-function fillMicColor() {
-	var micUrl = document.getElementById('onlineLesson').getAttribute('data-video-url');
-	var micIcon = $('#micIcon');
-	if (micUrl && micUrl.indexOf('zoom.us/rec/play/') !== -1) {
-		micIcon.removeClass('text-danger').addClass('text-secondary');
-	}else{
-		micIcon.removeClass('text-secondary').addClass('text-danger');
-	}
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display grade
@@ -189,6 +185,72 @@ function displayGrade() {
 function clearPassword() {
 	$("#newPassword").val('');
 	$("#confirmPassword").val('');
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 			Determine Online live/ Recorded lession
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+function determineLiveOrRecordedLesson() {
+  // Get the current date and time
+  var now = new Date();
+  // Get the time from the elements
+  var lessonDay = document.getElementById("onlineLessonDayTitle").textContent;
+  var lessonStart = document.getElementById("onlineLessonStartTitle").textContent;
+  var lessonEnd = document.getElementById("onlineLessonEndTitle").textContent;
+  console.log(lessonDay + ' : ' + lessonStart + ' : ' + lessonEnd);
+  // Convert the times to Date objects for comparison
+  var lessonStartDate = getTimeForDayAndTime(lessonDay, lessonStart);
+  var lessonEndDate = getTimeForDayAndTime(lessonDay, lessonEnd);
+  // Compare the current time with the lesson times
+  console.log(now.getTime() + ':' + lessonStartDate + ' : ' + lessonEndDate);
+
+  if (now.getTime() >= lessonStartDate && now.getTime() <= lessonEndDate) {
+    // turn on mic
+    var micIcon = $('#micIcon');
+    micIcon.removeClass('text-secondary').addClass('text-danger');
+
+    console.log("Onair");
+  } else if (now.getTime() < lessonStartDate) {
+    console.log("Before Onair");
+  } else {
+    console.log("After onair");
+  }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 			Get time for live onair comparison
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+function getTimeForDayAndTime(day, time) {
+  // Create an array of days to map them to corresponding indices
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+  // Get the current date
+  const currentDate = new Date();
+
+  // Find the index of the specified day
+  const dayIndex = daysOfWeek.indexOf(day);
+
+  if (dayIndex === -1) {
+    console.error("Invalid day provided");
+    return null;
+  }
+
+  // Calculate the difference between the current day and the specified day
+  var dayOnMondayBase = currentDate.getDay();
+  dayOnMondayBase = (dayOnMondayBase===0) ? 6 : dayOnMondayBase-1;
+  let dayDifference = dayIndex - dayOnMondayBase;
+
+  currentDate.setDate(currentDate.getDate() + dayDifference);
+
+  // Parse the time string and set the hours and minutes
+  const [hours, minutes] = time.split(':');
+  currentDate.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0);
+
+  // Return the getTime() value
+  return currentDate.getTime();
 }
 
 </script>    
@@ -218,8 +280,6 @@ function clearPassword() {
 	}
 
 </style>
-
-
 <div class="row">
     <div class="col-lg-12">
         <div class="card-body jae-background-color text-center">
@@ -242,24 +302,21 @@ function clearPassword() {
 		</sec:authorize>
         <!-- HTML with additional container -->
 		<div class="iframe-container">
-			<iframe id="lessonVideo" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+			<iframe id="lessonVideo" src="" allow="autoplay; encrypted-media" allowfullscree]></iframe>
 		</div>
 		
 		<div class="card-body">
             <div class="alert alert-info" role="alert">
-                <p><strong>Week</strong> <span id="academicWeek"></span>&nbsp;&nbsp;
-				<i id="micIcon" name="micIcon" class="bi bi-mic-fill h5" title="Live"></i>
+				<p id="onlineLesson" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
+					Online Live Weekly Lesson <strong>Set</strong> <span id="academicWeek"></span>
+					(<span id="onlineLessonDayTitle" name="onlineLessonDayTitle"></span>, <span id="onlineLessonStartTitle" name="onlineLessonStartTitle"></span> - <span id="onlineLessonEndTitle" name="onlineLessonEndTitle"></span>&nbsp;&nbsp;<i id="micIcon" name="micIcon" class="bi bi-mic-fill text-secondary h5" title="Live"></i>)
+					&nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
 				</p>
-                <p id="onlineLesson" data-video-url="">
-                    <span style="margin-left: 30px;"> 
-                        Online Weekly Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
-                    </span>
-                </p>
             </div>
             <div class="alert alert-primary" role="alert">
-                <p><strong>Week</strong> <span id="academicMinusOneWeek"></span></p>
-                <p id="recordAcademicMinusOneWeek" data-video-url="">
-                    <span style="margin-left: 30px;">Recorded Lesson &nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i></span>    
+                <p id="recordAcademicMinusOneWeek" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
+                    Recorded Lesson &nbsp;(<strong>Set</strong> <span id="academicMinusOneWeek"></span> available until ...day)
+					<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>    
                 </p>
             </div>
         </div>
