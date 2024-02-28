@@ -29,34 +29,19 @@ $(function() {
 			// save the response into the variable
 			academicYear = response[0];
 			academicWeek = response[1];
-
 			// update the value of the academicWeek span element
 			document.getElementById("academicWeek").innerHTML = academicWeek;
-			// document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
-
 			// update online url
 			getOnlineLive(studentId, academicYear, academicWeek);
-			// getOnline(studentId, academicYear,  academicWeek-1, 'recordAcademicMinusOneWeek');
-
-			//console.log(numericGrade + '.  ' + grade);
-			// fillMicColor();
-			// Call fillMicColor after updating data-video-url
-			// $('#onlineLesson').on('data-video-url-updated', function () {
-        	// 	fillMicColor();
-    		// });
-
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			console.log('Error : ' + errorThrown);
 		}
 	});
-
 	// initialise state list when loading
 	listState('#editState');
     listBranch('#editBranch');
 	listGrade('#editGrade');
-
-	
 });
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
