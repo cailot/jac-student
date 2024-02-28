@@ -39,30 +39,7 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                         ); // excluding folders list
 	}
 
-	// @Override
-	// protected void configure(HttpSecurity http) throws Exception {
-
-        //         http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
-        //                 // disable CSRF protection
-        //         http.csrf().disable();
-        //         http
-        //                 .antMatcher("/online/**")
-        //                 .authorizeRequests(requests -> requests
-        //                 .antMatchers("/online/", "/online/login").permitAll()
-        //                 .antMatchers("/online/lesson").authenticated())
-        //                 .formLogin(login -> login
-        //                         .loginPage("/online/login") // login page link
-        //                         .loginProcessingUrl("/online/processLogin")
-        //                         .defaultSuccessUrl("/online/lesson")// redirect link after login
-        //                         .permitAll())
-        //                 .logout(logout -> logout
-        //                         .logoutUrl("/online/logout") // specify logout URL
-        //                         .logoutSuccessUrl("/online/login")// redirect url after logout
-        //                         .invalidateHttpSession(true)// make session unavailable
-        //                         .permitAll());
-		
-	// }
-
+        /* 
         @Configuration
         @Order(1)
         public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -91,7 +68,35 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                 }
         }
 
+*/
 
+
+        @Configuration
+        @Order(1)
+        public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
+
+                @Override
+                protected void configure(HttpSecurity http) throws Exception {
+                        http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
+                        // disable CSRF protection
+                        http.csrf().disable();
+                        http
+                                .antMatcher("/online/**")
+                                .authorizeRequests(requests -> requests
+                                .antMatchers("/online/lesson").authenticated() // Secure /online/lesson
+                                .antMatchers("/online/login").permitAll())
+                                .formLogin(login -> login
+                                        .loginPage("/online/login") // login page link
+                                        .loginProcessingUrl("/online/processLogin")
+                                        .defaultSuccessUrl("/online/lesson") // redirect link after login
+                                        .permitAll())
+                                .logout(logout -> logout
+                                        .logoutUrl("/online/logout") // specify logout URL
+                                        .logoutSuccessUrl("/online/login") // redirect url after logout
+                                        .invalidateHttpSession(true) // make session unavailable
+                                        .permitAll());
+                }
+        }
 
         @Configuration
         @Order(2)
@@ -106,7 +111,9 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                         http
                                 .antMatcher("/connected/**")
                                 .authorizeRequests(requests -> requests
-                                .antMatchers("/connected/", "/connected/login").permitAll())
+                                // .antMatchers("/connected/", "/connected/login").permitAll())
+                                .antMatchers("/connected/lesson").authenticated() // Secure /online/lesson
+                                .antMatchers("/connected/login").permitAll())
                                 .formLogin(login -> login
                                         .loginPage("/connected/login") // login page link
                                         .loginProcessingUrl("/connected/processLogin")

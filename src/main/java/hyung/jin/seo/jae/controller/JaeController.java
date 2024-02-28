@@ -46,4 +46,9 @@ public class JaeController {
 	public String populateConnectedClass() {
 		return "connectedPage";
 	}
+
+	@GetMapping("/connected/engHomework")
+	public String dispayEngHomework() {
+		return "engHomeworkPage";
+	}
 }

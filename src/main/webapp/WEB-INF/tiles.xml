@@ -8,15 +8,18 @@
 		<put-attribute name="title" value="" />
 		<put-attribute name="body" value="" />
 	</definition>
-
-
+	<!-- Tile Page Base -->
+	<definition name="tile.definition" template="/WEB-INF/layouts/tilePage.jsp">
+		<put-attribute name="title" value="" />
+		<put-attribute name="menu" value="/WEB-INF/layouts/tiles/menu.jsp" />
+		<put-attribute name="body" value="" />
+	</definition>
 
 	<!-- Online Login Page -->
 	<definition name="onlineLogin" extends="single.definition">
 		<put-attribute name="title" value="James An College Online Course Login Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/online/login.jsp" />
-	</definition>
-	
+	</definition>	
 	<!-- Online Page -->
 	<definition name="onlinePage" extends="single.definition">
 		<put-attribute name="title" value="James An College Online Course Page" />
@@ -28,11 +31,15 @@
 		<put-attribute name="title" value="James An College Connected Class Login Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/login.jsp" />
 	</definition>
-	
-	<!-- Connected Class Page -->
-	<definition name="connectedPage" extends="single.definition">
+	<!-- Connected Default Page -->
+	<definition name="connectedPage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/connectedClass.jsp" />
+	</definition>
+	<!-- Connected English Homework Page -->
+	<definition name="engHomeworkPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/engHomework.jsp" />
 	</definition>
 
 </tiles-definitions>
