@@ -1,6 +1,23 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<sec:authorize access="isAuthenticated()">
+
+<sec:authentication var="role" property='principal.authorities'/>
+<sec:authentication var="id" property="principal.username"/>
+<sec:authentication var="firstName" property="principal.firstName"/>
+<sec:authentication var="lastName" property="principal.lastName"/>
+	<script>
+		var role = '${role}';
+		var numericGrade = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
+		var studentId = '${id}';
+		var firstName = '${firstName}';
+		var lastName = '${lastName}';
+		// var academicYear;
+    	// var academicWeek;
+	</script>
+</sec:authorize>
+
 
 <style>
 .jae-header{
@@ -66,23 +83,6 @@ font-size: 2rem; /* Adjust the size as needed */
 <script>
 
 $(function() {
-	// to get the academic year and week
-	$.ajax({
-		url : '${pageContext.request.contextPath}/class/academy',
-		method: "GET",
-		success: function(response) {
-			// save the response into the variable
-			academicYear = response[0];
-			academicWeek = response[1];
-			// update the value of the academicWeek span element
-			// document.getElementById("academicWeek").innerHTML = academicWeek;
-			// update online url
-			// getOnlineLive(studentId, academicYear, academicWeek);
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			console.log('Error : ' + errorThrown);
-		}
-	});
 	// initialise state list when loading
 	listState('#editState');
     listBranch('#editBranch');
@@ -98,6 +98,7 @@ function displayGrade() {
 	var grade = gradeName(numericPart);
 	return grade;
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Clear password fields
@@ -186,26 +187,6 @@ function updatePassword() {
 }
 
 </script>
-
-
-<sec:authorize access="isAuthenticated()">
-
-<sec:authentication var="role" property='principal.authorities'/>
-<sec:authentication var="id" property="principal.username"/>
-<sec:authentication var="firstName" property="principal.firstName"/>
-<sec:authentication var="lastName" property="principal.lastName"/>
-	<script>
-		var role = '${role}';
-		var numericGrade = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
-		var studentId = '${id}';
-		var firstName = '${firstName}';
-		var lastName = '${lastName}';
-		var academicYear;
-    	var academicWeek;
-	</script>
-</sec:authorize>
-
-
 
 <div class="container-fluid jae-header">
 <nav class="navbar">
