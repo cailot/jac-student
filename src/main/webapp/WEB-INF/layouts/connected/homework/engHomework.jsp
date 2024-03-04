@@ -13,6 +13,8 @@
 <script>
 
 const SUBJECT = 1; // 1 is English 
+const MOVIE = 0;
+const PDF = 1;
 
 $(function() {
     $.ajax({
@@ -35,58 +37,30 @@ $(function() {
     });
 });
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 			Assign Attribute (Video/Pdf url & duration)
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-function assignAttributes(weekNumber, elementId) {
-    document.getElementById("videoPlayer").src = video; // 'https://djyb0v5s4sgfh.cloudfront.net/vaiim1/VIC_ENGLISH_WORKBOOK/English Workbook Volume4 level7/7_SE_33_1.mp4';
-    document.getElementById("pdfViewer").src = pdf; //'https://vod.writingand.com/documents/pdf/2023/K3/2023_Yr3_Math_Mega_Test_vol_2_-_SC.pdf';
-    // set dialogSet value as weekNumber
-    document.getElementById("dialogSet").innerHTML = weekNumber;  
-    var year = document.getElementById("academicYear").value;
-    var week = document.getElementById("academicWeek").textContent;
-    $.ajax({
-        url : '${pageContext.request.contextPath}/connected/homework/' + SUBJECT + "/" + year + "/" + week,
-        method: "GET",
-        success: function(response) {
-            var video = response.video;
-            var pdf = response.pdf;
-            var duration = response.duration;
-
-            // pop-up video & pdf
-            $('#homeworkModal').modal('show');
-
-
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log('Error : ' + errorThrown);
-        }
-    });  
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display Material (Video/Pdf)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function displayMaterial(weekNumber, video, pdf, duration) {
-    document.getElementById("videoPlayer").src = video; // 'https://djyb0v5s4sgfh.cloudfront.net/vaiim1/VIC_ENGLISH_WORKBOOK/English Workbook Volume4 level7/7_SE_33_1.mp4';
-    document.getElementById("pdfViewer").src = pdf; //'https://vod.writingand.com/documents/pdf/2023/K3/2023_Yr3_Math_Mega_Test_vol_2_-_SC.pdf';
+function displayMaterial(weekNumber) {
     // set dialogSet value as weekNumber
     document.getElementById("dialogSet").innerHTML = weekNumber;  
     var year = document.getElementById("academicYear").value;
-    var week = document.getElementById("academicWeek").textContent;
     $.ajax({
-        url : '${pageContext.request.contextPath}/connected/homework/' + SUBJECT + "/" + year + "/" + week,
+        url : '${pageContext.request.contextPath}/connected/homework/' + SUBJECT + "/" + year + "/" + weekNumber,
         method: "GET",
-        success: function(response) {
-            var video = response.video;
-            var pdf = response.pdf;
-            var duration = response.duration;
-
+        success: function(data) {
+            $.each(data, function(index, value) {
+				const cleaned = cleanUpJson(value);
+                console.log(cleaned);
+				if(value.type == MOVIE){
+                    console.log('duration : ' + value.duration);
+                    document.getElementById("videoPlayer").src = value.path;
+                }else{
+                    console.log('no duration');
+                    document.getElementById("pdfViewer").data = value.path;
+                }
+ 			});
             // pop-up video & pdf
             $('#homeworkModal').modal('show');
-
-
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
@@ -105,10 +79,9 @@ function displayMaterial(weekNumber, video, pdf, duration) {
     </div>
 </div>
 <div class="col-md-6">
-    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus2Week').textContent, document.getElementById('m2OnlineLesson').getAttribute('video-url'), document.getElementById('m2OnlineLesson').getAttribute('pdf-url'), document.getElementById('m2OnlineLesson').getAttribute('duration'))">
+    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus2Week').textContent)">
         <div class="alert alert-info english-homework" role="alert">
-            <p id="m2OnlineLesson" video-url="https://djyb0v5s4sgfh.cloudfront.net/vaiim1/VIC_ENGLISH_WORKBOOK/English Workbook Volume4 level7/7_SE_33_1.mp4" 
-                pdf-url="https://vod.writingand.com/documents/pdf/2023/K3/2023_Yr3_Math_Mega_Test_vol_2_-_SC.pdf" duration="123" style="margin: 30px;">
+            <p id="m2OnlineLesson" style="margin: 30px;">
                 <strong>Set</strong> <span id="minus2Week"></span>
                 &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-primary"></i>
             </p>
@@ -123,8 +96,8 @@ function displayMaterial(weekNumber, video, pdf, duration) {
 <div class="col-md-6">
     <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus1Week').textContent)">
         <div class="alert alert-info english-homework" role="alert">
-            <p id="m1OnlineLesson" video-url="" pdf-url="" duration="" style="margin: 30px;">
-                <strong>Set</strong> <span id="minus1Week">34</span>
+            <p id="m1OnlineLesson" style="margin: 30px;">
+                <strong>Set</strong> <span id="minus1Week"></span>
                 &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-primary"></i>
             </p>
             <div class="progress" style="margin: 30px;">
@@ -139,8 +112,8 @@ function displayMaterial(weekNumber, video, pdf, duration) {
 <div class="col-md-6">
     <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('academicWeek').textContent)">
         <div class="alert alert-info english-homework" role="alert">
-            <p id="onlineLesson" video-url="" pdf-url="" duration="" style="margin: 30px;">
-                <strong>Set</strong> <span id="academicWeek">35</span>
+            <p id="onlineLesson" style="margin: 30px;">
+                <strong>Set</strong> <span id="academicWeek"></span>
                 &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-primary"></i>
             </p>
             <div class="progress" style="margin: 30px;">
@@ -155,7 +128,7 @@ function displayMaterial(weekNumber, video, pdf, duration) {
     <div class="card-body mx-auto" style="max-width: 75%;">
         <div class="alert alert-info english-homework" role="alert">
             <p style="margin: 30px;">
-                <strong>Set</strong> <span id="plus1Week">36</span>
+                <strong>Set</strong> <span id="plus1Week"></span>
                 &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-secondary"></i>
             </p>
             <div class="progress" style="margin: 30px;">
@@ -185,7 +158,9 @@ function displayMaterial(weekNumber, video, pdf, duration) {
                         </video>
                     </div>
                     <div class="col-md-6 bg-white p-3 border">
-                        <embed id="pdfViewer" src="" type="application/pdf" style="width: 100%; height: 600px;" />
+                        <object id="pdfViewer" data="" type="application/pdf" style="width: 100%; height: 600px;">
+                            <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="your_pdf_url">click here to download the PDF file.</a></p>
+                        </object>
                     </div>
                 </div>
             </div>
