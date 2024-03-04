@@ -95,6 +95,8 @@ public interface JaeConstants {
 
 	String ONLINE_LIST = "OnlineList";
 	
+	String HOMEWORK_LIST = "HomeworkList";
+	
 	String VSSE = "VSSE";
 
 	String ACADEMIC_CYCLES = "academicCycles";
@@ -209,4 +211,13 @@ public interface JaeConstants {
 
 	String DEFAULT_PASSWORD = "123";
 
+	////////////////////////////////////
+	//
+	//	Homework Type
+	//
+	////////////////////////////////////
+
+	int VIDEO = 0;
+
+	int PDF = 1;
 }

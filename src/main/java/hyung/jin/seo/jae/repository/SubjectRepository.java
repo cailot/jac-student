@@ -13,4 +13,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>{
 
 	@Query("SELECT DISTINCT s.abbr FROM Course c JOIN c.subjects s WHERE c.grade = ?1")
 	List<String> findSubjectAbbrForGrade(String grade);
+
+	@Query(value = "SELECT s.name, s.id FROM Subject s", nativeQuery = true)   
+	List<Object[]> loadSubject();
 }

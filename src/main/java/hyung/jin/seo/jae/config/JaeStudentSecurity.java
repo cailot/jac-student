@@ -117,7 +117,7 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                                 .formLogin(login -> login
                                         .loginPage("/connected/login") // login page link
                                         .loginProcessingUrl("/connected/processLogin")
-                                        .defaultSuccessUrl("/connected/lesson")// redirect link after login
+                                        .defaultSuccessUrl("/connected/engHomework")// redirect link after login
                                         .permitAll())
                                 .logout(logout -> logout
                                         .logoutUrl("/connected/logout") // specify logout URL

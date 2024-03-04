@@ -9,12 +9,15 @@ import hyung.jin.seo.jae.dto.BranchDTO;
 import hyung.jin.seo.jae.dto.GradeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StateDTO;
+import hyung.jin.seo.jae.dto.SubjectDTO;
 import hyung.jin.seo.jae.model.Branch;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.State;
+import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.repository.BranchRepository;
 import hyung.jin.seo.jae.repository.GradeRepository;
 import hyung.jin.seo.jae.repository.StateRepository;
+import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.CodeService;
 
 @Service
@@ -28,6 +31,9 @@ public class CodeServiceImpl implements CodeService {
 
 	@Autowired
 	private GradeRepository gradeRepository;
+
+	@Autowired
+	private SubjectRepository subjectRepository;
 
 	@Override
 	public List<StateDTO> allStates() {
@@ -238,6 +244,49 @@ public class CodeServiceImpl implements CodeService {
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to delete");
 		}
+	}
+
+	@Override
+	public List<SubjectDTO> allSubjects() {
+		List<SubjectDTO> dtos = new ArrayList<>();
+		try{
+			List<Subject> subs = subjectRepository.findAll();
+			for(Subject sub : subs){
+				SubjectDTO dto = new SubjectDTO(sub);
+				dtos.add(dto);
+			}
+		}catch(Exception e){
+			System.out.println("No Subject found");
+		}
+		return dtos;
+	}
+
+	@Override
+	public Subject getSubject(Long id) {
+		Subject subject = null;
+		try{
+			subject = subjectRepository.findById(id).get();
+		}catch(Exception e){
+			System.out.println("No Subject found");
+		}
+		return subject;
+	}
+
+	@Override
+	public List<SimpleBasketDTO> loadSubject() {
+		List<Object[]> objects = new ArrayList<>();
+		try{
+			objects = subjectRepository.loadSubject();
+		}catch(Exception e){
+			System.out.println("No Subject found");
+		}
+		List<SimpleBasketDTO> dtos = new ArrayList<>();
+		for(Object[] object : objects){
+			SimpleBasketDTO dto = new SimpleBasketDTO(object);
+			dtos.add(dto);
+		}
+		return dtos;
+
 	}
 
 }
