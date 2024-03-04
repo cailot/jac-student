@@ -6,9 +6,11 @@ import hyung.jin.seo.jae.dto.BranchDTO;
 import hyung.jin.seo.jae.dto.GradeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StateDTO;
+import hyung.jin.seo.jae.dto.SubjectDTO;
 import hyung.jin.seo.jae.model.Branch;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.State;
+import hyung.jin.seo.jae.model.Subject;
 
 public interface CodeService {
 
@@ -62,5 +64,15 @@ public interface CodeService {
 
 	// delete grade
 	void deleteGrade(Long id);
+
+	// list all subjcet
+	List<SubjectDTO> allSubjects();
+
+	// get Subject
+	Subject getSubject(Long id);
+
+	// list for initial subject value
+	List<SimpleBasketDTO> loadSubject();
+
 
 }

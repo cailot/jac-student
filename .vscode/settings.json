@@ -43,5 +43,5 @@
     "javascript.validate.enable": false,
     "javascript.format.enable": false,
     "java.format.settings.url": ".vscode/java-formatter.xml",
-    "CodeGPT.apiKey": "CodeGPT Plus Beta"
+    "CodeGPT.apiKey": "OpenAI"
 }
