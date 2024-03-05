@@ -22,13 +22,13 @@ public interface ConnectedService {
 	void deleteHomework(Long id);
 
 	// get Homework by subject, year & week
-	List<HomeworkDTO> getHomeworkInfo(int subject, int year, int week);
+	HomeworkDTO getHomeworkInfo(int subject, int year, int week);
 
 	// get Video Homework by subject, year & week
-	HomeworkDTO getVideoHomeworkInfo(int subject, int year, int week);
+	// HomeworkDTO getVideoHomeworkInfo(int subject, int year, int week);
 
 	// get Pdf Homework by subject, year & week
-	HomeworkDTO getPdfHomeworkInfo(int subject, int year, int week);
+	// HomeworkDTO getPdfHomeworkInfo(int subject, int year, int week);
 
 	// list Homework by subject, grade, year & week
 	List<HomeworkDTO> listHomework(int subject, String grade, int year, int week);

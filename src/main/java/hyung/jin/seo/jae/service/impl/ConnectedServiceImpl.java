@@ -52,18 +52,18 @@ public class ConnectedServiceImpl implements ConnectedService {
 		// search by getId
 		Homework existing = homeworkRepository.findById(id).get();
         // Update info
-        String newPath = StringUtils.defaultString(newWork.getPath());
-        if(StringUtils.isNotBlank(newPath)){
-        	existing.setPath(newPath);
+        String newVideoPath = StringUtils.defaultString(newWork.getVideoPath());
+        if(StringUtils.isNotBlank(newVideoPath)){
+        	existing.setVideoPath(newVideoPath);
+        }
+		String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
+        if(StringUtils.isNotBlank(newPdfPath)){
+        	existing.setPdfPath(newPdfPath);
         }
         String newInfo = StringUtils.defaultString(newWork.getInfo());
         if(StringUtils.isNotBlank(newInfo)){
         	existing.setInfo(newInfo);
         }
-		int newType = newWork.getType();		
-		existing.setType(newType);
-		long newDuration = newWork.getDuration();
-		existing.setDuration(newDuration);
 		int newWeek = newWork.getWeek();
 		existing.setWeek(newWeek);
 		int newYear = newWork.getYear();
@@ -91,37 +91,37 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
-	public List<HomeworkDTO> getHomeworkInfo(int subject, int year, int week) {
-		List<HomeworkDTO> dtos = new ArrayList<>();
+	public HomeworkDTO getHomeworkInfo(int subject, int year, int week) {
+		HomeworkDTO dto = null;
 		try{
-			dtos = homeworkRepository.findHomework(subject, year, week);
+			dto = homeworkRepository.findHomework(subject, year, week);
 		}catch(Exception e){
 			System.out.println("No Homework found");
 		}
-		return dtos;
+		return dto;
 	}
 	
-	@Override
-	public HomeworkDTO getVideoHomeworkInfo(int subject, int year, int week) {
-		HomeworkDTO dto = null;
-		try{
-			dto = homeworkRepository.findVideoHomework(subject, year, week);
-		}catch(Exception e){
-			System.out.println("No Homework found");
-		}
-		return dto;
-	}
+	// @Override
+	// public HomeworkDTO getVideoHomeworkInfo(int subject, int year, int week) {
+	// 	HomeworkDTO dto = null;
+	// 	try{
+	// 		dto = homeworkRepository.findVideoHomework(subject, year, week);
+	// 	}catch(Exception e){
+	// 		System.out.println("No Homework found");
+	// 	}
+	// 	return dto;
+	// }
 
-	@Override
-	public HomeworkDTO getPdfHomeworkInfo(int subject, int year, int week) {
-		HomeworkDTO dto = null;
-		try{
-			dto = homeworkRepository.findPdfHomework(subject, year, week);
-		}catch(Exception e){
-			System.out.println("No Homework found");
-		}
-		return dto;
-	}
+	// @Override
+	// public HomeworkDTO getPdfHomeworkInfo(int subject, int year, int week) {
+	// 	HomeworkDTO dto = null;
+	// 	try{
+	// 		dto = homeworkRepository.findPdfHomework(subject, year, week);
+	// 	}catch(Exception e){
+	// 		System.out.println("No Homework found");
+	// 	}
+	// 	return dto;
+	// }
 
 	@Override
 	public List<HomeworkDTO> listHomework(int subject, String grade, int year, int week) {

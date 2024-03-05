@@ -20,13 +20,15 @@ public class HomeworkDTO implements Serializable {
 
 	private String id;
 
-	private String path;
+	private String videoPath;
+
+	private String pdfPath;
 
 	private String info;
 
-	private int type;
+	// private int type;
 
-	private long duration;
+	// private long duration;
 
 	private int week;
 
@@ -41,10 +43,10 @@ public class HomeworkDTO implements Serializable {
 	private String registerDate;
 
 	
-	public HomeworkDTO(long id, String path, long duration, int week, int year, String info, boolean active, long grade, long subject, LocalDate registerDate){
+	public HomeworkDTO(long id, String videoPath, String pdfPath, int week, int year, String info, boolean active, long grade, long subject, LocalDate registerDate){
 		this.id = String.valueOf(id);
-		this.path = path;
-		this.duration = duration;
+		this.videoPath = videoPath;
+		this.pdfPath = pdfPath;
 		this.week = week;
 		this.year = year;
 		this.info = info;
@@ -54,25 +56,24 @@ public class HomeworkDTO implements Serializable {
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 
-	public HomeworkDTO(long id, int type, String path, long duration, int week, int year, String info, boolean active, long grade, long subject, LocalDate registerDate){
-		this.id = String.valueOf(id);
-		this.type = type;
-		this.path = path;
-		this.duration = duration;
-		this.week = week;
-		this.year = year;
-		this.info = info;
-		this.active = active;
-		this.grade = String.valueOf(grade);
-		this.subject = String.valueOf(subject);
-		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-	}
+	// public HomeworkDTO(long id, String videoPath, String pdfPath, int week, int year, String info, boolean active, long grade, long subject, LocalDate registerDate){
+	// 	this.id = String.valueOf(id);
+	// 	this.type = type;
+	// 	this.path = path;
+	// 	this.duration = duration;
+	// 	this.week = week;
+	// 	this.year = year;
+	// 	this.info = info;
+	// 	this.active = active;
+	// 	this.grade = String.valueOf(grade);
+	// 	this.subject = String.valueOf(subject);
+	// 	this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	// }
 
 	public Homework convertToHomework() {
     	Homework work = new Homework();
-    	work.setType(this.type);
-		work.setPath(this.path);
-		work.setDuration(this.duration);
+		work.setVideoPath(this.videoPath);
+		work.setPdfPath(this.pdfPath);
 		work.setWeek(this.week);
 		work.setYear(this.year);
 		work.setInfo(this.info);
@@ -82,9 +83,8 @@ public class HomeworkDTO implements Serializable {
 
 	public HomeworkDTO(Homework work){
 		this.id = String.valueOf(work.getId());
-		this.type = work.getType();
-		this.path = work.getPath();
-		this.duration = work.getDuration();
+		this.videoPath = work.getVideoPath();
+		this.pdfPath = work.getPdfPath();
 		this.week = work.getWeek();
 		this.year = work.getYear();
 		this.info = work.getInfo();

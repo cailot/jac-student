@@ -31,14 +31,17 @@ public class Homework {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long id;
 
-    @Column(length = 1, nullable = false)
-    private Integer type;
+    // @Column(length = 1, nullable = false)
+    // private Integer type;
 
     @Column(length = 300, nullable = true)
-    private String path;
+    private String videoPath;
+
+    @Column(length = 300, nullable = true)
+    private String pdfPath;
     
-    @Column(length = 10, nullable = true)
-    private Long duration;
+    // @Column(length = 10, nullable = true)
+    // private Long duration;
 
     @Column(length = 2, nullable = true)
     private Integer week;

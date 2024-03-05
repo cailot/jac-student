@@ -47,52 +47,48 @@ function displayMaterial(weekNumber, elementId) {
     $.ajax({
         url : '${pageContext.request.contextPath}/connected/homework/' + SUBJECT + "/" + year + "/" + weekNumber,
         method: "GET",
-        success: function(data) {
-            $.each(data, function(index, value) {
-                if(value.type == MOVIE){
-                    // Add this part for displaying played percentage
-                    var videoPlayer = document.getElementById("videoPlayer");
-                    videoPlayer.src = value.path;
+        success: function(value) {
+            // Add this part for displaying played percentage
+            var videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = value.videoPath;
 
-                    var progressPercentage = document.getElementById(elementId);
-                    var progressBar = document.getElementById(elementId+"Bar");
+            var progressPercentage = document.getElementById(elementId);
+            var progressBar = document.getElementById(elementId+"Bar");
 
-                    // Define the event listener function
-                    var updateProgressBar = function() {
-                        var playedPercentage = Math.round((videoPlayer.currentTime / videoPlayer.duration) * 100);
-                        if(!playedPercentage || isNaN(playedPercentage)){
-                            progressPercentage.innerHTML = "0%";
-                            progressBar.style.width = "0%";
-                        } else {
-                            progressPercentage.innerHTML = playedPercentage + "%";
-                            progressBar.style.width = playedPercentage + "%";
-                            if(playedPercentage < 30){
-                                progressBar.className = 'progress-bar bg-danger'; // Red color for less than 30%
-                            } else if(playedPercentage >= 30 && playedPercentage <= 70){
-                                progressBar.className = 'progress-bar bg-warning'; // Yellow color for 30% - 70%
-                            } else {
-                                progressBar.className = 'progress-bar bg-success'; // Green color for more than 70%
-                            }
-                        }
-                    }
-
-                    // Add the event listener when the video starts playing
-                    videoPlayer.addEventListener('timeupdate', updateProgressBar);
-
-                    videoPlayer.addEventListener("ended", function() {
-                        // Video ended, you can perform additional actions if needed
-                        console.log("Video ended");
-                    });
-
-                    // Remove the event listener when the modal is closed
-                    $('#homeworkModal').on('hidden.bs.modal', function () {
-                        videoPlayer.removeEventListener('timeupdate', updateProgressBar);
-                    });
+            // Define the event listener function
+            var updateProgressBar = function() {
+                var playedPercentage = Math.round((videoPlayer.currentTime / videoPlayer.duration) * 100);
+                if(!playedPercentage || isNaN(playedPercentage)){
+                    progressPercentage.innerHTML = "0%";
+                    progressBar.style.width = "0%";
                 } else {
-                    // console.log('no duration');
-                    document.getElementById("pdfViewer").data = value.path;
+                    progressPercentage.innerHTML = playedPercentage + "%";
+                    progressBar.style.width = playedPercentage + "%";
+                    if(playedPercentage < 30){
+                        progressBar.className = 'progress-bar bg-danger'; // Red color for less than 30%
+                    } else if(playedPercentage >= 30 && playedPercentage <= 70){
+                        progressBar.className = 'progress-bar bg-warning'; // Yellow color for 30% - 70%
+                    } else {
+                        progressBar.className = 'progress-bar bg-success'; // Green color for more than 70%
+                    }
                 }
+            }
+
+            // Add the event listener when the video starts playing
+            videoPlayer.addEventListener('timeupdate', updateProgressBar);
+
+            videoPlayer.addEventListener("ended", function() {
+                // Video ended, you can perform additional actions if needed
+                console.log("Video ended");
             });
+
+            // Remove the event listener when the modal is closed
+            $('#homeworkModal').on('hidden.bs.modal', function () {
+                videoPlayer.removeEventListener('timeupdate', updateProgressBar);
+            });
+            // console.log('no duration');
+            document.getElementById("pdfViewer").data = value.pdfPath;
+              
             // pop-up video & pdf
             $('#homeworkModal').modal('show');
         },
