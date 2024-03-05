@@ -46,5 +46,15 @@
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/mathHomework.jsp" />
 	</definition>
+	<!-- Connected Writig Homework Page -->
+	<definition name="writeHomeworkPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/writeHomework.jsp" />
+	</definition>
+	<!-- Connected Homework Answer Page -->
+	<definition name="answerHomeworkPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/answerHomework.jsp" />
+	</definition>
 
 </tiles-definitions>

@@ -202,7 +202,7 @@ function updatePassword() {
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/engHomework">English Homework</a>
 			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/mathHomework">Mathematics Homework</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/writingHomework">Writing</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/writeHomework">Writing</a>
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/answerHomework">Short Answer</a>
 			</div>
 		</li>
