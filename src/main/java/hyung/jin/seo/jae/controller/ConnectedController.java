@@ -91,26 +91,26 @@ public class ConnectedController {
 	// search homework by subject, year & week
 	@GetMapping("/homework/{subject}/{year}/{week}")
 	@ResponseBody
-	public List<HomeworkDTO> searchHomework(@PathVariable int subject, @PathVariable int year, @PathVariable int week) {
-		List<HomeworkDTO> dtos = connectedService.getHomeworkInfo(subject, year, week);
-		return dtos;
+	public HomeworkDTO searchHomework(@PathVariable int subject, @PathVariable int year, @PathVariable int week) {
+		HomeworkDTO dto = connectedService.getHomeworkInfo(subject, year, week);
+		return dto;
 	}
 
 	// search video homework by subject, year & week
-	@GetMapping("/movieHomework/{subject}/{year}/{week}")
-	@ResponseBody
-	public HomeworkDTO searchVideoHomework(@PathVariable int subject, @PathVariable int year, @PathVariable int week) {
-		HomeworkDTO dto = connectedService.getVideoHomeworkInfo(subject, year, week);
-		return dto;
-	}
+	// @GetMapping("/movieHomework/{subject}/{year}/{week}")
+	// @ResponseBody
+	// public HomeworkDTO searchVideoHomework(@PathVariable int subject, @PathVariable int year, @PathVariable int week) {
+	// 	HomeworkDTO dto = connectedService.getVideoHomeworkInfo(subject, year, week);
+	// 	return dto;
+	// }
 
 	// search homework by subject, year & week
-	@GetMapping("/pdfHomework/{subject}/{year}/{week}")
-	@ResponseBody
-	public HomeworkDTO searchPdfHomework(@PathVariable int subject, @PathVariable int year, @PathVariable int week) {
-		HomeworkDTO dto = connectedService.getPdfHomeworkInfo(subject, year, week);
-		return dto;
-	}
+	// @GetMapping("/pdfHomework/{subject}/{year}/{week}")
+	// @ResponseBody
+	// public HomeworkDTO searchPdfHomework(@PathVariable int subject, @PathVariable int year, @PathVariable int week) {
+	// 	HomeworkDTO dto = connectedService.getPdfHomeworkInfo(subject, year, week);
+	// 	return dto;
+	// }
 
 	// bring all homework in database
 	@GetMapping("/filterHomework")

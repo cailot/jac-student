@@ -12,7 +12,7 @@
 </style>
 <script>
 
-const SUBJECT = 1; // 1 is English 
+const SUBJECT = 2; // 2 is Math 
 const MOVIE = 0;
 const PDF = 1;
 
@@ -97,12 +97,13 @@ function displayMaterial(weekNumber, elementId) {
         }
     });  
 }
+
 </script>
 
 <input type="hidden" id="academicYear" name="academicYear" />
 <div class="col-md-12" style="padding: 30px;">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">English Homework</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Mathematics Homework</h2>
     </div>
 </div>
 <div class="col-md-6">
