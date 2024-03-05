@@ -50,13 +50,27 @@ public class JaeController {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Homework Menu
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// english homework
 	@GetMapping("/connected/engHomework")
 	public String dispayEngHomework() {
 		return "engHomeworkPage";
 	}
 
+	// math homework
 	@GetMapping("/connected/mathHomework")
 	public String dispayMathHomework() {
 		return "mathHomeworkPage";
+	}
+
+	// writing homework
+	@GetMapping("/connected/writeHomework")
+	public String dispayWritingHomework() {
+		return "writeHomeworkPage";
+	}
+
+	// homework answer
+	@GetMapping("/connected/answerHomework")
+	public String dispayAnswerHomework() {
+		return "answerHomeworkPage";
 	}
 }
