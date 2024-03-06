@@ -73,4 +73,12 @@ public class JaeController {
 	public String dispayAnswerHomework() {
 		return "shortAnswerPage";
 	}
+
+	
+	// extra materials
+	@GetMapping("/connected/extraMaterial")
+	public String dispayExtraMaterial() {
+		return "extraMaterialPage";
+	}
+	
 }

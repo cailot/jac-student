@@ -195,6 +195,7 @@ function updatePassword() {
 		&nbsp;&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/image/cc.png" style="width:80px;" >
 	</div>
 	<ul class="navbar_menu">
+		<!-- Homework -->
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Homework
@@ -206,50 +207,44 @@ function updatePassword() {
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/shortAnswer">Short Answer</a>
 			</div>
 		</li>
-
+		<!-- Extra Materials -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Extra Materials
+			<a class="nav-link" href="${pageContext.request.contextPath}/connected/extraMaterial" role="button">
+			Extra Materials
 			</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/courseList">Course List</a>
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/onlineList">Online Class Session</a>				
-				<!-- <a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/gradeList">Grade List</a> -->
-			</div>
 		</li>
-
+		<!-- Practice -->
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Practice
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/teacherList">Teacher List</a>
+			  	<!-- <a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/teacherList">Teacher List</a> -->
 			</div>
 		</li>
-
+		<!-- Test -->
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Test
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
-				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a>
+			  	<!-- <a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/classList">Class List</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Student Invoice</a> -->
 			</div>
 		</li>
-
+		<!-- Test Results-->
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Test Results
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/cycle">Academic Cycle</a>
+				<!-- <a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/cycle">Academic Cycle</a>
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/branch">Branch Management</a>
 			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/setting">Admin Automation</a>
-				<a class="dropdown-item" style="color: #212529;" href="#">Admin Property</a>
+				<a class="dropdown-item" style="color: #212529;" href="#">Admin Property</a> -->
 			</div>
 		</li>
-
+		<!-- Link to Jac-eLearning -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="${pageContext.request.contextPath}/online/lesson" role="button">
 				Jac-eLearning
