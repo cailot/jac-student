@@ -167,11 +167,10 @@ function displayMaterial(weekNumber, elementId) {
         </div>
     </div>
 </div>
-
 <!-- Pop up Video modal -->
 <div class="modal fade" id="homeworkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-extra-large" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
                 <h5 class="modal-title w-100" id="exampleModalLabel">English Homework Details - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
@@ -186,7 +185,7 @@ function displayMaterial(weekNumber, elementId) {
                         </video>
                     </div>
                     <div class="col-md-6 bg-white p-3 border">
-                        <object id="pdfViewer" data="" type="application/pdf" style="width: 100%; height: 600px;">
+                        <object id="pdfViewer" data="" type="application/pdf" style="width: 100%; height: 80vh;">
                             <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="your_pdf_url">click here to download the PDF file.</a></p>
                         </object>
                     </div>

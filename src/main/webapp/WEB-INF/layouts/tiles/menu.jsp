@@ -203,7 +203,7 @@ function updatePassword() {
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/engHomework">English Homework</a>
 			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/mathHomework">Mathematics Homework</a>
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/writeHomework">Writing</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/answerHomework">Short Answer</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/shortAnswer">Short Answer</a>
 			</div>
 		</li>
 
@@ -248,6 +248,12 @@ function updatePassword() {
 			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/setting">Admin Automation</a>
 				<a class="dropdown-item" style="color: #212529;" href="#">Admin Property</a>
 			</div>
+		</li>
+
+		<li class="nav-item dropdown">
+			<a class="nav-link" href="${pageContext.request.contextPath}/online/lesson" role="button">
+				Jac-eLearning
+			</a>
 		</li>
 
 	</ul>

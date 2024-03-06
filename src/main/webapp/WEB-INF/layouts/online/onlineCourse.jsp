@@ -214,8 +214,17 @@ function determineLiveOrRecordedLesson() {
 	// 1. turn on mic
     var micIcon = $('#micIcon');
     micIcon.removeClass('text-secondary').addClass('text-danger');
-	// 2. disappear previous div
-	document.getElementById("recordAcademicMinusOneWeekBlock").style.display = "none";  
+	// 2. disappear previous div ???
+	// document.getElementById("recordAcademicMinusOneWeekBlock").style.display = "none"; 
+
+
+	// 2. enable recorded session
+	getRecordedSession(studentId, academicYear, academicWeek-1);
+	// 3. update label in recordedSessionBlock
+	document.getElementById("academicMinusOneWeek").innerHTML = academicWeek-1;
+	document.getElementById("recordedLessonInfo").textContent = 'Available until current Online Live sesson'; 
+
+	
   } else if (now.getTime() < lessonStartDate) {
     console.log("Before Onair");
 	// 1. disable link
@@ -330,9 +339,15 @@ function getTimeForDayAndTime(day, time) {
 					<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>    
                 </p>
             </div>
-        </div>
+			<div class="text-right">
+				<a href="${pageContext.request.contextPath}/connected/engHomework" class="btn btn-primary" target="_blank">Link To Connected Class</a>
+			</div>
+        </div>	
     </div>
 </div>
+
+
+
 
  <!-- Edit Form Dialogue -->
 <div class="modal fade" id="editStudentModal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">	
@@ -513,17 +528,6 @@ function getTimeForDayAndTime(day, time) {
         $('#realtimeWarning').modal('hide');
         $('#recordWarning').modal('hide');
 	}
-
-
-
-
-
-
-	
-
-
-
-
 
 </script>
 

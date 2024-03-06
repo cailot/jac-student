@@ -52,9 +52,9 @@
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/writeHomework.jsp" />
 	</definition>
 	<!-- Connected Homework Answer Page -->
-	<definition name="answerHomeworkPage" extends="tile.definition">
+	<definition name="shortAnswerPage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/answerHomework.jsp" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/shortAnswer.jsp" />
 	</definition>
 
 </tiles-definitions>
