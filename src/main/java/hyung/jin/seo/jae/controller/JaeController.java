@@ -69,8 +69,8 @@ public class JaeController {
 	}
 
 	// homework answer
-	@GetMapping("/connected/answerHomework")
+	@GetMapping("/connected/shortAnswer")
 	public String dispayAnswerHomework() {
-		return "answerHomeworkPage";
+		return "shortAnswerPage";
 	}
 }

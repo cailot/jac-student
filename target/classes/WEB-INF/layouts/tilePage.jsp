@@ -23,16 +23,15 @@
 		<div class="row">
 			<tiles:insertAttribute name="menu" />
 		</div>
-		<!-- <div class="row justify-content-center align-items-center"> -->
-			<div class="row justify-content-center">
+		<div class="row justify-content-center">
 			<tiles:insertAttribute name="body" />
 		</div>
 		<footer class="mt-auto">
 			<div class="row" style="padding: 15px 20px;">
-				2015 -
-				<%=new java.util.Date().getYear() + 1900%>
-				&copy;&nbsp; All rights reserved.&nbsp;&nbsp;
-				<div class="copyright-font-color">James An College</div>
+				<div class="col-12 text-center">
+					2015 - <%=new java.util.Date().getYear() + 1900%> &copy; All rights reserved.
+					<div class="copyright-font-color">James An College</div>
+				</div>
 			</div>
 		</footer>
 	</div>
