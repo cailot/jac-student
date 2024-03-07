@@ -96,6 +96,8 @@ public interface JaeConstants {
 	String ONLINE_LIST = "OnlineList";
 	
 	String HOMEWORK_LIST = "HomeworkList";
+
+	String EXTRAWORK_LIST = "ExtraworkList";
 	
 	String VSSE = "VSSE";
 

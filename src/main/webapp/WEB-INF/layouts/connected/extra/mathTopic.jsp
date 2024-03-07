@@ -1,5 +1,5 @@
 <style>
-    .english-homework {
+    .topic-card {
         background-color: #d1ecf1; 
         padding: 20px; 
         border-radius: 10px; 
@@ -11,25 +11,24 @@
     }
 </style>
 <script>
-
-const SUBJECT = 1; // 1 is English 
-const MOVIE = 0;
-const PDF = 1;
-
 $(function() {
     $.ajax({
-        url : '${pageContext.request.contextPath}/class/academy',
+        url : '${pageContext.request.contextPath}/connected/summaryExtrawork/' + numericGrade,
         method: "GET",
-        success: function(response) {
-            // save the response into the variable
-            academicYear = response[0];
-            academicWeek = response[1];
-            // update the value of the academicWeek span element
-            document.getElementById("academicYear").value = parseInt(academicYear);
-            document.getElementById("minus2Week").innerHTML = parseInt(academicWeek)-2;
-            document.getElementById("minus1Week").innerHTML = parseInt(academicWeek)-1;
-            document.getElementById("academicWeek").innerHTML = parseInt(academicWeek);
-            document.getElementById("plus1Week").innerHTML = parseInt(academicWeek)+1;
+        success: function(data) {
+
+            $.each(data, function(index, basket) {
+				var title = basket.name;
+                var id = basket.value;
+               // console.log(basket);
+                var topicDiv = '<div class="col-md-4">'
+                +  '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id + ', \'' +  title + '\');">'
+                + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
+                + '<strong><span id="topicTitle">' + title + '</span></strong>&nbsp;&nbsp;<i class="bi bi-calculator h5 text-primary"></i></p>'
+                + '<div class="progress" style="margin: 30px;"><div id="' + id + 'topicPercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">'
+                + '<span id="'+ id + 'topicPercentage" class="ml-auto">0%</span></div></div></div></div></div>';
+                $('#topicContainer').append(topicDiv);    
+			});
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
@@ -40,20 +39,19 @@ $(function() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display Material (Video/Pdf)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function displayMaterial(weekNumber, elementId) {
-    // set dialogSet value as weekNumber
-    document.getElementById("dialogSet").innerHTML = weekNumber;  
-    var year = document.getElementById("academicYear").value;
+function displayMaterial(id, title) {
+    // set dialogTitle value
+    document.getElementById("dialogTitle").innerHTML = title;  
     $.ajax({
-        url : '${pageContext.request.contextPath}/connected/homework/' + SUBJECT + "/" + year + "/" + weekNumber,
+        url : '${pageContext.request.contextPath}/connected/getExtrawork/' + id,
         method: "GET",
         success: function(value) {
             // Add this part for displaying played percentage
             var videoPlayer = document.getElementById("videoPlayer");
             videoPlayer.src = value.videoPath;
 
-            var progressPercentage = document.getElementById(elementId);
-            var progressBar = document.getElementById(elementId+"Bar");
+            var progressPercentage = document.getElementById(id+"topicPercentage");
+            var progressBar = document.getElementById(id+"topicPercentageBar");
 
             // Define the event listener function
             var updateProgressBar = function() {
@@ -83,14 +81,14 @@ function displayMaterial(weekNumber, elementId) {
             });
 
             // Remove the event listener when the modal is closed
-            $('#homeworkModal').on('hidden.bs.modal', function () {
+            $('#materialModal').on('hidden.bs.modal', function () {
                 videoPlayer.removeEventListener('timeupdate', updateProgressBar);
             });
             // console.log('no duration');
             document.getElementById("pdfViewer").data = value.pdfPath;
               
             // pop-up video & pdf
-            $('#homeworkModal').modal('show');
+            $('#materialModal').modal('show');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
@@ -99,80 +97,20 @@ function displayMaterial(weekNumber, elementId) {
 }
 </script>
 
-<input type="hidden" id="academicYear" name="academicYear" />
 <div class="col-md-12" style="padding: 30px;">
     <div class="card-body text-center">
         <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Math Topics</h2>
     </div>
 </div>
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus2Week').textContent, 'm2Percentage')">
-        <div class="alert alert-info english-homework" role="alert">
-            <p id="m2OnlineLesson" style="margin: 30px;">
-                <strong>Set</strong> <span id="minus2Week"></span>
-                &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-primary"></i>
-            </p>
-            <div class="progress" style="margin: 30px;">
-                <div id="m2PercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
-                    <span id="m2Percentage" class="ml-auto">0%</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus1Week').textContent, 'm1Percentage')">
-        <div class="alert alert-info english-homework" role="alert">
-            <p id="m1OnlineLesson" style="margin: 30px;">
-                <strong>Set</strong> <span id="minus1Week"></span>
-                &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-primary"></i>
-            </p>
-            <div class="progress" style="margin: 30px;">
-                <div id="m1PercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
-                    <span id="m1Percentage" class="ml-auto">0%</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('academicWeek').textContent, 'weekPercentage')">
-        <div class="alert alert-info english-homework" role="alert">
-            <p id="onlineLesson" style="margin: 30px;">
-                <strong>Set</strong> <span id="academicWeek"></span>
-                &nbsp;&nbsp;<i class="bi bi-mortarboard-fill h5 text-primary"></i>
-            </p>
-            <div class="progress" style="margin: 30px;">
-                <div id="weekPercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
-                    <span id="weekPercentage" class="ml-auto">0%</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Next Week -->
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="max-width: 75%;">
-        <div class="alert alert-info english-homework" role="alert" style="background-color: lightgrey;">
-            <p style="margin: 30px;">
-                <strong>Set</strong> <span id="plus1Week"></span>
-               &nbsp;&nbsp;<i class="bi bi-lock-fill h5 text-secondary"></i>
-            </p>
-            <div class="progress" style="margin: 30px;">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                    <span class="ml-auto"></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<div id="topicContainer" class="row"></div>
+
 <!-- Pop up Video modal -->
-<div class="modal fade" id="homeworkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="materialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel">English Homework Details - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span></h5>
+                <h5 class="modal-title w-100" id="exampleModalLabel">Math Topics - <span id="dialogTitle" name="dialogTitle" class="text-warning"></span></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
