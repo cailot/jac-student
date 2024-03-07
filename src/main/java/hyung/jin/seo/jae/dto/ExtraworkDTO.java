@@ -1,22 +1,23 @@
 package hyung.jin.seo.jae.dto;
 
 import java.io.Serializable;
-import hyung.jin.seo.jae.model.Homework;
+
+import hyung.jin.seo.jae.model.Extrawork;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class HomeworkDTO implements Serializable {
+public class ExtraworkDTO implements Serializable {
 
 	private String id;
 
@@ -24,55 +25,40 @@ public class HomeworkDTO implements Serializable {
 
 	private String pdfPath;
 
-	private String info;
-
-	private int week;
-
-	private int year;
+	private String name;
 
 	private boolean active;
 
 	private String grade;
 
-	private String subject;
-
 	private String registerDate;
-
 	
-	public HomeworkDTO(long id, String videoPath, String pdfPath, int week, int year, String info, boolean active, String grade, long subject, LocalDate registerDate){
+	public ExtraworkDTO(long id, String videoPath, String pdfPath, String name, boolean active, String grade, LocalDate registerDate){
 		this.id = String.valueOf(id);
 		this.videoPath = videoPath;
 		this.pdfPath = pdfPath;
-		this.week = week;
-		this.year = year;
-		this.info = info;
+		this.name = name;
 		this.active = active;
 		this.grade = grade;
-		this.subject = String.valueOf(subject);
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 
-	public Homework convertToHomework() {
-    	Homework work = new Homework();
+	public Extrawork convertToExtrawork() {
+    	Extrawork work = new Extrawork();
 		work.setVideoPath(this.videoPath);
 		work.setPdfPath(this.pdfPath);
-		work.setWeek(this.week);
-		work.setYear(this.year);
-		work.setInfo(this.info);
+		work.setName(this.name);
 		work.setActive(this.active);
 		return work;
 	}
 
-	public HomeworkDTO(Homework work){
+	public ExtraworkDTO(Extrawork work){
 		this.id = String.valueOf(work.getId());
 		this.videoPath = work.getVideoPath();
 		this.pdfPath = work.getPdfPath();
-		this.week = work.getWeek();
-		this.year = work.getYear();
-		this.info = work.getInfo();
+		this.name = work.getName();
 		this.active = work.isActive();
 		this.grade = work.getGrade().getCode();
-		this.subject = String.valueOf(work.getSubject().getId());
 		this.registerDate = work.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 	}
 
