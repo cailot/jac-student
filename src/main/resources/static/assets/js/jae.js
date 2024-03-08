@@ -161,6 +161,23 @@ function listSubject(selectElementId) {
 	});
 }
 
+//	List practice type
+function listPracticeType(selectElementId) {
+	$.ajax({
+		url: getContextPath() + '/code/practiceType',
+		type: 'GET',
+		success: function (data) {
+			$.each(data, function (index, state) {
+				var option = "<option value='" + state.value + "'>" + state.name + "</option>";
+				$(selectElementId).append(option);	
+			});
+		},
+		error: function (xhr, status, error) {
+			console.log('Error : ' + error);
+		}
+	});
+}
+
 // get grade name
 function  gradeName(value){
 	var gradeText = '';

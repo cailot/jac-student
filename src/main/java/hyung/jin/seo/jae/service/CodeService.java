@@ -9,6 +9,7 @@ import hyung.jin.seo.jae.dto.StateDTO;
 import hyung.jin.seo.jae.dto.SubjectDTO;
 import hyung.jin.seo.jae.model.Branch;
 import hyung.jin.seo.jae.model.Grade;
+import hyung.jin.seo.jae.model.PracticeType;
 import hyung.jin.seo.jae.model.State;
 import hyung.jin.seo.jae.model.Subject;
 
@@ -74,5 +75,10 @@ public interface CodeService {
 	// list for initial subject value
 	List<SimpleBasketDTO> loadSubject();
 
+	// get practice type
+	PracticeType getPracticeType(Long id);
+
+	// list for initial practice type value
+	List<SimpleBasketDTO> loadPracticeType();
 
 }

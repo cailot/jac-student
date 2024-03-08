@@ -340,7 +340,7 @@ function getTimeForDayAndTime(day, time) {
                 </p>
             </div>
 			<div class="text-right">
-				<a href="${pageContext.request.contextPath}/connected/engHomework" class="btn btn-primary" target="_blank">Link To Connected Class</a>
+				<a href="${pageContext.request.contextPath}/connected/engHomework" class="btn btn-primary" target="_blank">Access To Connected Class</a>
 			</div>
         </div>	
     </div>

@@ -4,9 +4,11 @@ import java.util.List;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
+import hyung.jin.seo.jae.model.Practice;
 
 public interface ConnectedService {
 	// list all Homeworks
@@ -46,11 +48,33 @@ public interface ConnectedService {
 	void deleteExtrawork(Long id);
 
 	// get Extrawork by subject, year & week
-	ExtraworkDTO getExtraworkkInfo(int subject, int year, int week);
+	ExtraworkDTO getExtraworkInfo(int subject, int year, int week);
 
 	// list Extrawork by grade
 	List<ExtraworkDTO> listExtrawork(String grade);
 	
 	// summary of Extrawork by grade
 	List<SimpleBasketDTO> loadExtrawork(String grade);
+
+	// list all Practices
+	List<Practice> allPractices();
+
+	// retrieve Practice by Id
+	Practice getPractice(Long id);
+	
+	// register Practice
+	Practice addPractice(Practice crs);
+	
+	// update Practice info by Id
+	Practice updatePractice(Practice newWork, Long id);
+	
+	// delete Practice
+	void deletePractice(Long id);
+
+	// get Practice by type, grade & volume
+	PracticeDTO getPracticeInfo(int type, String grade, int volume);
+
+	// list Practice by type, grade & volume
+	List<PracticeDTO> listPractice(int type, String grade, int volume);
+	
 }

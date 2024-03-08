@@ -22,10 +22,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.Homework;
+import hyung.jin.seo.jae.model.Practice;
+import hyung.jin.seo.jae.model.PracticeType;
 import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.service.CodeService;
 import hyung.jin.seo.jae.service.ConnectedService;
@@ -84,6 +87,27 @@ public class ConnectedController {
 		return dto;
 	}
 
+	// register practice
+	@PostMapping("/addPractice")
+	@ResponseBody
+	public PracticeDTO registerPractice(@RequestBody PracticeDTO formData) {
+		// 1. create barebone
+		Practice work = formData.convertToPractice();
+		// 2. set active to true as default
+		work.setActive(true);
+		// 3. set Grade & PracticeType
+		Grade grade = codeService.getGrade(Long.parseLong(formData.getGrade()));
+		PracticeType type = codeService.getPracticeType(formData.getPracticeType());
+		// 4. associate Grade & PracticeType
+		work.setGrade(grade);
+		work.setPracticeType(type);
+		// 5. register Practice
+		Practice added = connectedService.addPractice(work);
+		// 6. return dto
+		PracticeDTO dto = new PracticeDTO(added);
+		return dto;
+	}
+
 	// update existing homework
 	@PutMapping("/updateHomework")
 	@ResponseBody
@@ -117,6 +141,23 @@ public class ConnectedController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
 		}
 	}
+
+	// update existing practice
+	@PutMapping("/updatePractice")
+	@ResponseBody
+	public ResponseEntity<String> updatePractice(@RequestBody PracticeDTO formData) {
+		try{
+			// 1. create barebone Homework
+			Practice work = formData.convertToPractice();
+			// 2. update Homework
+			work = connectedService.updatePractice(work, Long.parseLong(formData.getId()));
+			// 3.return flag
+			return ResponseEntity.ok("\"Practice updated\"");
+		}catch(Exception e){
+			String message = "Error updating Practice : " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
+	}
 	
 	// get homework
 	@GetMapping("/getHomework/{id}")
@@ -136,6 +177,14 @@ public class ConnectedController {
 		return dto;
 	}
 
+	// get practice
+	@GetMapping("/getPractice/{id}")
+	@ResponseBody
+	public PracticeDTO getPractice(@PathVariable Long id) {
+		Practice work = connectedService.getPractice(id);
+		PracticeDTO dto = new PracticeDTO(work);
+		return dto;
+	}
 
 	// search homework by subject, year & week
 	@GetMapping("/homework/{subject}/{year}/{week}")
@@ -164,13 +213,30 @@ public class ConnectedController {
 	}
 
 	// bring extrawork in database
-	@GetMapping("/filterExtrawork/{grade}")
-	@ResponseBody
-	public List<ExtraworkDTO> listExtraworks(@PathVariable String grade) {
+	@GetMapping("/filterExtrawork")
+	public String listExtraworks(
+			@RequestParam(value = "listGrade", required = false) String grade,
+			Model model) {
 		List<ExtraworkDTO> dtos = new ArrayList();
 		String filteredGrade = StringUtils.defaultString(grade, JaeConstants.ALL);
 		dtos = connectedService.listExtrawork(filteredGrade);		
-		return dtos;
+		model.addAttribute(JaeConstants.EXTRAWORK_LIST, dtos);
+		return "extraworkListPage";
+	}
+
+	@GetMapping("/filterPractice")
+	public String listPractices(
+			@RequestParam(value = "listPracticeType", required = false) String practiceType,
+			@RequestParam(value = "listGrade", required = false) String grade,
+			@RequestParam(value = "listVolume", required = false) String volume,
+			Model model) {
+		List<PracticeDTO> dtos = new ArrayList();
+		String filteredType = StringUtils.defaultString(practiceType, "0");
+		String filteredGrade = StringUtils.defaultString(grade, JaeConstants.ALL);
+		String filteredVolume = StringUtils.defaultString(volume, "0");
+		dtos = connectedService.listPractice(Integer.parseInt(filteredType), filteredGrade, Integer.parseInt(filteredVolume));		
+		model.addAttribute(JaeConstants.PRACTICE_LIST, dtos);
+		return "practiceListPage";
 	}
 
 	// bring summary of extrawork

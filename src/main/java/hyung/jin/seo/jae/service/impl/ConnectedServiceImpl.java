@@ -11,11 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
+import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.repository.ExtraworkRepository;
 import hyung.jin.seo.jae.repository.HomeworkRepository;
+import hyung.jin.seo.jae.repository.PracticeRepository;
 import hyung.jin.seo.jae.service.ConnectedService;
 
 @Service
@@ -26,6 +29,9 @@ public class ConnectedServiceImpl implements ConnectedService {
 
 	@Autowired
 	private ExtraworkRepository extraworkRepository;
+
+	@Autowired
+	private PracticeRepository practiceRepository;
 
 	
 	@Override
@@ -38,7 +44,18 @@ public class ConnectedServiceImpl implements ConnectedService {
 		}
 		return dtos;
 	}
-	
+
+	@Override
+	public List<Practice> allPractices() {
+		List<Practice> dtos = new ArrayList<>();
+		try{
+			dtos = practiceRepository.findAll();
+		}catch(Exception e){
+			System.out.println("No Practice found");
+		}
+		return dtos;
+	}
+
 	@Override
 	public Homework getHomework(Long id) {
 		Optional<Homework> work = homeworkRepository.findById(id);
@@ -47,10 +64,26 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
+	public Practice getPractice(Long id) {
+		Optional<Practice> work = practiceRepository.findById(id);
+		if(!work.isPresent()) return null;
+		return work.get();
+	}
+
+	@SuppressWarnings("null")
+	@Override
 	@Transactional
 	public Homework addHomework(Homework work) {
 		Homework home = homeworkRepository.save(work);
 		return home;
+	}
+
+	@SuppressWarnings("null")
+	@Override
+	@Transactional
+	public Practice addPractice(Practice practice) {
+		Practice prac = practiceRepository.save(practice);
+		return prac;
 	}
 
 	@Override
@@ -82,12 +115,44 @@ public class ConnectedServiceImpl implements ConnectedService {
         return updated;
 	}
 
-	
+	@Override
+	@Transactional
+	public Practice updatePractice(Practice newWork, Long id) {
+		// search by getId
+		Practice existing = practiceRepository.findById(id).get();
+        // Update info
+        String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
+        if(StringUtils.isNotBlank(newPdfPath)){
+        	existing.setPdfPath(newPdfPath);
+        }
+		String newInfo = StringUtils.defaultString(newWork.getInfo());
+        if(StringUtils.isNotBlank(newInfo)){
+        	existing.setInfo(newInfo);
+        }
+		int newVolume = newWork.getVolume();
+		existing.setVolume(newVolume);
+		boolean newActive = newWork.isActive();
+		existing.setActive(newActive);
+        // update the existing record
+        Practice updated = practiceRepository.save(existing);
+		return updated;
+	}
+
 	@Override
 	@Transactional
 	public void deleteHomework(Long id) {
 		try{
 		    homeworkRepository.deleteById(id);
+        }catch(org.springframework.dao.EmptyResultDataAccessException e){
+            System.out.println("Nothing to delete");
+        }
+	}
+
+	@Override
+	@Transactional
+	public void deletePractice(Long id) {
+		try{
+		    practiceRepository.deleteById(id);
         }catch(org.springframework.dao.EmptyResultDataAccessException e){
             System.out.println("Nothing to delete");
         }
@@ -105,6 +170,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
+	public PracticeDTO getPracticeInfo(int type, String grade, int volume) {
+		PracticeDTO dto = null;
+		try{
+			dto = practiceRepository.findHomework(type, grade, volume);
+		}catch(Exception e){
+			System.out.println("No Practice found");
+		}
+		return dto;
+	}
+
+	@Override
 	public List<HomeworkDTO> listHomework(int subject, String grade, int year, int week) {
 		List<HomeworkDTO> dtos = new ArrayList<>();
 		try{
@@ -114,6 +190,18 @@ public class ConnectedServiceImpl implements ConnectedService {
 		}
 		return dtos;
 	}
+
+	@Override
+	public List<PracticeDTO> listPractice(int type, String grade, int volume) {
+		List<PracticeDTO> dtos = new ArrayList<>();
+		try{
+			dtos = practiceRepository.filterPracticeByTypeNGradeNVolume(type, grade, volume);
+		}catch(Exception e){
+			System.out.println("No Practice found");
+		}
+		return dtos;
+	}
+
 
 	@Override
 	public List<Extrawork> allExtraworks() {
@@ -176,7 +264,7 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
-	public ExtraworkDTO getExtraworkkInfo(int subject, int year, int week) {
+	public ExtraworkDTO getExtraworkInfo(int subject, int year, int week) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getExtraworkkInfo'");
 	}
@@ -207,6 +295,10 @@ public class ConnectedServiceImpl implements ConnectedService {
 		}
 		return dtos;
 	}
-	
+
+
+
+
+
 
 }

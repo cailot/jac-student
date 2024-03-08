@@ -197,7 +197,7 @@ function updatePassword() {
 	<ul class="navbar_menu">
 		<!-- Homework -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Homework
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -215,16 +215,19 @@ function updatePassword() {
 		</li>
 		<!-- Practice -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Practice
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			  	<!-- <a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/teacherList">Teacher List</a> -->
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/engHomework">MEGA English</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/mathHomework">MEGA Mathematics</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/writeHomework">MEGA General Ability</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/shortAnswer">NAPLAN</a>
 			</div>
 		</li>
 		<!-- Test -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Test
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -234,7 +237,7 @@ function updatePassword() {
 		</li>
 		<!-- Test Results-->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="${pageContext.request.contextPath}/admin" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Test Results
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
