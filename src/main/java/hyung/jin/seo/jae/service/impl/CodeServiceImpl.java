@@ -12,10 +12,12 @@ import hyung.jin.seo.jae.dto.StateDTO;
 import hyung.jin.seo.jae.dto.SubjectDTO;
 import hyung.jin.seo.jae.model.Branch;
 import hyung.jin.seo.jae.model.Grade;
+import hyung.jin.seo.jae.model.PracticeType;
 import hyung.jin.seo.jae.model.State;
 import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.repository.BranchRepository;
 import hyung.jin.seo.jae.repository.GradeRepository;
+import hyung.jin.seo.jae.repository.PracticeTypeRepository;
 import hyung.jin.seo.jae.repository.StateRepository;
 import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.CodeService;
@@ -34,6 +36,9 @@ public class CodeServiceImpl implements CodeService {
 
 	@Autowired
 	private SubjectRepository subjectRepository;
+
+	@Autowired
+	private PracticeTypeRepository practiceTypeRepository;
 
 	@Override
 	public List<StateDTO> allStates() {
@@ -279,6 +284,33 @@ public class CodeServiceImpl implements CodeService {
 			objects = subjectRepository.loadSubject();
 		}catch(Exception e){
 			System.out.println("No Subject found");
+		}
+		List<SimpleBasketDTO> dtos = new ArrayList<>();
+		for(Object[] object : objects){
+			SimpleBasketDTO dto = new SimpleBasketDTO(object);
+			dtos.add(dto);
+		}
+		return dtos;
+	}
+
+	@Override
+	public PracticeType getPracticeType(Long id) {
+		PracticeType type = null;
+		try{
+			type = practiceTypeRepository.findById(id).get();
+		}catch(Exception e){
+			System.out.println("No PracticeType found");
+		}
+		return type;
+	}
+
+	@Override
+	public List<SimpleBasketDTO> loadPracticeType() {
+		List<Object[]> objects = new ArrayList<>();
+		try{
+			objects = practiceTypeRepository.loadPracticeType();
+		}catch(Exception e){
+			System.out.println("No PracticeType found");
 		}
 		List<SimpleBasketDTO> dtos = new ArrayList<>();
 		for(Object[] object : objects){
