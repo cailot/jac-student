@@ -69,8 +69,6 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
         }
 
 */
-
-
         @Configuration
         @Order(1)
         public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {

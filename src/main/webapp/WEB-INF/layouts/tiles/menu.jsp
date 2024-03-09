@@ -191,13 +191,13 @@ function updatePassword() {
 <div class="container-fluid jae-header">
 <nav class="navbar">
 	<div class="navbar_logo">
-		<img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:45px;" >
-		&nbsp;&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/image/cc.png" style="width:80px;" >
+		<img src="${pageContext.request.contextPath}/image/logo.png" title="JAC Connected Class" style="filter: brightness(0) invert(1);width:45px;" >
+		&nbsp;&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/image/cc.png" title="JAC Connected Class" style="width:80px;" >
 	</div>
 	<ul class="navbar_menu">
 		<!-- Homework -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Homework
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -215,19 +215,21 @@ function updatePassword() {
 		</li>
 		<!-- Practice -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Practice
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/engHomework">MEGA English</a>
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/mathHomework">MEGA Mathematics</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/writeHomework">MEGA General Ability</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/shortAnswer">NAPLAN</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/megaEng">MEGA English</a>
+			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/megaMath">MEGA Mathematics</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/megaGA">MEGA General Ability</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanMath">NAPLAN Math</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanLc">NAPLAN LC</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanRead">NAPLAN Reading</a>
 			</div>
 		</li>
 		<!-- Test -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Test
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -237,7 +239,7 @@ function updatePassword() {
 		</li>
 		<!-- Test Results-->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			  Test Results
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
