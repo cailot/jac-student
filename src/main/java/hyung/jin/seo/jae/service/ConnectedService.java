@@ -76,5 +76,9 @@ public interface ConnectedService {
 
 	// list Practice by type, grade & volume
 	List<PracticeDTO> listPractice(int type, String grade, int volume);
+
+	// summary of Practice by practiceType & grade
+	List<SimpleBasketDTO> loadPractice(int type, int grade);
+
 	
 }

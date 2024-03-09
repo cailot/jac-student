@@ -1,7 +1,5 @@
 package hyung.jin.seo.jae.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -9,100 +7,120 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class JaeController {
 
 
-	@GetMapping("/studentAdmin")
-	public String adminJob(HttpSession session) {
-		return "studentAdminPage";
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Online Course
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@GetMapping("/online/login")
+	public String showOnlineLogin() {
+		return "onlineLogin";
 	}
 
-	@GetMapping("/studentList")
-	public String studentList(HttpSession session) {
-		return "studentListPage";
+	@GetMapping("/online/logout")
+	public String redirectOnlineLogin() {
+		return "redirect:/online/login";
 	}
 
-	@GetMapping("/studentInvoice")
-	public String studentInvoice(HttpSession session) {
-		return "studentInvoicePage";
+	@GetMapping("/online/lesson")
+	public String populateOnlineCourse() {
+		return "onlinePage";
 	}
 
-	@GetMapping("/studentAttendance")
-	public String studentAttendance(HttpSession session) {
-		return "studentAttendancePage";
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Connected Class
+	//
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@GetMapping("/connected/login")
+	public String showConnectedLogin() {
+		return "connectedLogin";
 	}
 
-	@GetMapping("/studentGrade")
-	public String studentGrade(HttpSession session) {
-		return "studentGradePage";
+	@GetMapping("/connected/logout")
+	public String redirectConnectedLogin() {
+		return "redirect:/connected/login";
 	}
 
-	@GetMapping("/courseList")
-	public String courseList(HttpSession session) {
-		return "courseListPage";
+	@GetMapping("/connected/lesson")
+	public String populateConnectedClass() {
+		return "connectedPage";
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Homework Menu
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// english homework
+	@GetMapping("/connected/engHomework")
+	public String dispayEngHomework() {
+		return "engHomeworkPage";
+	}
+
+	// math homework
+	@GetMapping("/connected/mathHomework")
+	public String dispayMathHomework() {
+		return "mathHomeworkPage";
+	}
+
+	// writing homework
+	@GetMapping("/connected/writeHomework")
+	public String dispayWritingHomework() {
+		return "writeHomeworkPage";
+	}
+
+	// homework answer
+	@GetMapping("/connected/shortAnswer")
+	public String dispayAnswerHomework() {
+		return "shortAnswerPage";
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Extra Material Menu
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// extra materials
+	@GetMapping("/connected/extraMaterial")
+	public String dispayExtraMaterial() {
+		return "extraMaterialPage";
 	}
 	
-	@GetMapping("/classList")
-	public String classList(HttpSession session) {
-		return "classListPage";
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Practice Menu
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// mega english
+	@GetMapping("/connected/megaEng")
+	public String dispayMegaEngPractice() {
+		return "megaEngPage";
 	}
 
-	@GetMapping("/onlineList")
-	public String onlineList(HttpSession session) {
-		return "onlineListPage";
+	// mega math
+	@GetMapping("/connected/megaMath")
+	public String dispayMegaMathPractice() {
+		return "megaMathPage";
 	}
 
-	@GetMapping("/gradeList")
-	public String gradeList(HttpSession session) {
-		return "gradeListPage";
+	// mega GA
+	@GetMapping("/connected/megaGA")
+	public String dispayMegaGAPractice() {
+		return "megaGAPage";
 	}
 
-	@GetMapping("/cycle")
-	public String academicCycle(HttpSession session) {
-		return "cyclePage";
+	// naplan math
+	@GetMapping("/connected/naplanMath")
+	public String dispayNaplanMathPractice() {
+		return "naplanMathPage";
 	}
 
-	@GetMapping("/branch")
-	public String branchList(HttpSession session) {
-		return "branchPage";
+	// naplan LC
+	@GetMapping("/connected/naplanLC")
+	public String dispayNaplanLCPractice() {
+		return "naplanLCPage";
 	}
 
-	@GetMapping("/teacherList")
-	public String teacher(HttpSession session) {
-		return "teacherListPage";
+	// naplan Reading
+	@GetMapping("/connected/naplanRead")
+	public String dispayNaplanReadPractice() {
+		return "naplanReadPage";
 	}
 
-	@GetMapping("/setting")
-	public String setting(HttpSession session) {
-		return "settingPage";
-	}
-
-	@GetMapping("/receipt")
-	public String openReceipt(HttpSession session) {
-		return "receiptPage";
-	}
-
-	@GetMapping("/invoice")
-	public String openInvoice(HttpSession session) {
-		return "invoicePage";
-	}
-
-	//////////////////////////////////////////////////
-	// CONNECTED CLASS
-	/////////////////////////////////////////////////
-
-	@GetMapping("/homeworkList")
-	public String homework(HttpSession session) {
-		return "homeworkListPage";
-	}
-
-	@GetMapping("/extraworkList")
-	public String extrawork(HttpSession session) {
-		return "extraworkListPage";
-	}
-
-	@GetMapping("/practiceList")
-	public String practice(HttpSession session) {
-		return "practiceListPage";
-	}
-
-	
 
 }

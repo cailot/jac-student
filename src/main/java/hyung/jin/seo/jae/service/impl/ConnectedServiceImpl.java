@@ -131,6 +131,8 @@ public class ConnectedServiceImpl implements ConnectedService {
         }
 		int newVolume = newWork.getVolume();
 		existing.setVolume(newVolume);
+		int newCount = newWork.getQuestionCount();
+		existing.setQuestionCount(newCount);
 		boolean newActive = newWork.isActive();
 		existing.setActive(newActive);
         // update the existing record
@@ -173,7 +175,7 @@ public class ConnectedServiceImpl implements ConnectedService {
 	public PracticeDTO getPracticeInfo(int type, String grade, int volume) {
 		PracticeDTO dto = null;
 		try{
-			dto = practiceRepository.findHomework(type, grade, volume);
+			dto = practiceRepository.findPractice(type, grade, volume);
 		}catch(Exception e){
 			System.out.println("No Practice found");
 		}
@@ -297,8 +299,20 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 
-
-
-
+	@Override
+	public List<SimpleBasketDTO> loadPractice(int type, int grade) {
+		List<Object[]> objects = new ArrayList<>();
+		try{
+			objects = practiceRepository.summaryPractice(type, grade);
+		}catch(Exception e){
+			System.out.println("No Practice found");
+		}
+		List<SimpleBasketDTO> dtos = new ArrayList<>();
+		for(Object[] object : objects){
+			SimpleBasketDTO dto = new SimpleBasketDTO(object);
+			dtos.add(dto);
+		}
+		return dtos;
+	}
 
 }

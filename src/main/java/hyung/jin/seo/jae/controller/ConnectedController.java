@@ -2,6 +2,7 @@ package hyung.jin.seo.jae.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -194,6 +195,14 @@ public class ConnectedController {
 		return dto;
 	}
 
+	// // search practice by id
+	// @GetMapping("/practice/{id}")
+	// @ResponseBody
+	// public PracticeDTO searchPractice(@PathVariable int id) {
+	// 	PracticeDTO dto = connectedService.getPracticeInfo(id);
+	// 	return dto;
+	// }
+	
 	// bring homework in database
 	@GetMapping("/filterHomework")
 	public String listHomeworks(
@@ -248,5 +257,37 @@ public class ConnectedController {
 		dtos = connectedService.loadExtrawork(filteredGrade);	
 		return dtos;
 	}
+
+	@GetMapping("/summaryPractice/{practiceType}/{grade}")
+	@ResponseBody
+	public List<SimpleBasketDTO> summaryPractices(@PathVariable String practiceType, @PathVariable String grade) {
+		List<SimpleBasketDTO> dtos = new ArrayList();
+		String filteredPracticeType = StringUtils.defaultString(practiceType, "0");
+		String filteredGrade = StringUtils.defaultString(grade, "0");
+		dtos = connectedService.loadPractice(Integer.parseInt(filteredPracticeType), Integer.parseInt(filteredGrade));	
+		return dtos;
+	}
+
+	@PostMapping(value = "/submitAnswers")
+	@ResponseBody
+    public ResponseEntity<String> submitAnswers(@RequestBody Map<String, Object> payload) {
+         // Extract practiceId and answers from the payload
+		 Integer practiceId = (Integer) payload.get("practiceId");
+		 List<Map<String, Object>> answers = (List<Map<String, Object>>) payload.get("answers");
+ 
+		 // Process the answers
+		 // Each answer is a map with two keys: "question" and "answer"
+ 
+		 for (Map<String, Object> answer : answers) {
+			 Integer question = (Integer) answer.get("question");
+			 Integer selectedOption = (Integer) answer.get("answer");
+			
+			 System.out.println(question + " - " + selectedOption);
+			 // Process each answer
+			 // ...
+		 } 
+        return ResponseEntity.ok("\"Success\"");
+    }
+
 	
 }

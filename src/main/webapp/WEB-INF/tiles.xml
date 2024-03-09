@@ -36,6 +36,8 @@
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/connectedClass.jsp" />
 	</definition>
+
+	<!-- HOMEWORK MENU -->
 	<!-- Connected English Homework Page -->
 	<definition name="engHomeworkPage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
@@ -56,10 +58,45 @@
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/homework/shortAnswer.jsp" />
 	</definition>
+
+	<!-- EXTRA MATERIAL MENU -->
 	<!-- Connected Extra Materials Page -->
 	<definition name="extraMaterialPage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/extra/mathTopic.jsp" />
 	</definition>
+
+	<!-- PRACTICE MENU -->
+	<!-- Connected Mega English Practice -->
+	<definition name="megaEngPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaEng.jsp" />
+	</definition>
+	<!-- Connected Mega Mathematics Practice -->
+	<definition name="megaMathPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaMath.jsp" />
+	</definition>
+	<!-- Connected Mega GA Practice -->
+	<definition name="megaGAPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaGA.jsp" />
+	</definition>
+	<!-- Connected NAPLAN LC Practice -->
+	<definition name="naplanLCPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanLC.jsp" />
+	</definition>
+	<!-- Connected NAPLAN Math Practice -->
+	<definition name="naplanMathPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanMath.jsp" />
+	</definition>
+	<!-- Connected NAPLAN Reading Practice -->
+	<definition name="naplanReadPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanRead.jsp" />
+	</definition>
+
 
 </tiles-definitions>

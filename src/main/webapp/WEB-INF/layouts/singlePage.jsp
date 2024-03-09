@@ -1,5 +1,5 @@
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<html>
+<html lang="en-US">
 <head>
 <title><tiles:getAsString name="title" /></title>
 <link href="${pageContext.request.contextPath}/css/jae.css" rel="stylesheet" type="text/css"/>
