@@ -4,11 +4,13 @@ import java.util.List;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
+import hyung.jin.seo.jae.model.PracticeAnswer;
 
 public interface ConnectedService {
 	// list all Homeworks
@@ -79,6 +81,19 @@ public interface ConnectedService {
 
 	// summary of Practice by practiceType & grade
 	List<SimpleBasketDTO> loadPractice(int type, int grade);
+
+	// retrieve PracticeAnswer by Id
+	PracticeAnswer getPracticeAnswer(Long id);
+
+	// retrieve PracticeAnswer by Practice
+	PracticeAnswerDTO findPracticeAnswerByPractice(Long id);
+
+	// register PracticeAnswer
+	PracticeAnswer addPracticeAnswer(PracticeAnswer crs);
+	
+	// update PracticeAnswer info by Id
+	PracticeAnswer updatePracticeAnswer(PracticeAnswer newWork, Long id);
+	
 
 	
 }
