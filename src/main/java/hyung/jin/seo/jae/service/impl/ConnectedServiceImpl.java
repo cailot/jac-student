@@ -11,13 +11,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
+import hyung.jin.seo.jae.model.PracticeAnswer;
 import hyung.jin.seo.jae.repository.ExtraworkRepository;
 import hyung.jin.seo.jae.repository.HomeworkRepository;
+import hyung.jin.seo.jae.repository.PracticeAnswerRepository;
 import hyung.jin.seo.jae.repository.PracticeRepository;
 import hyung.jin.seo.jae.service.ConnectedService;
 
@@ -32,6 +35,9 @@ public class ConnectedServiceImpl implements ConnectedService {
 
 	@Autowired
 	private PracticeRepository practiceRepository;
+
+	@Autowired
+	private PracticeAnswerRepository practiceAnswerRepository;
 
 	
 	@Override
@@ -70,6 +76,14 @@ public class ConnectedServiceImpl implements ConnectedService {
 		return work.get();
 	}
 
+	@Override
+	public PracticeAnswer getPracticeAnswer(Long id) {
+		Optional<PracticeAnswer> answer = practiceAnswerRepository.findById(id);
+		if(!answer.isPresent()) return null;
+		return answer.get();
+	}
+
+
 	@SuppressWarnings("null")
 	@Override
 	@Transactional
@@ -85,6 +99,15 @@ public class ConnectedServiceImpl implements ConnectedService {
 		Practice prac = practiceRepository.save(practice);
 		return prac;
 	}
+
+	@SuppressWarnings("null")
+	@Override
+	@Transactional
+	public PracticeAnswer addPracticeAnswer(PracticeAnswer ans) {
+		PracticeAnswer answer = practiceAnswerRepository.save(ans);
+		return answer;
+	}
+
 
 	@Override
 	@Transactional
@@ -139,6 +162,28 @@ public class ConnectedServiceImpl implements ConnectedService {
         Practice updated = practiceRepository.save(existing);
 		return updated;
 	}
+
+	@Override
+	@Transactional
+	public PracticeAnswer updatePracticeAnswer(PracticeAnswer newWork, Long id) {
+		// search by getId
+		PracticeAnswer existing = practiceAnswerRepository.findById(id).get();
+		// update info
+		String newVideoPath = StringUtils.defaultString(newWork.getVideoPath());
+        if(StringUtils.isNotBlank(newVideoPath)){
+        	existing.setVideoPath(newVideoPath);
+        }
+		String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
+        if(StringUtils.isNotBlank(newPdfPath)){
+        	existing.setPdfPath(newPdfPath);
+        }
+		List newAns = newWork.getAnswers();
+		existing.setAnswers(newAns);
+		// update the existing record
+		PracticeAnswer updated = practiceAnswerRepository.save(existing);
+		return updated;	
+	}
+
 
 	@Override
 	@Transactional
@@ -313,6 +358,20 @@ public class ConnectedServiceImpl implements ConnectedService {
 			dtos.add(dto);
 		}
 		return dtos;
+	}
+
+	@Override
+	public PracticeAnswerDTO findPracticeAnswerByPractice(Long id) {
+		PracticeAnswerDTO dto = null;
+		try{
+			PracticeAnswer answer = practiceAnswerRepository.findPracticeAnswerByPractice(id);
+			if(answer!=null){
+				dto = new PracticeAnswerDTO(answer);
+			}
+		}catch(Exception e){
+			System.out.println("No PracticeAnswer found");
+		}
+		return dto;
 	}
 
 }
