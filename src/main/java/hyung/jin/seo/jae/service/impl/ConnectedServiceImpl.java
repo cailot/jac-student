@@ -428,5 +428,15 @@ public class ConnectedServiceImpl implements ConnectedService {
 		return 0;
 	}
 
+	@Override
+	public boolean isStudentPracticeExist(Long studentId, Long practiceId) {
+		Optional<StudentPractice> sp = studentPracticeRepository.findByStudentIdAndPracticeId(studentId, practiceId);
+		if(sp.isPresent()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 
 }

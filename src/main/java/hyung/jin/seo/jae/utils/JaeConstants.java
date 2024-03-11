@@ -224,4 +224,13 @@ public interface JaeConstants {
 	int VIDEO = 0;
 
 	int PDF = 1;
+
+	////////////////////////////////////
+	//
+	//	PRACTICE
+	//
+	////////////////////////////////////
+
+	String PRACTICE_COMPLETE = "DONE";
+
 }

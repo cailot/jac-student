@@ -22,22 +22,30 @@
 const PRACTICE_TYPE = 4; // 4 is NAPLAN Math 
 const MOVIE = 0;
 const PDF = 1;
+const DONE= 'DONE';
 // console.log(studentId);
 $(function() {
     $.ajax({
-        url : '${pageContext.request.contextPath}/connected/summaryPractice/' + PRACTICE_TYPE + '/' + numericGrade,
+        url : '${pageContext.request.contextPath}/connected/summaryPractice/' + studentId + '/' + PRACTICE_TYPE + '/' + numericGrade,
         method: "GET",
         success: function(data) {
             $.each(data, function(index, basket) {
 
 				var title = basket.name;
                 var id = basket.value;
+                var icon = '<i class="bi bi-send h5 text-primary" title="unsubmitted yet"></i>';
+                var cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
+                if (title.endsWith('DONE')) {
+                    // title ends with 'DONE'
+                    title = title.slice(0, -4);
+                    icon = '<i class="bi bi-send-fill h5 text-primary" title="submitted"></i>';
+                    cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayAnswer(' + id +  ', \'' +  title + '\');">'
+                }
                 console.log(basket);
                 var topicDiv = '<div class="col-md-4">'
-                +  '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
+                + cardBody
                 + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
-                + '<strong><span id="topicTitle">Set ' + title + '</span></strong>&nbsp;&nbsp;<i class="bi bi-send h5 text-primary" title="unsubmitted yet"></i>'
-                // + '&nbsp;&nbsp;<i class="bi bi-check-square h5 text-primary"></i>'
+                + '<strong><span id="topicTitle">Set ' + title + '</span></strong>&nbsp;&nbsp;' + icon
                 + '</p></div></div></div>';
                 $('#topicContainer').append(topicDiv);    
 			});
@@ -53,6 +61,60 @@ $(function() {
 // 			Display Material (Pdf/Answer Sheet)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function displayMaterial(practiceId, setNumber) {
+    // set dialogSet value as setNumber
+    document.getElementById("dialogSet").innerHTML = setNumber;  
+    $.ajax({
+        url : '${pageContext.request.contextPath}/connected/getPractice/' + practiceId,
+        method: "GET",
+        success: function(practice) {
+            // console.log(practice);
+            document.getElementById("pdfViewer").data = practice.pdfPath;
+            // manipulate answer sheet
+            var numQuestion = practice.questionCount; // replace with the actual property name
+            var container = $('.answerSheet');
+            container.empty(); // remove existing question elements
+            // header
+            var header = '<div style="font-size: 24px; color: #333; text-align: center; margin-bottom: 20px;">Answers <span id="chosenAnswerNum" name="chosenAnswerNum">0</span>/<span id="numQuestion" name="numQuestion">'+ numQuestion +'</span></div>';
+            container.append(header);
+            for (var i = 1; i <= numQuestion; i++) {
+                var questionDiv = $('<div>').addClass('mt-4 mb-4');
+                questionDiv.append($('<div>').addClass('form-check form-check-inline h5').text('Question ' + i + '. '));
+                ['A', 'B', 'C', 'D', 'E'].forEach(function(option, index) {
+                    var optionDiv = $('<div>').addClass('form-check form-check-inline h5');
+                    var input = $('<input>').addClass('form-check-input mr-3 ml-2').attr({
+                        type: 'radio',
+                        name: 'inlineRadioOptions' + i,
+                        id: 'inlineRadio' + i + (index + 1), // append the question number to the id
+                        value: index + 1
+                    });
+                    var label = $('<label>').addClass('form-check-label').attr('for', 'inlineRadio' + i + (index + 1)).text(option);
+                    optionDiv.append(input, label);
+                    questionDiv.append(optionDiv);
+                });
+                container.append(questionDiv);
+            }
+
+            // Add event listener to radio buttons
+            $('.form-check-input').on('change', function() {
+                var chosenAnswerNum = $('input[type=radio]:checked').length;
+                $('#chosenAnswerNum').text(chosenAnswerNum);
+            });
+            var footer = '<div><button type="submit" class="btn btn-primary w-100" onclick="checkAnswer(' + practiceId + ', ' +  numQuestion +')">SUBMIT</button></div>';
+            container.append(footer);
+
+            // pop-up pdf & answer sheet
+            $('#practiceModal').modal('show');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('Error : ' + errorThrown);
+        }
+    });  
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 			Display Answer (Video/Pdf)
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+function displayAnswer(practiceId, setNumber) {
     // set dialogSet value as setNumber
     document.getElementById("dialogSet").innerHTML = setNumber;  
     $.ajax({

@@ -298,13 +298,24 @@ public class ConnectedController {
 		return dtos;
 	}
 
-	@GetMapping("/summaryPractice/{practiceType}/{grade}")
+	@GetMapping("/summaryPractice/{studentId}/{practiceType}/{grade}")
 	@ResponseBody
-	public List<SimpleBasketDTO> summaryPractices(@PathVariable String practiceType, @PathVariable String grade) {
+	public List<SimpleBasketDTO> summaryPractices(@PathVariable String studentId, @PathVariable String practiceType, @PathVariable String grade) {
 		List<SimpleBasketDTO> dtos = new ArrayList();
+		String filteredStudentId = StringUtils.defaultString(studentId, "0");
 		String filteredPracticeType = StringUtils.defaultString(practiceType, "0");
 		String filteredGrade = StringUtils.defaultString(grade, "0");
-		dtos = connectedService.loadPractice(Integer.parseInt(filteredPracticeType), Integer.parseInt(filteredGrade));	
+		dtos = connectedService.loadPractice(Integer.parseInt(filteredPracticeType), Integer.parseInt(filteredGrade));
+		// check whether the volume is finished or not
+		for(SimpleBasketDTO dto : dtos){
+			// get practiceId
+			String practiceId = StringUtils.defaultString(dto.getValue(), "0");
+			boolean done = connectedService.isStudentPracticeExist(Long.parseLong(filteredStudentId), Long.parseLong(practiceId));
+			if(done){
+				String name = dto.getName();
+				dto.setName(name + JaeConstants.PRACTICE_COMPLETE);
+			}
+		}
 		return dtos;
 	}
 
