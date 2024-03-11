@@ -16,6 +16,8 @@ public interface PracticeAnswerRepository extends JpaRepository<PracticeAnswer, 
 	@SuppressWarnings("null")
 	Optional<PracticeAnswer> findById(Long id);
 
+	Optional<PracticeAnswer> findByPracticeId(Long practiceId);
+
 	@Query(value = "SELECT * FROM PracticeAnswer pa where pa.practiceId = :practiceId", nativeQuery = true)
 	PracticeAnswer findPracticeAnswerByPractice(Long practiceId);
 }

@@ -5,23 +5,26 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.aspectj.lang.annotation.SuppressAjWarnings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
-import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
+import hyung.jin.seo.jae.dto.StudentPracticeDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.model.PracticeAnswer;
+import hyung.jin.seo.jae.model.StudentPractice;
 import hyung.jin.seo.jae.repository.ExtraworkRepository;
 import hyung.jin.seo.jae.repository.HomeworkRepository;
 import hyung.jin.seo.jae.repository.PracticeAnswerRepository;
 import hyung.jin.seo.jae.repository.PracticeRepository;
+import hyung.jin.seo.jae.repository.StudentPracticeRepository;
 import hyung.jin.seo.jae.service.ConnectedService;
 
 @Service
@@ -38,6 +41,9 @@ public class ConnectedServiceImpl implements ConnectedService {
 
 	@Autowired
 	private PracticeAnswerRepository practiceAnswerRepository;
+
+	@Autowired
+	private StudentPracticeRepository studentPracticeRepository;
 
 	
 	@Override
@@ -83,6 +89,13 @@ public class ConnectedServiceImpl implements ConnectedService {
 		return answer.get();
 	}
 
+	@Override
+	public StudentPractice getStudentPractice(Long id) {
+		Optional<StudentPractice> sp = studentPracticeRepository.findById(id);
+		if(!sp.isPresent()) return null;
+		return sp.get();
+	}
+
 
 	@SuppressWarnings("null")
 	@Override
@@ -108,6 +121,14 @@ public class ConnectedServiceImpl implements ConnectedService {
 		return answer;
 	}
 
+	@SuppressAjWarnings("null")
+	@Override
+	@Transactional
+	public StudentPractice addStudentPractice(StudentPractice crs) {
+		StudentPractice sp = studentPracticeRepository.save(crs);
+		return sp;
+	}
+
 
 	@Override
 	@Transactional
@@ -116,17 +137,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 		Homework existing = homeworkRepository.findById(id).get();
         // Update info
         String newVideoPath = StringUtils.defaultString(newWork.getVideoPath());
-        if(StringUtils.isNotBlank(newVideoPath)){
+        // if(StringUtils.isNotBlank(newVideoPath)){
         	existing.setVideoPath(newVideoPath);
-        }
+        // }
 		String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
-        if(StringUtils.isNotBlank(newPdfPath)){
+        // if(StringUtils.isNotBlank(newPdfPath)){
         	existing.setPdfPath(newPdfPath);
-        }
+        // }
         String newInfo = StringUtils.defaultString(newWork.getInfo());
-        if(StringUtils.isNotBlank(newInfo)){
+        // if(StringUtils.isNotBlank(newInfo)){
         	existing.setInfo(newInfo);
-        }
+        // }
 		int newWeek = newWork.getWeek();
 		existing.setWeek(newWeek);
 		int newYear = newWork.getYear();
@@ -145,17 +166,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 		Practice existing = practiceRepository.findById(id).get();
         // Update info
         String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
-        if(StringUtils.isNotBlank(newPdfPath)){
+        // if(StringUtils.isNotBlank(newPdfPath)){
         	existing.setPdfPath(newPdfPath);
-        }
+        // }
 		String newInfo = StringUtils.defaultString(newWork.getInfo());
-        if(StringUtils.isNotBlank(newInfo)){
+        // if(StringUtils.isNotBlank(newInfo)){
         	existing.setInfo(newInfo);
-        }
+        // }
 		int newVolume = newWork.getVolume();
 		existing.setVolume(newVolume);
-		int newCount = newWork.getQuestionCount();
-		existing.setQuestionCount(newCount);
+		// int newCount = newWork.getQuestionCount();
+		// existing.setQuestionCount(newCount);
 		boolean newActive = newWork.isActive();
 		existing.setActive(newActive);
         // update the existing record
@@ -170,19 +191,35 @@ public class ConnectedServiceImpl implements ConnectedService {
 		PracticeAnswer existing = practiceAnswerRepository.findById(id).get();
 		// update info
 		String newVideoPath = StringUtils.defaultString(newWork.getVideoPath());
-        if(StringUtils.isNotBlank(newVideoPath)){
+        // if(StringUtils.isNotBlank(newVideoPath)){
         	existing.setVideoPath(newVideoPath);
-        }
+        // }
 		String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
-        if(StringUtils.isNotBlank(newPdfPath)){
+        // if(StringUtils.isNotBlank(newPdfPath)){
         	existing.setPdfPath(newPdfPath);
-        }
+        // }
 		List newAns = newWork.getAnswers();
 		existing.setAnswers(newAns);
 		// update the existing record
 		PracticeAnswer updated = practiceAnswerRepository.save(existing);
 		return updated;	
 	}
+
+	@Override
+	@Transactional
+	public StudentPractice updateStudentPractice(StudentPractice newWork, Long id) {
+		// search by getId
+		StudentPractice existing = studentPracticeRepository.findById(id).get();
+		// update info
+		double newScore = newWork.getScore();
+		existing.setScore(newScore);
+		List newAnswers = newWork.getAnswers();
+		existing.setAnswers(newAnswers);
+		// update the existing record
+		StudentPractice updated = studentPracticeRepository.save(existing);
+		return updated;
+	}
+
 
 
 	@Override
@@ -282,17 +319,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 		Extrawork existing = extraworkRepository.findById(id).get();
         // Update info
         String newVideoPath = StringUtils.defaultString(newWork.getVideoPath());
-        if(StringUtils.isNotBlank(newVideoPath)){
+        // if(StringUtils.isNotBlank(newVideoPath)){
         	existing.setVideoPath(newVideoPath);
-        }
+        // }
 		String newPdfPath = StringUtils.defaultString(newWork.getPdfPath());
-        if(StringUtils.isNotBlank(newPdfPath)){
+        // if(StringUtils.isNotBlank(newPdfPath)){
         	existing.setPdfPath(newPdfPath);
-        }
+        // }
         String newName = StringUtils.defaultString(newWork.getName());
-        if(StringUtils.isNotBlank(newName)){
+        // if(StringUtils.isNotBlank(newName)){
         	existing.setName(newName);
-        }
+        // }
 		boolean newActive = newWork.isActive();
 		existing.setActive(newActive);
         // update the existing record
@@ -361,17 +398,35 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
-	public PracticeAnswerDTO findPracticeAnswerByPractice(Long id) {
-		PracticeAnswerDTO dto = null;
+	public StudentPracticeDTO findStudentPracticeByStudentNPractice(Long studentId, Long practiceId) {
+		StudentPracticeDTO dto = null;
 		try{
-			PracticeAnswer answer = practiceAnswerRepository.findPracticeAnswerByPractice(id);
-			if(answer!=null){
-				dto = new PracticeAnswerDTO(answer);
-			}
+			dto = studentPracticeRepository.findStudentPractice(studentId, practiceId);
 		}catch(Exception e){
-			System.out.println("No PracticeAnswer found");
+			System.out.println("No StudentPractice found");
 		}
-		return dto;
+		return dto;	
 	}
+
+	@Override
+	public List<Integer> getAnswersByPractice(Long practiceId) {
+		Optional<PracticeAnswer> answer = practiceAnswerRepository.findByPracticeId(practiceId);
+		if(answer.isPresent()){
+			return answer.get().getAnswers();
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public int getAnswerCount(Long practiceId) {
+		Optional<PracticeAnswer> answer = practiceAnswerRepository.findByPracticeId(practiceId);
+		if(answer.isPresent()){
+			List<Integer> answers =  answer.get().getAnswers();
+			if((answers != null) && (answers.size()>0)) return answers.get(0);
+		}
+		return 0;
+	}
+
 
 }

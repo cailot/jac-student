@@ -11,13 +11,18 @@
         max-height: 90%;
     }
 
+    input[type="radio"]{
+        transform: scale(2);
+    }
+
+
 </style>
 <script>
 
 const PRACTICE_TYPE = 4; // 4 is NAPLAN Math 
 const MOVIE = 0;
 const PDF = 1;
-// console.log(numericGrade);
+// console.log(studentId);
 $(function() {
     $.ajax({
         url : '${pageContext.request.contextPath}/connected/summaryPractice/' + PRACTICE_TYPE + '/' + numericGrade,
@@ -27,7 +32,7 @@ $(function() {
 
 				var title = basket.name;
                 var id = basket.value;
-                //console.log(basket);
+                console.log(basket);
                 var topicDiv = '<div class="col-md-4">'
                 +  '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
                 + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
@@ -68,7 +73,7 @@ function displayMaterial(practiceId, setNumber) {
                 questionDiv.append($('<div>').addClass('form-check form-check-inline h5').text('Question ' + i + '. '));
                 ['A', 'B', 'C', 'D', 'E'].forEach(function(option, index) {
                     var optionDiv = $('<div>').addClass('form-check form-check-inline h5');
-                    var input = $('<input>').addClass('form-check-input').attr({
+                    var input = $('<input>').addClass('form-check-input mr-3 ml-2').attr({
                         type: 'radio',
                         name: 'inlineRadioOptions' + i,
                         id: 'inlineRadio' + i + (index + 1), // append the question number to the id
@@ -115,9 +120,10 @@ function checkAnswer(practiceId, numQuestion) {
     }
     //Make an AJAX call to send the data to the server
     $.ajax({
-        url: '${pageContext.request.contextPath}/connected/submitAnswers', // replace with the actual URL
+        url: '${pageContext.request.contextPath}/connected/addStudentPractice',
         method: 'POST',
         data: JSON.stringify({
+            studentId : studentId,
             practiceId : practiceId,
             answers : answers
         }),

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -261,5 +262,29 @@ public class JaeUtils {
 			session.removeAttribute(name);
 		}
 	}
+
+	// calculate score by comparing student answers and answer sheet
+	public static double calculateScore(List<Integer> studentAnswers, List<Integer> answerSheet) {
+        // Check if both lists have the same size
+        if ((studentAnswers==null) || (answerSheet==null) || (studentAnswers.size() != answerSheet.size())) {
+            return 0;
+        }
+        int totalQuestions = answerSheet.get(0); // Assuming the first element is the total count
+
+        // Iterate through the lists and compare corresponding elements
+        int correctAnswers = 0;
+        for (int i = 1; i <= totalQuestions; i++) {
+            int studentAnswer = studentAnswers.get(i);
+            int correctAnswer = answerSheet.get(i);
+
+            if (studentAnswer == correctAnswer) {
+                correctAnswers++;
+            }
+        }
+        // Calculate the final score as a percentage
+        double score = ((double) correctAnswers / totalQuestions) * 100;
+		double rounded = Math.round(score * 100.0) / 100.0;
+        return rounded;
+    }
 	
 }

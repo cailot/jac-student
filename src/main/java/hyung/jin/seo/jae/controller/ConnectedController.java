@@ -1,6 +1,7 @@
 package hyung.jin.seo.jae.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +31,14 @@ import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.model.PracticeType;
+import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.model.StudentPractice;
 import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.service.CodeService;
 import hyung.jin.seo.jae.service.ConnectedService;
+import hyung.jin.seo.jae.service.StudentService;
 import hyung.jin.seo.jae.utils.JaeConstants;
+import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Controller
 @RequestMapping("connected")
@@ -46,6 +51,9 @@ public class ConnectedController {
 
 	@Autowired
 	private CodeService codeService;
+
+	@Autowired
+	private StudentService studentService;
 	
 	// register homework
 	@PostMapping("/addHomework")
@@ -108,6 +116,35 @@ public class ConnectedController {
 		PracticeDTO dto = new PracticeDTO(added);
 		return dto;
 	}
+
+	@PostMapping(value = "/addStudentPractice")
+	@ResponseBody
+    public ResponseEntity<String> registerStudentPractice(@RequestBody Map<String, Object> payload) {
+        // Extract practiceId and answers from the payload
+		String studentId = StringUtils.defaultString(payload.get("studentId").toString(), "0");
+		String practiceId = StringUtils.defaultString(payload.get("practiceId").toString(), "0");
+		List<Map<String, Object>> mapAns = (List<Map<String, Object>>) payload.get("answers");
+		// convert the Map of answers to List
+		List<Integer> answers = convertAnswers(mapAns);
+		// compare answers with answer sheet
+		List<Integer> corrects = connectedService.getAnswersByPractice(Long.parseLong(practiceId));
+		double score = JaeUtils.calculateScore(answers, corrects);
+		// 1. create barebone
+		StudentPractice sp = new StudentPractice();
+		sp.setScore(score);
+		// 2. set Student & Practice
+		Student student = studentService.getStudent(Long.parseLong(studentId));
+		Practice practice = connectedService.getPractice(Long.parseLong(practiceId));
+		// 3. associate Student & Practice
+		sp.setStudent(student);
+		sp.setPractice(practice);
+		// 4. set answers
+		sp.setAnswers(answers);
+		// 5. register StudentPractice
+		connectedService.addStudentPractice(sp);
+		// 6. return flag
+		return ResponseEntity.ok("\"StudentPractice registered\"");
+    }
 
 	// update existing homework
 	@PutMapping("/updateHomework")
@@ -184,6 +221,9 @@ public class ConnectedController {
 	public PracticeDTO getPractice(@PathVariable Long id) {
 		Practice work = connectedService.getPractice(id);
 		PracticeDTO dto = new PracticeDTO(work);
+		// get question count
+		int count = connectedService.getAnswerCount(id);
+		dto.setQuestionCount(count);
 		return dto;
 	}
 
@@ -272,7 +312,8 @@ public class ConnectedController {
 	@ResponseBody
     public ResponseEntity<String> submitAnswers(@RequestBody Map<String, Object> payload) {
          // Extract practiceId and answers from the payload
-		 Integer practiceId = (Integer) payload.get("practiceId");
+		 String studentId = payload.get("studentId").toString();
+		 String practiceId = payload.get("practiceId").toString();
 		 List<Map<String, Object>> answers = (List<Map<String, Object>>) payload.get("answers");
  
 		 // Process the answers
@@ -289,5 +330,19 @@ public class ConnectedController {
         return ResponseEntity.ok("\"Success\"");
     }
 
-	
+	// helper method converting answers Map to List
+	private List<Integer> convertAnswers(List<Map<String, Object>> answers) {
+		// Sort the answers based on the "question" key
+		answers.sort(Comparator.comparingInt(answer -> Integer.parseInt(answer.get("question").toString())));
+
+		List<Integer> answerList = new ArrayList<>();
+		// 1st element represents total answer count
+		answerList.add(0, answers.size());
+		for (Map<String, Object> answer : answers) {
+			int questionNum = Integer.parseInt(answer.get("question").toString());
+			int selectedOption = Integer.parseInt(answer.get("answer").toString());
+			answerList.add(questionNum, selectedOption);
+		}
+		return answerList;
+	}
 }
