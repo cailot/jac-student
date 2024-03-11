@@ -111,5 +111,8 @@ public interface ConnectedService {
 	// update PracticeAnswer info by Id
 	StudentPractice updateStudentPractice(StudentPractice newWork, Long id);
 
+	// check if student has done the practice
+	boolean isStudentPracticeExist(Long studentId, Long practiceId);
+
 	
 }
