@@ -37,8 +37,8 @@ public class Practice {
     @Column(length = 2, nullable = true)
     private Integer volume;
 
-    @Column(length = 2, nullable = true)
-    private Integer questionCount;
+    // @Column(length = 2, nullable = true)
+    // private Integer questionCount;
 
     @Column(length = 50, nullable = true)
     private String info;

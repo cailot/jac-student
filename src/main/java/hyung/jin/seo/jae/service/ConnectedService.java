@@ -7,10 +7,12 @@ import hyung.jin.seo.jae.dto.HomeworkDTO;
 import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
+import hyung.jin.seo.jae.dto.StudentPracticeDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.model.PracticeAnswer;
+import hyung.jin.seo.jae.model.StudentPractice;
 
 public interface ConnectedService {
 	// list all Homeworks
@@ -85,15 +87,29 @@ public interface ConnectedService {
 	// retrieve PracticeAnswer by Id
 	PracticeAnswer getPracticeAnswer(Long id);
 
-	// retrieve PracticeAnswer by Practice
-	PracticeAnswerDTO findPracticeAnswerByPractice(Long id);
-
 	// register PracticeAnswer
 	PracticeAnswer addPracticeAnswer(PracticeAnswer crs);
 	
 	// update PracticeAnswer info by Id
 	PracticeAnswer updatePracticeAnswer(PracticeAnswer newWork, Long id);
+
+	// get Answer sheet by Practice
+	List<Integer> getAnswersByPractice(Long practiceid);
+
+	// get how many question answer sheet has
+	int getAnswerCount(Long practiceId);
 	
+	// retrieve StudentPractice by Id
+	StudentPractice getStudentPractice(Long id);
+
+	// retrieve PracticeAnswer by Practice
+	StudentPracticeDTO findStudentPracticeByStudentNPractice(Long studentId, Long practiceId);
+
+	// register PracticeAnswer
+	StudentPractice addStudentPractice(StudentPractice crs);
+	
+	// update PracticeAnswer info by Id
+	StudentPractice updateStudentPractice(StudentPractice newWork, Long id);
 
 	
 }
