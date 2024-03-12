@@ -28,6 +28,8 @@ public class PracticeAnswerDTO implements Serializable {
 
 	private List<Integer> answers;
 
+	private List<Integer> students;
+
 	public PracticeAnswerDTO(PracticeAnswer work){
 		this.id = String.valueOf(work.getId());
 		this.videoPath = work.getVideoPath();
