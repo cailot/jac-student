@@ -36,4 +36,7 @@ public interface StudentPracticeRepository extends JpaRepository<StudentPractice
 	// check whether there is a record in StudentPractice table by studentId and practiceId
 	Optional<StudentPractice> findByStudentIdAndPracticeId(Long studentId, Long practiceId);
 	
+	// delete existing record in StudentPracice table by studentId and practiceId
+	void deleteByStudentIdAndPracticeId(Long studentId, Long practiceId);
+
 }

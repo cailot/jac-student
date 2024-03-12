@@ -25,7 +25,7 @@ public interface PracticeRepository extends JpaRepository<Practice, Long>{
 	List<PracticeDTO> filterPracticeByTypeNGradeNVolume(int type, String grade, int volume);
 
 	// summarise Extawork by grade
-	@Query(value = "SELECT p.volume, p.id FROM Practice p WHERE p.practiceTypeId = ?1 AND p.gradeId = ?2", nativeQuery = true)   
+	@Query(value = "SELECT p.volume, p.id FROM Practice p WHERE p.practiceTypeId = ?1 AND p.gradeId = ?2 AND p.active = true", nativeQuery = true)   
 	List<Object[]> summaryPractice(int type, int grade);
 
 }

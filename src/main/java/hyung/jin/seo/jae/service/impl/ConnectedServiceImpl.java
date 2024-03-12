@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StudentPracticeDTO;
@@ -419,6 +420,16 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
+	public List<Integer> getStudentAnswer(Long studentId, Long practionId) {
+		Optional<StudentPractice> sp = studentPracticeRepository.findByStudentIdAndPracticeId(studentId, practionId);
+		if(sp.isPresent()){
+			return sp.get().getAnswers();
+		}else{
+			return null;
+		}
+	}
+
+	@Override
 	public int getAnswerCount(Long practiceId) {
 		Optional<PracticeAnswer> answer = practiceAnswerRepository.findByPracticeId(practiceId);
 		if(answer.isPresent()){
@@ -438,5 +449,28 @@ public class ConnectedServiceImpl implements ConnectedService {
 		}
 	}
 
+	@Override
+	public PracticeAnswerDTO findPracticeAnswerByPractice(Long id) {
+		PracticeAnswerDTO dto = null;
+		try{
+			PracticeAnswer answer = practiceAnswerRepository.findPracticeAnswerByPractice(id);
+			if(answer!=null){
+				dto = new PracticeAnswerDTO(answer);
+			}
+		}catch(Exception e){
+			System.out.println("No PracticeAnswer found");
+		}
+		return dto;
+	}
+
+	@Override
+	@Transactional
+	public void deleteStudentPractice(Long studentId, Long practiceId) {
+		try{
+			studentPracticeRepository.deleteByStudentIdAndPracticeId(studentId, practiceId);
+		}catch(Exception e){
+			System.out.println("No StudentPractice found");
+		}
+	}
 
 }

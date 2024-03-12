@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
+import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Extrawork;
@@ -146,6 +148,19 @@ public class ConnectedController {
 		return ResponseEntity.ok("\"StudentPractice registered\"");
     }
 
+	// delete StudentPractice
+	@DeleteMapping("/deleteStudentPractice/{studentId}/{practiceId}")
+	@ResponseBody
+	public ResponseEntity<String> deleteStudentAnswer(@PathVariable Long studentId, @PathVariable Long practiceId){
+		try{
+			connectedService.deleteStudentPractice(studentId, practiceId);
+			return ResponseEntity.ok("\"StudentPractice deleted\"");
+		}catch(Exception e){
+			String message = "Error deleting StudentPractice : " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
+	}
+
 	// update existing homework
 	@PutMapping("/updateHomework")
 	@ResponseBody
@@ -236,12 +251,17 @@ public class ConnectedController {
 	}
 
 	// // search practice by id
-	// @GetMapping("/practice/{id}")
-	// @ResponseBody
-	// public PracticeDTO searchPractice(@PathVariable int id) {
-	// 	PracticeDTO dto = connectedService.getPracticeInfo(id);
-	// 	return dto;
-	// }
+	@GetMapping("/practiceAnswer/{studentId}/{practiceId}")
+	@ResponseBody
+	public PracticeAnswerDTO searchPracticeAnswer(@PathVariable String studentId, @PathVariable String practiceId) {
+		String filteredStudentId = StringUtils.defaultString(studentId, "0");
+		String filteredPracticeId = StringUtils.defaultString(practiceId, "0");
+		PracticeAnswerDTO dto = connectedService.findPracticeAnswerByPractice(Long.parseLong(filteredPracticeId));
+		// get student's answer....
+		List<Integer> answers = connectedService.getStudentAnswer(Long.parseLong(filteredStudentId), Long.parseLong(filteredPracticeId));
+		dto.setStudents(answers);
+		return dto;
+	}
 	
 	// bring homework in database
 	@GetMapping("/filterHomework")
