@@ -237,7 +237,7 @@ public class ConnectedController {
 		Practice work = connectedService.getPractice(id);
 		PracticeDTO dto = new PracticeDTO(work);
 		// get question count
-		int count = connectedService.getAnswerCount(id);
+		int count = connectedService.getPracticeAnswerCount(id);
 		dto.setQuestionCount(count);
 		return dto;
 	}
@@ -258,7 +258,7 @@ public class ConnectedController {
 		String filteredPracticeId = StringUtils.defaultString(practiceId, "0");
 		PracticeAnswerDTO dto = connectedService.findPracticeAnswerByPractice(Long.parseLong(filteredPracticeId));
 		// get student's answer....
-		List<Integer> answers = connectedService.getStudentAnswer(Long.parseLong(filteredStudentId), Long.parseLong(filteredPracticeId));
+		List<Integer> answers = connectedService.getStudentPracticeAnswer(Long.parseLong(filteredStudentId), Long.parseLong(filteredPracticeId));
 		dto.setStudents(answers);
 		return dto;
 	}
