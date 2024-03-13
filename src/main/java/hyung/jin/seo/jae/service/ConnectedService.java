@@ -8,13 +8,25 @@ import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StudentPracticeDTO;
+import hyung.jin.seo.jae.dto.StudentTestDTO;
+import hyung.jin.seo.jae.dto.TestAnswerDTO;
+import hyung.jin.seo.jae.dto.TestDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.model.PracticeAnswer;
 import hyung.jin.seo.jae.model.StudentPractice;
+import hyung.jin.seo.jae.model.StudentTest;
+import hyung.jin.seo.jae.model.Test;
+import hyung.jin.seo.jae.model.TestAnswer;
 
 public interface ConnectedService {
+
+	/////////////////////////////////////////////////////////
+	//
+	//	HOMEWORK
+	//
+	/////////////////////////////////////////////////////////
 	// list all Homeworks
 	List<Homework> allHomeworks();
 	
@@ -36,6 +48,11 @@ public interface ConnectedService {
 	// list Homework by subject, grade, year & week
 	List<HomeworkDTO> listHomework(int subject, String grade, int year, int week);
 
+	/////////////////////////////////////////////////////////
+	//
+	//	EXTRAWORK
+	//
+	/////////////////////////////////////////////////////////
 	// list all Extraworks
 	List<Extrawork> allExtraworks();
 
@@ -59,6 +76,12 @@ public interface ConnectedService {
 	
 	// summary of Extrawork by grade
 	List<SimpleBasketDTO> loadExtrawork(String grade);
+
+	/////////////////////////////////////////////////////////
+	//
+	//	PRACTICE
+	//
+	/////////////////////////////////////////////////////////
 
 	// list all Practices
 	List<Practice> allPractices();
@@ -100,10 +123,10 @@ public interface ConnectedService {
 	List<Integer> getAnswersByPractice(Long practiceId);
 
 	// get Student's answer by Student & Practice
-	List<Integer> getStudentAnswer(Long studentId, Long  practionId);
+	List<Integer> getStudentPracticeAnswer(Long studentId, Long  practionId);
 
 	// get how many question answer sheet has
-	int getAnswerCount(Long practiceId);
+	int getPracticeAnswerCount(Long practiceId);
 	
 	// retrieve StudentPractice by Id
 	StudentPractice getStudentPractice(Long id);
@@ -122,5 +145,73 @@ public interface ConnectedService {
 
 	// delete existing record to take test again
 	void deleteStudentPractice(Long studentId, Long practiceId); 
+
+	/////////////////////////////////////////////////////////
+	//
+	//	TEST
+	//
+	/////////////////////////////////////////////////////////
+
+	// list all Test
+	List<Test> allTests();
+
+	// retrieve Test by Id
+	Test getTest(Long id);
 	
+	// register Test
+	Test addTest(Test crs);
+	
+	// update Test info by Id
+	Test updateTest(Test newWork, Long id);
+	
+	// delete Test
+	void deleteTest(Long id);
+
+	// get Test by type, grade & volume
+	TestDTO getTestInfo(int type, String grade, int volume);
+
+	// list Test by type, grade & volume
+	List<TestDTO> listTest(int type, String grade, int volume);
+
+	// summary of Test by practiceType & grade
+	List<SimpleBasketDTO> loadTest(int type, int grade);
+
+	// retrieve TestAnswer by Id
+	TestAnswer getTestAnswer(Long id);
+
+	// retrieve TestAnswer by Test
+	TestAnswerDTO findTestAnswerByTest(Long id);
+
+	// register TestAnswer
+	TestAnswer addTestAnswer(TestAnswer crs);
+	
+	// update TestAnswer info by Id
+	TestAnswer updateTestAnswer(TestAnswer newWork, Long id);
+
+	// get Answer sheet by Test
+	List<Integer> getAnswersByTest(Long testId);
+
+	// get Student's answer by Student & Test
+	List<Integer> getStudentTestAnswer(Long studentId, Long  testId);
+
+	// get how many question answer sheet has
+	int getTestAnswerCount(Long testId);
+	
+	// retrieve StudentTest by Id
+	StudentTest getStudentTest(Long id);
+
+	// retrieve TestAnswer by Test
+	StudentTestDTO findStudentTestByStudentNTest(Long studentId, Long testId);
+
+	// register TestAnswer
+	StudentTest addStudentTest(StudentTest crs);
+	
+	// update TestAnswer info by Id
+	StudentTest updateStudentTest(StudentTest newWork, Long id);
+
+	// check if student has done the test
+	boolean isStudentTestExist(Long studentId, Long testId);
+
+	// delete existing record to take test again
+	void deleteStudentTest(Long studentId, Long testId); 	
 }
