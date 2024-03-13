@@ -15,34 +15,46 @@
         transform: scale(2);
     }
 
+    /* no square in check box */
+    .custom-control-label::before, .custom-control-label::after {
+        display: none;
+    }
+    .circle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        border: 1px solid black;
+    }
+
     .correct {
-        color: red;
+        color: white;
+        background-color: red;
+        border-color: red;
     }
 
     .student {
-        color: blue;
+        color: white;
+        background-color: blue;
+        border-color: blue;
     }
 
     .answer {
-        color: red;
+        color: white;
+        background-color: red;
+        border-color: red;
     }
-
-    .different {
-        background-color: #D1ECF1;
-    }
-
-    /*
-    #stickyHeader {
-        position: sticky;
-        top: 0;
-        background-color: white; 
-    }
-    */
     
+    .different {
+        background-color: #FDEFB2;
+    }
+
 </style>
 <script>
 
-const PRACTICE_TYPE = 4; // 4 is NAPLAN Math 
+const PRACTICE_TYPE = 4; // 4 is NAPLAN Mathematics 
 const MOVIE = 0;
 const PDF = 1;
 const DONE= 'DONE';
@@ -57,12 +69,12 @@ $(function() {
 				var title = basket.name;
                 var id = basket.value;
                 var icon = '<i class="bi bi-send h5 text-primary" title="unsubmitted yet"></i>';
-                var cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
+                var cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
                 if (title.endsWith('DONE')) {
                     // title ends with 'DONE'
                     title = title.slice(0, -4);
                     icon = '<i class="bi bi-send-fill h5 text-primary" title="submitted"></i>';
-                    cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayAnswer(' + id +  ', \'' +  title + '\');">'
+                    cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayAnswer(' + id +  ', \'' +  title + '\');">'
                 }
                 console.log(basket);
                 var topicDiv = '<div class="col-md-4">'
@@ -97,13 +109,16 @@ function displayMaterial(practiceId, setNumber) {
             var container = $('.answerSheet');
             container.empty(); // remove existing question elements
             // header
-            var header = '<div style="font-size: 24px; color: #333; text-align: center; margin-bottom: 20px;">Answers <span id="chosenAnswerNum" name="chosenAnswerNum">0</span>/<span id="numQuestion" name="numQuestion">'+ numQuestion +'</span></div>';
+            var header = '<div class="h5 bg-primary" style="position: relative; display: flex; justify-content: center; align-items: center; color: #ffffff; text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 5px;">'
+            + 'Answers&nbsp;&nbsp;<span id="chosenAnswerNum" name="chosenAnswerNum" class="text-warning" title="Student Answer">0</span>&nbsp;/&nbsp;<span id="numQuestion" name="numQuestion" title="Total Question">'+ numQuestion +'</span></div>';
             container.append(header);
             for (var i = 1; i <= numQuestion; i++) {
-                var questionDiv = $('<div>').addClass('mt-4 mb-4');
-                questionDiv.append($('<div>').addClass('form-check form-check-inline h5').text('Question ' + i + '. '));
+                var questionDiv = $('<div>').addClass('mt-5 mb-4');
+                var questionLabel = $('<div>').addClass('form-check form-check-inline h5 ml-2').text(' ' + i + '. ');
+                questionLabel.css('width', '50px');
+                questionDiv.append(questionLabel);
                 ['A', 'B', 'C', 'D', 'E'].forEach(function(option, index) {
-                    var optionDiv = $('<div>').addClass('form-check form-check-inline h5');
+                    var optionDiv = $('<div>').addClass('form-check form-check-inline h5 ml-2');
                     var input = $('<input>').addClass('form-check-input mr-3 ml-2').attr({
                         type: 'radio',
                         name: 'inlineRadioOptions' + i,
@@ -157,48 +172,38 @@ function displayAnswer(practiceId, setNumber) {
             var container = $('.resultSheet');
             container.empty(); // remove existing question elements
             // header
-            var header = '<div id="stickyHeader" style="font-size: 24px; color: #333; text-align: center; margin-bottom: 20px;">You got ' + score + ' score (Answers <span id="correctAnswerNum" name="correctAnswerNum" class="student" title="Student Answer">' + countCorrect + '</span>/<span id="answerNumQuestion" name="answerNumQuestion" class="correct" title="Correct Answer">'+ (answerNumQuestion-1) +'</span>)<button onclick="retestRequest(' + value.practiceId + ')" style="margin-left: 20px;">Retake</button></div>';
+            var header = '<div id="stickyHeader" class="h5" style="position: relative; display: flex; justify-content: center; align-items: center; color: #333; text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 5px;">'
+            + '<button onclick="retestRequest(' + value.practiceId + ')" style="position: absolute; left: 20px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;"><i class="bi bi-arrow-clockwise"></i>&nbsp;Retake</button>' 
+            + 'My Score : ' + score + ' (<span id="correctAnswerNum" name="correctAnswerNum" style="color:blue;" title="Student Answer">' + countCorrect + '</span>/<span id="answerNumQuestion" name="answerNumQuestion" style="color:red;" title="Correct Answer">'+ (answerNumQuestion-1) +'</span>)</div>';
             container.append(header);
             for (var i = 1; i < answerNumQuestion; i++) {
-                var questionDiv = $('<div>').addClass('mt-4 mb-4');
-                questionDiv.append($('<div>').addClass('form-check form-check-inline h5').text('Question ' + i + '. '));
-                // Loop for the answers
-                ['A', 'B', 'C', 'D', 'E'].forEach(function(option, index) {
-                    var optionDiv = $('<div>').addClass('custom-control custom-checkbox custom-control-inline h5');
-                    var input = $('<input>').addClass('custom-control-input').attr({
-                        type: 'checkbox',
-                        id: 'customCheck' + i + (index + 1),
-                        value: index + 1,
-                        checked: value.students[i] == index + 1 || value.answers[i] == index + 1
-                        //disabled: true
-                    }).on('click', function(e) {
-                        e.preventDefault();
-                    });
-                    var label = $('<label>').addClass('custom-control-label').attr('for', 'customCheck' + i + (index + 1)).text(option);
+                var questionDiv = $('<div>').addClass('m-4');
+                var questionLabel = $('<div>').addClass('form-check form-check-inline h6 ml-5').text(' ' + i + '. ');
+                // Set a consistent width for the question label container
+                questionLabel.css('width', '50px'); // Adjust the width as needed
+                questionDiv.append(questionLabel);
+                ['A', 'B', 'C', 'D', 'E'].forEach(function (option, index) {
+                    var optionDiv = $('<div>').addClass('custom-control custom-control-inline h6');
+                    var label = $('<label>').addClass('custom-control-label circle').attr('for', 'customCheck' + i + (index + 1)).text(option);
                     if (value.students[i] == index + 1 && value.answers[i] == index + 1) {
                         // If student's answer and correct answer are the same, add 'correct' class
-                        input.addClass('correct');
                         label.addClass('correct');
                     } else if (value.students[i] == index + 1) {
                         // If only student's answer is this option, add 'student' class
-                        input.addClass('student');
                         label.addClass('student');
                     } else if (value.answers[i] == index + 1) {
                         // If only correct answer is this option, add 'answer' class
-                        input.addClass('answer');
                         label.addClass('answer');
                     }
                     if (value.students[i] != value.answers[i]) {
                         // If student's answer and correct answer are different, add 'different' class to the question div
                         questionDiv.addClass('different');
                     }
-                    optionDiv.append(input, label);
+                    optionDiv.append(label);
                     questionDiv.append(optionDiv);
                 });
-
-                container.append(questionDiv);
-            }    
-
+                container.append(questionDiv);    
+            }
             // pop-up video & pdf
             $('#answerModal').modal('show');
         },
@@ -207,7 +212,6 @@ function displayAnswer(practiceId, setNumber) {
         }
     });   
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Submit Answer
@@ -234,16 +238,10 @@ function checkAnswer(practiceId, numQuestion) {
         }),
         contentType: 'application/json',
         success: function(response) {
-
-
              // pdf & answer sheet dialogue disappears
-             $('#practiceModal').modal('hide');
-
-
-
+            $('#practiceModal').modal('hide');
             $('#success-alert .modal-body').html('Answer is successfully submitted.');
 	        $('#success-alert').modal('show');
-
 
 			// Attach an event listener to the success alert close event
 			$('#success-alert').on('hidden.bs.modal', function () {
@@ -267,23 +265,9 @@ function retestRequest(practiceId) {
         url: '${pageContext.request.contextPath}/connected/deleteStudentPractice/' + studentId + '/' + practiceId,
         method: 'DELETE',
         success: function(response) {
-
-
              // pdf & answer sheet dialogue disappears
              $('#practiceModal').modal('hide');
-
-
-
-            // $('#success-alert .modal-body').html('Upgrade to <span class="font-weight-bold text-danger">' + practiceId + '</span> is successfully updated.');
-	        // $('#success-alert').modal('show');
-
-
-			// // Attach an event listener to the success alert close event
-			// $('#success-alert').on('hidden.bs.modal', function () {
-				// Reload the page after the success alert is closed
-				location.href = window.location.pathname; // Passing true forces a reload from the server and not from the cache
-			// });
-
+            location.href = window.location.pathname; // Passing true forces a reload from the server and not from the cache
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
@@ -346,7 +330,7 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
 
 <div class="col-md-12" style="padding: 30px;">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">NAPLAN MATH</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">NAPLAN Mathematics</h2>
     </div>
 </div>
 
@@ -357,12 +341,11 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel">NAPLAN Math Practice - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span></h5>
+                <h5 class="modal-title w-100" id="exampleModalLabel">NAPLAN Mathematics Practice - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
-            
+            </div>            
             <div class="modal-body bg-light">
                 <div class="row">
                     <div class="col-md-8 bg-white p-3 border">
@@ -389,7 +372,7 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel">NAPLAN Math Practice - Set <span id="dialogAnswerSet" name="dialogAnswerSet" class="text-warning"></span></h5>
+                <h5 class="modal-title w-100" id="exampleModalLabel">NAPLAN Mathematics Practice - Set <span id="dialogAnswerSet" name="dialogAnswerSet" class="text-warning"></span></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -397,19 +380,13 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
             <div class="modal-body bg-light">
                 <div class="row">
                     <div class="col-md-6 d-flex flex-column justify-content-center bg-white p-3 border">
-                        <video id="answerVideoPlayer" controls controlsList="nodownload" style="width: 100%; height: 60%;">
-                            <source src="" type="video/mp4">
-                        </video>
-                        <div style="overflow-y: auto; flex-grow: 1; height: 10%;"></div>
-                        <div class="resultSheet" style="overflow-y: auto; flex-grow: 1; height: 30%;">
-                            
-                        
-                        
-                        
-                        
-                        
-                        
-                        
+                        <div style="display: flex; flex-direction: column; height: 80vh;">
+                            <video id="answerVideoPlayer" controls controlsList="nodownload" style="flex: 6;">
+                                <source src="" type="video/mp4">
+                            </video>
+                            <div style="overflow-y: auto; flex: 1;"></div>
+                            <div class="resultSheet" style="overflow-y: auto; flex: 3;">
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6 bg-white p-3 border">
@@ -424,26 +401,5 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
             </div>
         </div>
     </div>
-</div>
-
-
-<!-- Success Alert -->
-<div id="success-alert" class="modal fade">
-	<div class="modal-dialog">
-		<div class="alert alert-block alert-success alert-dialog-display">
-			<i class="bi bi-check-circle-fill fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		</div>
-	</div>
-</div>
-
-<!-- Warning Alert -->
-<div id="warning-alert" class="modal fade">
-	<div class="modal-dialog">
-		<div class="alert alert-block alert-warning alert-dialog-display">
-			<i class="bi bi-exclamation-circle fa-2x"></i>&nbsp;&nbsp;<div class="modal-body"></div>
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-		</div>
-	</div>
 </div>
 
