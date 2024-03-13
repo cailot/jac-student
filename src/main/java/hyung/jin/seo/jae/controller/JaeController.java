@@ -104,6 +104,24 @@ public class JaeController {
 		return "megaGAPage";
 	}
 
+	// revision english
+	@GetMapping("/connected/revisionEng")
+	public String dispayRevisionEngPractice() {
+		return "revsionEngPage";
+	}
+
+	// revision math
+	@GetMapping("/connected/revisionMath")
+	public String dispayRevisionMathPractice() {
+		return "revsionMathPage";
+	}
+
+	// revision science
+	@GetMapping("/connected/revisionSci")
+	public String dispayRevisionSciencePractice() {
+		return "revsionSciPage";
+	}
+
 	// naplan math
 	@GetMapping("/connected/naplanMath")
 	public String dispayNaplanMathPractice() {
@@ -120,6 +138,42 @@ public class JaeController {
 	@GetMapping("/connected/naplanRead")
 	public String dispayNaplanReadPractice() {
 		return "naplanReadPage";
+	}
+
+	// edu math
+	@GetMapping("/connected/eduMath")
+	public String dispayEduMathPractice() {
+		return "eduMathPage";
+	}
+
+	// edu NR
+	@GetMapping("/connected/eduNR")
+	public String dispayEduNRPractice() {
+		return "eduNRPage";
+	}
+
+	// edu RC
+	@GetMapping("/connected/eduRC")
+	public String dispayEduRCPractice() {
+		return "eduRCPage";
+	}
+
+	// edu VR
+	@GetMapping("/connected/eduVR")
+	public String dispayEduVRPractice() {
+		return "eduVRPage";
+	}
+
+	// acer Humanities
+	@GetMapping("/connected/acerH")
+	public String dispayAcerHumanitiesPractice() {
+		return "acerHPage";
+	}
+
+	// acer Math
+	@GetMapping("/connected/acerMath")
+	public String dispayAcerMathPractice() {
+		return "acerMathPage";
 	}
 
 

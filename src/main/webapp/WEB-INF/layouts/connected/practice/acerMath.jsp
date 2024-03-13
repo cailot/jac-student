@@ -54,7 +54,7 @@
 </style>
 <script>
 
-const PRACTICE_TYPE = 6; // 4 is NAPLAN Language Conventions 
+const PRACTICE_TYPE =15; // 15 is Mathematics (ACER) 
 const MOVIE = 0;
 const PDF = 1;
 const DONE= 'DONE';
@@ -65,6 +65,7 @@ $(function() {
         method: "GET",
         success: function(data) {
             $.each(data, function(index, basket) {
+
 				var title = basket.name;
                 var id = basket.value;
                 var icon = '<i class="bi bi-send h5 text-primary" title="unsubmitted yet"></i>';
@@ -90,7 +91,6 @@ $(function() {
         }
     });
 });
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display Material (Pdf/Answer Sheet)
@@ -330,7 +330,7 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
 
 <div class="col-md-12" style="padding: 30px;">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">NAPLAN Language Conventions</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Mathematics (ACER)</h2>
     </div>
 </div>
 
@@ -341,7 +341,7 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel">NAPLAN Language Conventions Practice - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span></h5>
+                <h5 class="modal-title w-100" id="exampleModalLabel">Mathematics (ACER) Practice - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -372,7 +372,7 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
-                <h5 class="modal-title w-100" id="exampleModalLabel">NAPLAN Language Conventions Practice - Set <span id="dialogAnswerSet" name="dialogAnswerSet" class="text-warning"></span></h5>
+                <h5 class="modal-title w-100" id="exampleModalLabel">Mathematics (ACER) Practice - Set <span id="dialogAnswerSet" name="dialogAnswerSet" class="text-warning"></span></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -402,5 +402,4 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
         </div>
     </div>
 </div>
-
 

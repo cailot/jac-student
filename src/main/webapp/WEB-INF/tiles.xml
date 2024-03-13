@@ -82,6 +82,21 @@
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaGA.jsp" />
 	</definition>
+	<!-- Connected Revision English Practice -->
+	<definition name="revisionEngPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/revisionEng.jsp" />
+	</definition>
+	<!-- Connected Revision Mathematics Practice -->
+	<definition name="revisionMathPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/revisionMath.jsp" />
+	</definition>
+	<!-- Connected Revision Science Practice -->
+	<definition name="revisionSciPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/revisionSci.jsp" />
+	</definition>
 	<!-- Connected NAPLAN LC Practice -->
 	<definition name="naplanLCPage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
@@ -97,6 +112,35 @@
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanRead.jsp" />
 	</definition>
-
+	<!-- Connected EDU RC Practice -->
+	<definition name="eduRCPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduRC.jsp" />
+	</definition>
+	<!-- Connected EDU VR Practice -->
+	<definition name="eduVRPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduVR.jsp" />
+	</definition>
+	<!-- Connected EDU Math Practice -->
+	<definition name="eduMathPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduMath.jsp" />
+	</definition>
+	<!-- Connected EDU NR Practice -->
+	<definition name="eduNRPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduNR.jsp" />
+	</definition>
+	<!-- Connected Acer Math Practice -->
+	<definition name="acerMathPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/acerMath.jsp" />
+	</definition>
+	<!-- Connected Acer Humanities Practice -->
+	<definition name="acerHPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/acerH.jsp" />
+	</definition>
 
 </tiles-definitions>

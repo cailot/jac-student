@@ -222,8 +222,8 @@ function updatePassword() {
 			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/megaEng">MEGA English</a>
 			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/megaMath">MEGA Mathematics</a>
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/megaGA">MEGA General Ability</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanMath">NAPLAN Math</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanLc">NAPLAN LC</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanMath">NAPLAN Mathematics</a>
+				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanLC">NAPLAN Language Conventions</a>
 				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/naplanRead">NAPLAN Reading</a>
 			</div>
 		</li>
