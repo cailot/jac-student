@@ -27,6 +27,7 @@ import hyung.jin.seo.jae.model.StudentPractice;
 import hyung.jin.seo.jae.model.StudentTest;
 import hyung.jin.seo.jae.model.Test;
 import hyung.jin.seo.jae.model.TestAnswer;
+import hyung.jin.seo.jae.model.TestAnswerItem;
 import hyung.jin.seo.jae.repository.ExtraworkRepository;
 import hyung.jin.seo.jae.repository.HomeworkRepository;
 import hyung.jin.seo.jae.repository.PracticeAnswerRepository;
@@ -611,7 +612,7 @@ public class ConnectedServiceImpl implements ConnectedService {
 	}
 
 	@Override
-	public List<Integer> getAnswersByTest(Long testId) {
+	public List<TestAnswerItem> getAnswersByTest(Long testId) {
 		Optional<TestAnswer> answer = testAnswerRepository.findByTestId(testId);
 		if(answer.isPresent()){
 			return answer.get().getAnswers();
@@ -644,8 +645,8 @@ public class ConnectedServiceImpl implements ConnectedService {
 	public int getTestAnswerCount(Long testId) {
 		Optional<TestAnswer> answer = testAnswerRepository.findByTestId(testId);
 		if(answer.isPresent()){
-			List<Integer> answers =  answer.get().getAnswers();
-			if((answers != null) && (answers.size()>0)) return answers.get(0);
+			List<TestAnswerItem> answers =  answer.get().getAnswers();
+			if((answers != null) && (answers.size()>0)) return answers.size();
 		}
 		return 0;
 	}

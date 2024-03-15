@@ -70,6 +70,13 @@ public class CodeController {
 		return dtos;
 	}
 
+	@GetMapping("/testType")
+	@ResponseBody
+	List<SimpleBasketDTO> listTestType() {
+		List<SimpleBasketDTO> dtos = codeService.loadTestType();
+		return dtos;
+	}
+
 	// list branch by state
 	@GetMapping("/listBranch")
 	String filterBranch(@RequestParam(value = "listState", required = true) String state, Model model) {

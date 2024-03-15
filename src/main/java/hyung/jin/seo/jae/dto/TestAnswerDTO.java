@@ -10,6 +10,7 @@ import lombok.ToString;
 import java.util.List;
 
 import hyung.jin.seo.jae.model.TestAnswer;
+import hyung.jin.seo.jae.model.TestAnswerItem;
 
 @Getter
 @Setter
@@ -26,7 +27,7 @@ public class TestAnswerDTO implements Serializable {
 
 	private long testId;
 
-	private List<Integer> answers;
+	private List<TestAnswerItem> answers;
 
 	public TestAnswerDTO(TestAnswer work){
 		this.id = String.valueOf(work.getId());

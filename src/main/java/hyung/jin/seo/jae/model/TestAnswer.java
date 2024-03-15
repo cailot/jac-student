@@ -42,7 +42,7 @@ public class TestAnswer {
 
     @ElementCollection
     @CollectionTable(name = "TestAnswerCollection") // Set the custom table name
-    private List<Integer> answers = new ArrayList<>();
+    private List<TestAnswerItem> answers = new ArrayList<>();
     
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "testId")
