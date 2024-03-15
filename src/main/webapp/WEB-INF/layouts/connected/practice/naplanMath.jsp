@@ -76,7 +76,7 @@ $(function() {
                     icon = '<i class="bi bi-send-fill h5 text-primary" title="submitted"></i>';
                     cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayAnswer(' + id +  ', \'' +  title + '\');">'
                 }
-                console.log(basket);
+                //console.log(basket);
                 var topicDiv = '<div class="col-md-4">'
                 + cardBody
                 + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
@@ -160,7 +160,7 @@ function displayAnswer(practiceId, setNumber) {
         url : '${pageContext.request.contextPath}/connected/practiceAnswer/' + studentId + '/' + practiceId,
         method: "GET",
         success: function(value) {
-            console.log(value);
+            //console.log(value);
             // Add this part for displaying played percentage
             var videoPlayer = document.getElementById("answerVideoPlayer");
             videoPlayer.src = value.videoPath;

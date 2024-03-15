@@ -81,4 +81,7 @@ public interface CodeService {
 	// list for initial practice type value
 	List<SimpleBasketDTO> loadPracticeType();
 
+	// list for initial test type value
+	List<SimpleBasketDTO> loadTestType();
+
 }

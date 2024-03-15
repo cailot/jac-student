@@ -19,6 +19,7 @@ import hyung.jin.seo.jae.model.StudentPractice;
 import hyung.jin.seo.jae.model.StudentTest;
 import hyung.jin.seo.jae.model.Test;
 import hyung.jin.seo.jae.model.TestAnswer;
+import hyung.jin.seo.jae.model.TestAnswerItem;
 
 public interface ConnectedService {
 
@@ -189,7 +190,7 @@ public interface ConnectedService {
 	TestAnswer updateTestAnswer(TestAnswer newWork, Long id);
 
 	// get Answer sheet by Test
-	List<Integer> getAnswersByTest(Long testId);
+	List<TestAnswerItem> getAnswersByTest(Long testId);
 
 	// get Student's answer by Student & Test
 	List<Integer> getStudentTestAnswer(Long studentId, Long  testId);

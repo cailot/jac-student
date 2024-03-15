@@ -20,6 +20,7 @@ import hyung.jin.seo.jae.repository.GradeRepository;
 import hyung.jin.seo.jae.repository.PracticeTypeRepository;
 import hyung.jin.seo.jae.repository.StateRepository;
 import hyung.jin.seo.jae.repository.SubjectRepository;
+import hyung.jin.seo.jae.repository.TestTypeRepository;
 import hyung.jin.seo.jae.service.CodeService;
 
 @Service
@@ -39,6 +40,9 @@ public class CodeServiceImpl implements CodeService {
 
 	@Autowired
 	private PracticeTypeRepository practiceTypeRepository;
+
+	@Autowired
+	private TestTypeRepository testTypeRepository;
 
 	@Override
 	public List<StateDTO> allStates() {
@@ -318,7 +322,22 @@ public class CodeServiceImpl implements CodeService {
 			dtos.add(dto);
 		}
 		return dtos;
+	}
 
+	@Override
+	public List<SimpleBasketDTO> loadTestType() {
+		List<Object[]> objects = new ArrayList<>();
+		try{
+			objects = testTypeRepository.loadTestType();
+		}catch(Exception e){
+			System.out.println("No PracticeType found");
+		}
+		List<SimpleBasketDTO> dtos = new ArrayList<>();
+		for(Object[] object : objects){
+			SimpleBasketDTO dto = new SimpleBasketDTO(object);
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 
 }
