@@ -87,94 +87,191 @@ public class JaeController {
 	// Practice Menu
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// mega english
-	@GetMapping("/connected/megaEng")
+	@GetMapping("/connected/practice/megaEng")
 	public String dispayMegaEngPractice() {
-		return "megaEngPage";
+		return "megaEngPracticePage";
 	}
 
 	// mega math
-	@GetMapping("/connected/megaMath")
+	@GetMapping("/connected/practice/megaMath")
 	public String dispayMegaMathPractice() {
-		return "megaMathPage";
+		return "megaMathPracticePage";
 	}
 
 	// mega GA
-	@GetMapping("/connected/megaGA")
+	@GetMapping("/connected/practice/megaGA")
 	public String dispayMegaGAPractice() {
-		return "megaGAPage";
+		return "megaGAPracticePage";
 	}
 
 	// revision english
-	@GetMapping("/connected/revisionEng")
+	@GetMapping("/connected/practice/revisionEng")
 	public String dispayRevisionEngPractice() {
-		return "revsionEngPage";
+		return "revsionEngPracticePage";
 	}
 
 	// revision math
-	@GetMapping("/connected/revisionMath")
+	@GetMapping("/connected/practice/revisionMath")
 	public String dispayRevisionMathPractice() {
-		return "revsionMathPage";
+		return "revsionMathPracticePage";
 	}
 
 	// revision science
-	@GetMapping("/connected/revisionSci")
+	@GetMapping("/connected/practice/revisionSci")
 	public String dispayRevisionSciencePractice() {
-		return "revsionSciPage";
+		return "revsionSciPracticePage";
 	}
 
 	// naplan math
-	@GetMapping("/connected/naplanMath")
+	@GetMapping("/connected/practice/naplanMath")
 	public String dispayNaplanMathPractice() {
-		return "naplanMathPage";
+		return "naplanMathPracticePage";
 	}
 
 	// naplan LC
-	@GetMapping("/connected/naplanLC")
+	@GetMapping("/connected/practice/naplanLC")
 	public String dispayNaplanLCPractice() {
-		return "naplanLCPage";
+		return "naplanLCPracticePage";
 	}
 
 	// naplan Reading
-	@GetMapping("/connected/naplanRead")
+	@GetMapping("/connected/practice/naplanRead")
 	public String dispayNaplanReadPractice() {
-		return "naplanReadPage";
+		return "naplanReadPracticePage";
 	}
 
 	// edu math
-	@GetMapping("/connected/eduMath")
+	@GetMapping("/connected/practice/eduMath")
 	public String dispayEduMathPractice() {
-		return "eduMathPage";
+		return "eduMathPracticePage";
 	}
 
 	// edu NR
-	@GetMapping("/connected/eduNR")
+	@GetMapping("/connected/practice/eduNR")
 	public String dispayEduNRPractice() {
-		return "eduNRPage";
+		return "eduNRPracticePage";
 	}
 
 	// edu RC
-	@GetMapping("/connected/eduRC")
+	@GetMapping("/connected/practice/eduRC")
 	public String dispayEduRCPractice() {
-		return "eduRCPage";
+		return "eduRCPracticePage";
 	}
 
 	// edu VR
-	@GetMapping("/connected/eduVR")
+	@GetMapping("/connected/practice/eduVR")
 	public String dispayEduVRPractice() {
-		return "eduVRPage";
+		return "eduVRPracticePage";
 	}
 
 	// acer Humanities
-	@GetMapping("/connected/acerH")
+	@GetMapping("/connected/practice/acerH")
 	public String dispayAcerHumanitiesPractice() {
-		return "acerHPage";
+		return "acerHPracticePage";
 	}
 
 	// acer Math
-	@GetMapping("/connected/acerMath")
+	@GetMapping("/connected/practice/acerMath")
 	public String dispayAcerMathPractice() {
-		return "acerMathPage";
+		return "acerMathPracticePage";
 	}
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Test Menu
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// mega english
+	@GetMapping("/connected/test/megaEng")
+	public String dispayMegaEngTest() {
+		return "megaEngTestPage";
+	}
+
+	// mega math
+	@GetMapping("/connected/test/megaMath")
+	public String dispayMegaMathTest() {
+		return "megaMathTestPage";
+	}
+
+	// mega GA
+	@GetMapping("/connected/test/megaGA")
+	public String dispayMegaGATest() {
+		return "megaGATestPage";
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Test Result Menu
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// mega vol 1 result
+	@GetMapping("/connected/result/megaVol1")
+	public String dispayMegaVol1Result() {
+		return "megaVol1ResultPage";
+	}
+	
+	// mega vol 2 result
+	@GetMapping("/connected/result/megaVol2")
+	public String dispayMegaVol2Result() {
+		return "megaVol2ResultPage";
+	}
+	
+	// mega vol 3 result
+	@GetMapping("/connected/result/megaVol3")
+	public String dispayMegaVol3Result() {
+		return "megaVol3ResultPage";
+	}
+
+	// mega vol 4 result
+	@GetMapping("/connected/result/megaVol4")
+	public String dispayMegaVol4Result() {
+		return "megaVol4ResultPage";
+	}
+
+	// mega vol 5 result
+	@GetMapping("/connected/result/megaVol5")
+	public String dispayMegaVol5Result() {
+		return "megaVol5ResultPage";
+	}
+
+
+
+	// revision vol 1 result
+	@GetMapping("/connected/result/revisionVol1")
+	public String dispayRevisionVol1Result() {
+		return "revisionVol1ResultPage";
+	}
+	
+	// revision vol 2 result
+	@GetMapping("/connected/result/revisionVol2")
+	public String dispayRevisionVol2Result() {
+		return "revisionVol2ResultPage";
+	}
+	
+	// revision vol 3 result
+	@GetMapping("/connected/result/revisionVol3")
+	public String dispayRevisionVol3Result() {
+		return "revisionVol3ResultPage";
+	}
+
+	// revision vol 4 result
+	@GetMapping("/connected/result/revisionVol4")
+	public String dispayRevisionVol4Result() {
+		return "revisionVol4ResultPage";
+	}
+
+	// revision vol 5 result
+	@GetMapping("/connected/result/revisionVol5")
+	public String dispayRevisionVol5Result() {
+		return "revisionVol5ResultPage";
+	}
+
+	// math result
+	@GetMapping("/connected/result/mathResult")
+	public String dispayMathResult() {
+		return "mathResultPage";
+	}
+
+	// english result
+	@GetMapping("/connected/result/engResult")
+	public String dispayEnglishResult() {
+		return "engResultPage";
+	}
 
 }

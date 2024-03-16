@@ -68,79 +68,156 @@
 
 	<!-- PRACTICE MENU -->
 	<!-- Connected Mega English Practice -->
-	<definition name="megaEngPage" extends="tile.definition">
+	<definition name="megaEngPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaEng.jsp" />
 	</definition>
 	<!-- Connected Mega Mathematics Practice -->
-	<definition name="megaMathPage" extends="tile.definition">
+	<definition name="megaMathPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaMath.jsp" />
 	</definition>
 	<!-- Connected Mega GA Practice -->
-	<definition name="megaGAPage" extends="tile.definition">
+	<definition name="megaGAPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/megaGA.jsp" />
 	</definition>
 	<!-- Connected Revision English Practice -->
-	<definition name="revisionEngPage" extends="tile.definition">
+	<definition name="revisionEngPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/revisionEng.jsp" />
 	</definition>
 	<!-- Connected Revision Mathematics Practice -->
-	<definition name="revisionMathPage" extends="tile.definition">
+	<definition name="revisionMathPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/revisionMath.jsp" />
 	</definition>
 	<!-- Connected Revision Science Practice -->
-	<definition name="revisionSciPage" extends="tile.definition">
+	<definition name="revisionSciPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/revisionSci.jsp" />
 	</definition>
 	<!-- Connected NAPLAN LC Practice -->
-	<definition name="naplanLCPage" extends="tile.definition">
+	<definition name="naplanLCPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanLC.jsp" />
 	</definition>
 	<!-- Connected NAPLAN Math Practice -->
-	<definition name="naplanMathPage" extends="tile.definition">
+	<definition name="naplanMathPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanMath.jsp" />
 	</definition>
 	<!-- Connected NAPLAN Reading Practice -->
-	<definition name="naplanReadPage" extends="tile.definition">
+	<definition name="naplanReadPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/naplanRead.jsp" />
 	</definition>
 	<!-- Connected EDU RC Practice -->
-	<definition name="eduRCPage" extends="tile.definition">
+	<definition name="eduRCPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduRC.jsp" />
 	</definition>
 	<!-- Connected EDU VR Practice -->
-	<definition name="eduVRPage" extends="tile.definition">
+	<definition name="eduVRPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduVR.jsp" />
 	</definition>
 	<!-- Connected EDU Math Practice -->
-	<definition name="eduMathPage" extends="tile.definition">
+	<definition name="eduMathPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduMath.jsp" />
 	</definition>
 	<!-- Connected EDU NR Practice -->
-	<definition name="eduNRPage" extends="tile.definition">
+	<definition name="eduNRPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/eduNR.jsp" />
 	</definition>
 	<!-- Connected Acer Math Practice -->
-	<definition name="acerMathPage" extends="tile.definition">
+	<definition name="acerMathPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/acerMath.jsp" />
 	</definition>
 	<!-- Connected Acer Humanities Practice -->
-	<definition name="acerHPage" extends="tile.definition">
+	<definition name="acerHPracticePage" extends="tile.definition">
 		<put-attribute name="title" value="James An College Connected Class Page" />
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/practice/acerH.jsp" />
 	</definition>
+
+	<!-- TEST MENU -->
+	<!-- Connected Mega English Test -->
+	<definition name="megaEngTestPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/test/megaEng.jsp" />
+	</definition>
+	<!-- Connected Mega Mathematics Test -->
+	<definition name="megaMathTestPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/test/megaMath.jsp" />
+	</definition>
+	<!-- Connected Mega GA Test -->
+	<definition name="megaGATestPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/test/megaGA.jsp" />
+	</definition>
+
+
+	<!-- TEST RESULTS MENU -->
+	<!-- Connected Mega Test Results -->
+	<definition name="megaVol1ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/megaVol1.jsp" />
+	</definition>
+		<definition name="megaVol2ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/megaVol2.jsp" />
+	</definition>
+	<definition name="megaVol3ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/megaVol3.jsp" />
+	</definition>
+	<definition name="megaVol4ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/megaVol4.jsp" />
+	</definition>
+	<definition name="megaVol5ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/megaVol5.jsp" />
+	</definition>
+
+	<!-- Connected Revision Test Results -->
+	<definition name="revisionVol1ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/revisionVol1.jsp" />
+	</definition>
+		<definition name="revisionVol2ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/revisionVol2.jsp" />
+	</definition>
+		<definition name="revisionVol3ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/revisionVol3.jsp" />
+	</definition>
+		<definition name="revisionVol4ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/revisionVol4.jsp" />
+	</definition>
+		<definition name="revisionVol5ResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/revisionVol5.jsp" />
+	</definition>
+	<!-- Connected English Test Results-->
+	<definition name="engResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/engResult.jsp" />
+	</definition>
+	<!-- Connected Math Test Results-->
+	<definition name="mathResultPage" extends="tile.definition">
+		<put-attribute name="title" value="James An College Connected Class Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/mathResult.jsp" />
+	</definition>
+
+
+
+
 
 </tiles-definitions>
