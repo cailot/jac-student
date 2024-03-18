@@ -31,8 +31,7 @@ $(function() {
                 + '</p></div></div></div>';
                 $('#topicContainer').append(topicDiv);    
 			});
-            document.getElementById("testModalLabel").innerHTML = 'MEGA General Ability Test - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span>';
-           
+            document.getElementById("testModalLabel").innerHTML = 'MEGA General Ability Test - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span>';           
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
