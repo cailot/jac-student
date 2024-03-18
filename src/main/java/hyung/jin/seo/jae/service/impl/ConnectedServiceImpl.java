@@ -586,11 +586,6 @@ public class ConnectedServiceImpl implements ConnectedService {
 		return dtos;
 	}
 
-
-
-
-
-
 	@Override
 	public List<Integer> getAnswersByPractice(Long practiceId) {
 		Optional<PracticeAnswer> answer = practiceAnswerRepository.findByPracticeId(practiceId);

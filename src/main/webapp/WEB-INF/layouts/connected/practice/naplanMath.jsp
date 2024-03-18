@@ -114,12 +114,12 @@ function displayMaterial(practiceId, setNumber) {
             container.append(header);
             for (var i = 1; i <= numQuestion; i++) {
                 var questionDiv = $('<div>').addClass('mt-5 mb-4');
-                var questionLabel = $('<div>').addClass('form-check form-check-inline h5 ml-2').text(' ' + i + '. ');
-                questionLabel.css('width', '50px');
+                var questionLabel = $('<div>').addClass('form-check form-check-inline h5 ml-1').text(' ' + i + '. ');
+                questionLabel.css('width', '30px');
                 questionDiv.append(questionLabel);
                 ['A', 'B', 'C', 'D', 'E'].forEach(function(option, index) {
-                    var optionDiv = $('<div>').addClass('form-check form-check-inline h5 ml-2');
-                    var input = $('<input>').addClass('form-check-input mr-3 ml-2').attr({
+                    var optionDiv = $('<div>').addClass('form-check form-check-inline h5 ml-1');
+                    var input = $('<input>').addClass('form-check-input mr-3 ml-1').attr({
                         type: 'radio',
                         name: 'inlineRadioOptions' + i,
                         id: 'inlineRadio' + i + (index + 1), // append the question number to the id
@@ -348,12 +348,12 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
             </div>            
             <div class="modal-body bg-light">
                 <div class="row">
-                    <div class="col-md-8 bg-white p-3 border">
+                    <div class="col-md-9 bg-white p-3 border">
                         <object id="pdfViewer" data="" type="application/pdf" style="width: 100%; height: 80vh;">
                             <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="your_pdf_url">click here to download the PDF file.</a></p>
                         </object>
                     </div>
-                    <div class="col-md-4 bg-white p-3 border" style="height: 85vh;">
+                    <div class="col-md-3 bg-white p-3 border" style="height: 85vh;">
                         <div style="display: flex; flex-direction: column; height: 100%;">
                             <!-- ANSWER SHEET -->
                             <div class="answerSheet" style="overflow-y: auto; flex-grow: 1;"></div>

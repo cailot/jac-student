@@ -28,6 +28,8 @@ import hyung.jin.seo.jae.dto.HomeworkDTO;
 import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
+import hyung.jin.seo.jae.dto.TestAnswerDTO;
+import hyung.jin.seo.jae.dto.TestDTO;
 import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.Homework;
@@ -35,7 +37,10 @@ import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.model.PracticeType;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentPractice;
+import hyung.jin.seo.jae.model.StudentTest;
 import hyung.jin.seo.jae.model.Subject;
+import hyung.jin.seo.jae.model.Test;
+import hyung.jin.seo.jae.model.TestAnswerItem;
 import hyung.jin.seo.jae.service.CodeService;
 import hyung.jin.seo.jae.service.ConnectedService;
 import hyung.jin.seo.jae.service.StudentService;
@@ -127,10 +132,10 @@ public class ConnectedController {
 		String practiceId = StringUtils.defaultString(payload.get("practiceId").toString(), "0");
 		List<Map<String, Object>> mapAns = (List<Map<String, Object>>) payload.get("answers");
 		// convert the Map of answers to List
-		List<Integer> answers = convertAnswers(mapAns);
+		List<Integer> answers = convertPracticeAnswers(mapAns);
 		// compare answers with answer sheet
 		List<Integer> corrects = connectedService.getAnswersByPractice(Long.parseLong(practiceId));
-		double score = JaeUtils.calculateScore(answers, corrects);
+		double score = JaeUtils.calculatePracticeScore(answers, corrects);
 		// 1. create barebone
 		StudentPractice sp = new StudentPractice();
 		sp.setScore(score);
@@ -146,6 +151,35 @@ public class ConnectedController {
 		connectedService.addStudentPractice(sp);
 		// 6. return flag
 		return ResponseEntity.ok("\"StudentPractice registered\"");
+    }
+
+	@PostMapping(value = "/addStudentTest")
+	@ResponseBody
+    public ResponseEntity<String> registerStudentTest(@RequestBody Map<String, Object> payload) {
+        // Extract practiceId and answers from the payload
+		String studentId = StringUtils.defaultString(payload.get("studentId").toString(), "0");
+		String testId = StringUtils.defaultString(payload.get("testId").toString(), "0");
+		List<Map<String, Object>> mapAns = (List<Map<String, Object>>) payload.get("answers");
+		// convert the Map of answers to List
+		List<Integer> answers = convertTestAnswers(mapAns);
+		// compare answers with answer sheet
+		List<TestAnswerItem> corrects = connectedService.getAnswersByTest(Long.parseLong(testId));
+		double score = JaeUtils.calculateTestScore(answers, corrects);
+		// 1. create barebone
+		StudentTest st = new StudentTest();
+		st.setScore(score);
+		// 2. set Student & Test
+		Student student = studentService.getStudent(Long.parseLong(studentId));
+		Test test = connectedService.getTest(Long.parseLong(testId));
+		// 3. associate Student & Test
+		st.setStudent(student);
+		st.setTest(test);
+		// 4. set answers
+		st.setAnswers(answers);
+		// 5. register StudentTest
+		connectedService.addStudentTest(st);
+		// 6. return flag
+		return ResponseEntity.ok("\"StudentTest registered\"");
     }
 
 	// delete StudentPractice
@@ -242,6 +276,18 @@ public class ConnectedController {
 		return dto;
 	}
 
+	// get test
+	@GetMapping("/getTest/{id}")
+	@ResponseBody
+	public TestDTO getTest(@PathVariable Long id) {
+		Test work = connectedService.getTest(id);
+		TestDTO dto = new TestDTO(work);
+		// get question count
+		int count = connectedService.getTestAnswerCount(id);
+		dto.setQuestionCount(count);
+		return dto;
+	}
+
 	// search homework by subject, year & week
 	@GetMapping("/homework/{subject}/{year}/{week}")
 	@ResponseBody
@@ -263,6 +309,26 @@ public class ConnectedController {
 		return dto;
 	}
 	
+	@GetMapping("/testAnswer/{studentId}/{testId}")
+	@ResponseBody
+	public TestAnswerDTO searchTestAnswer(@PathVariable String studentId, @PathVariable String testId) {
+		String filteredStudentId = StringUtils.defaultString(studentId, "0");
+		String filteredTestId = StringUtils.defaultString(testId, "0");
+		TestAnswerDTO dto = connectedService.findTestAnswerByTest(Long.parseLong(filteredTestId));
+		// get student's answer....
+		List<Integer> answers = connectedService.getStudentTestAnswer(Long.parseLong(filteredStudentId), Long.parseLong(filteredTestId));
+		// convert List<Integer> to List<TestAnswerItem>
+		List<TestAnswerItem> items = new ArrayList<>();
+		for(int i=0; i< answers.size(); i++){
+			TestAnswerItem item = new TestAnswerItem();
+			item.setQuestion(i+1);
+			item.setAnswer(answers.get(i));
+			items.add(item);
+		}
+		dto.setAnswers(items);
+		return dto;
+	}
+
 	// bring homework in database
 	@GetMapping("/filterHomework")
 	public String listHomeworks(
@@ -339,6 +405,27 @@ public class ConnectedController {
 		return dtos;
 	}
 
+	@GetMapping("/summaryTest/{studentId}/{testType}/{grade}")
+	@ResponseBody
+	public List<SimpleBasketDTO> summaryTests(@PathVariable String studentId, @PathVariable String testType, @PathVariable String grade) {
+		List<SimpleBasketDTO> dtos = new ArrayList();
+		String filteredStudentId = StringUtils.defaultString(studentId, "0");
+		String filteredTestType = StringUtils.defaultString(testType, "0");
+		String filteredGrade = StringUtils.defaultString(grade, "0");
+		dtos = connectedService.loadTest(Integer.parseInt(filteredTestType), Integer.parseInt(filteredGrade));
+		// check whether the volume is finished or not
+		for(SimpleBasketDTO dto : dtos){
+			// get testId
+			String testId = StringUtils.defaultString(dto.getValue(), "0");
+			boolean done = connectedService.isStudentTestExist(Long.parseLong(filteredStudentId), Long.parseLong(testId));
+			if(done){
+				String name = dto.getName();
+				dto.setName(name + JaeConstants.PRACTICE_COMPLETE);
+			}
+		}
+		return dtos;
+	}
+
 	@PostMapping(value = "/submitAnswers")
 	@ResponseBody
     public ResponseEntity<String> submitAnswers(@RequestBody Map<String, Object> payload) {
@@ -361,8 +448,8 @@ public class ConnectedController {
         return ResponseEntity.ok("\"Success\"");
     }
 
-	// helper method converting answers Map to List
-	private List<Integer> convertAnswers(List<Map<String, Object>> answers) {
+	// helper method converting practice answers Map to List
+	private List<Integer> convertPracticeAnswers(List<Map<String, Object>> answers) {
 		// Sort the answers based on the "question" key
 		answers.sort(Comparator.comparingInt(answer -> Integer.parseInt(answer.get("question").toString())));
 
@@ -373,6 +460,19 @@ public class ConnectedController {
 			int questionNum = Integer.parseInt(answer.get("question").toString());
 			int selectedOption = Integer.parseInt(answer.get("answer").toString());
 			answerList.add(questionNum, selectedOption);
+		}
+		return answerList;
+	}
+
+	// helper method converting test answers Map to List
+	private List<Integer> convertTestAnswers(List<Map<String, Object>> answers) {
+		// Sort the answers based on the "question" key
+		answers.sort(Comparator.comparingInt(answer -> Integer.parseInt(answer.get("question").toString())));
+		List<Integer> answerList = new ArrayList<>();
+		for (Map<String, Object> answer : answers) {
+//			int questionNum = Integer.parseInt(answer.get("question").toString());
+			int selectedOption = Integer.parseInt(answer.get("answer").toString());
+			answerList.add(selectedOption);
 		}
 		return answerList;
 	}
