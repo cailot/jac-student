@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 
+import hyung.jin.seo.jae.model.TestAnswerItem;
+
 public class JaeUtils {
 
 	// public static Map<String, String> ACADEMIC_START_DAY;
@@ -263,8 +265,8 @@ public class JaeUtils {
 		}
 	}
 
-	// calculate score by comparing student answers and answer sheet
-	public static double calculateScore(List<Integer> studentAnswers, List<Integer> answerSheet) {
+	// calculate practice score by comparing student answers and answer sheet
+	public static double calculatePracticeScore(List<Integer> studentAnswers, List<Integer> answerSheet) {
         // Check if both lists have the same size
         if ((studentAnswers==null) || (answerSheet==null) || (studentAnswers.size() != answerSheet.size())) {
             return 0;
@@ -286,5 +288,29 @@ public class JaeUtils {
 		double rounded = Math.round(score * 100.0) / 100.0;
         return rounded;
     }
+
+	// calculate test score by comparing student answers and answer sheet
+	public static double calculateTestScore(List<Integer> studentAnswers, List<TestAnswerItem> answerSheet) {
+		// Check if both lists have the same size
+        if ((studentAnswers==null) || (answerSheet==null) || (studentAnswers.size() != answerSheet.size())) {
+            return 0;
+        }
+        int totalQuestions = answerSheet.size();
+
+        // Iterate through the lists and compare corresponding elements
+        int correctAnswers = 0;
+        for (int i = 0; i < totalQuestions; i++) {
+            int studentAnswer = studentAnswers.get(i);
+            int correctAnswer = answerSheet.get(i).getAnswer();
+
+            if (studentAnswer == correctAnswer) {
+                correctAnswers++;
+            }
+        }
+        // Calculate the final score as a percentage
+        double score = ((double) correctAnswers / totalQuestions) * 100;
+		double rounded = Math.round(score * 100.0) / 100.0;
+        return rounded;
+	}
 	
 }
