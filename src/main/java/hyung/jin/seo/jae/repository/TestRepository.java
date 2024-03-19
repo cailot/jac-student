@@ -25,7 +25,7 @@ public interface TestRepository extends JpaRepository<Test, Long>{
 	List<TestDTO> filterTestByTypeNGradeNVolume(int type, String grade, int volume);
 
 	// summarise Test by grade
-	@Query(value = "SELECT t.volume, t.id FROM Test t WHERE t.testTypeId = ?1 AND t.gradeId = ?2", nativeQuery = true)   
+	@Query(value = "SELECT t.volume, t.id FROM Test t WHERE t.testTypeId = ?1 AND t.gradeId = ?2  AND t.active = true", nativeQuery = true)   
 	List<Object[]> summaryTest(int type, int grade);
 
 }
