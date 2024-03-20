@@ -29,6 +29,25 @@ public class StudentTestDTO{
 
 	private List<Integer> answers;
 
+	// additional info
+	private int volume;
+
+	private Long testTypeId;
+
+	private String gradeCode;
+
+	private String testTypeName;
+
+	public StudentTestDTO(Long id, Long studentId, Long testId, int volume, String gradeCode, Long testTypeId, String testTypeName) {
+        this.id = id;
+		this.studentId = studentId;
+        this.testId = testId;
+		this.volume = volume;
+		this.gradeCode = gradeCode;
+		this.testTypeId = testTypeId;
+		this.testTypeName = testTypeName;
+    }
+
 	public StudentTestDTO(Long id, LocalDate registerDate, double score, Long studentId, Long testId, Collection<Integer> answers) {
         this.id = id;
 		this.registerDate = registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));

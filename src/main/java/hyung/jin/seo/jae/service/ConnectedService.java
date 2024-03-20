@@ -214,5 +214,8 @@ public interface ConnectedService {
 	boolean isStudentTestExist(Long studentId, Long testId);
 
 	// delete existing record to take test again
-	void deleteStudentTest(Long studentId, Long testId); 	
+	void deleteStudentTest(Long studentId, Long testId); 
+	
+	// retrieve StudentTest brief info
+	StudentTestDTO getStudentTest(Long studentId, Long testTypeId, String grade, int volume);
 }

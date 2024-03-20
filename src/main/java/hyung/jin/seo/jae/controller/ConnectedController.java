@@ -28,6 +28,7 @@ import hyung.jin.seo.jae.dto.HomeworkDTO;
 import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
+import hyung.jin.seo.jae.dto.StudentTestDTO;
 import hyung.jin.seo.jae.dto.TestAnswerDTO;
 import hyung.jin.seo.jae.dto.TestDTO;
 import hyung.jin.seo.jae.model.Extrawork;
@@ -425,6 +426,24 @@ public class ConnectedController {
 		}
 		return dtos;
 	}
+
+	@GetMapping("/summaryTestResult/{studentId}/{testType}/{grade}/{volume}")
+	@ResponseBody
+	public List<StudentTestDTO> summaryTestResults(@PathVariable String studentId, @PathVariable String testType, @PathVariable String grade, @PathVariable String volume) {
+//////////////////////////////////////////////////////////////////////////////////////////////
+		List<StudentTestDTO> dtos = new ArrayList<>();
+		String filteredStudentId = StringUtils.defaultString(studentId, "0");
+		String filteredGrade = StringUtils.defaultString(grade, "0");
+		String filteredVolume = StringUtils.defaultString(volume, "0");
+		String[] types = StringUtils.split(StringUtils.defaultString(testType),",");
+		// Loop through each test type in the array
+		for (String type : types) {
+			StudentTestDTO dto = connectedService.getStudentTest(Long.parseLong(filteredStudentId), Long.parseLong(type), filteredGrade, Integer.parseInt(filteredVolume));
+			if(dto!=null) dtos.add(dto);
+		}		
+		return dtos;
+	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	@PostMapping(value = "/submitAnswers")
 	@ResponseBody
