@@ -28,10 +28,7 @@ public interface StudentTestRepository extends JpaRepository<StudentTest, Long> 
                 "st.answers) " +
                 "FROM StudentTest st " +
                 "WHERE st.student.id = :studentId AND st.test.id = :testId")
-        StudentTestDTO findStudentTest(
-                @Param("studentId") Long studentId,
-                @Param("testId") Long testId
-        );	// // bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in
+        StudentTestDTO findStudentTest(@Param("studentId") Long studentId, @Param("testId") Long testId);	// // bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in
 	// // courseInfo.jsp
 	// check whether there is a record in StudentTest table by studentId and testId
 	Optional<StudentTest> findByStudentIdAndTestId(Long studentId, Long testId);
@@ -39,4 +36,19 @@ public interface StudentTestRepository extends JpaRepository<StudentTest, Long> 
 	// delete existing record in StudentTest table by studentId and testId
 	void deleteByStudentIdAndTestId(Long studentId, Long testId);
 
+        @Query("SELECT new hyung.jin.seo.jae.dto.StudentTestDTO(" +
+                "st.id, " +
+                "st.student.id, " +
+                "st.test.id, " +
+                "st.test.volume, " +
+                "st.test.grade.code, " +
+                "st.test.testType.id, " +
+                "st.test.testType.name) " +
+                "FROM StudentTest st " +
+                "WHERE st.student.id = :studentId AND st.test.testType.id = :testTypeId AND st.test.grade.code = :gradeCode AND st.test.volume = :volume")
+        StudentTestDTO findStudentTestResult(
+                @Param("studentId") Long studentId, 
+                @Param("testTypeId") Long testTypeId, 
+                @Param("gradeCode") String gradeCode, 
+                @Param("volume") int volume);	// // bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in
 }

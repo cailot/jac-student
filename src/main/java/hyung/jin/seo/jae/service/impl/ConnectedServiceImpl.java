@@ -576,7 +576,7 @@ public class ConnectedServiceImpl implements ConnectedService {
 		try{
 			objects = testRepository.summaryTest(type, grade);
 		}catch(Exception e){
-			System.out.println("No Practice found");
+			System.out.println("No Test found");
 		}
 		List<SimpleBasketDTO> dtos = new ArrayList<>();
 		for(Object[] object : objects){
@@ -710,6 +710,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 		StudentTestDTO dto = null;
 		try{
 			dto =  studentTestRepository.findStudentTest(studentId, testId);
+		}catch(Exception e){
+			System.out.println("No StudentTest found");
+		}
+		return dto;
+	}
+
+	@Override
+	public StudentTestDTO getStudentTest(Long studentId, Long testTypeId, String grade, int volume) {
+		StudentTestDTO dto = null;
+		try{
+			dto =  studentTestRepository.findStudentTestResult(studentId, testTypeId, grade, volume);
 		}catch(Exception e){
 			System.out.println("No StudentTest found");
 		}

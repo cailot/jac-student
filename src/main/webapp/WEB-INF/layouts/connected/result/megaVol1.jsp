@@ -1,4 +1,3 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <style>
     .english-homework {
         background-color: #d1ecf1; 
@@ -54,15 +53,19 @@
 </style>
 <script>
 
-const PRACTICE_TYPE =14; // 14 is Humanities (ACER) 
-const MOVIE = 0;
-const PDF = 1;
-const DONE= 'DONE';
-// console.log(studentId);
+const TEST_TYPE = '1,2,3' ;
+const VOLUME = 3; // volume should be 1....
 $(function() {
     $.ajax({
-        url : '${pageContext.request.contextPath}/connected/summaryPractice/' + studentId + '/' + PRACTICE_TYPE + '/' + numericGrade,
+        url : '${pageContext.request.contextPath}/connected/summaryTestResult/' + studentId + '/' + TEST_TYPE + '/' + numericGrade + '/' + VOLUME,
+        // url : '${pageContext.request.contextPath}/connected/summaryTestResult/' + studentId + '/' + TEST_TYPE + '/' + numericGrade + '/' + VOLUME,
         method: "GET",
+        // data: {
+        //     studentId: studentId,
+        //     testTypeId: test
+        //     testType: TEST_TYPE,
+        //     grade: numericGrade
+        // },
         success: function(data) {
             $.each(data, function(index, basket) {
 
@@ -70,14 +73,8 @@ $(function() {
                 var id = basket.value;
                 var icon = '<i class="bi bi-send h5 text-primary" title="unsubmitted yet"></i>';
                 var cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
-                if (title.endsWith('DONE')) {
-                    // title ends with 'DONE'
-                    title = title.slice(0, -4);
-                    icon = '<i class="bi bi-send-fill h5 text-primary" title="submitted"></i>';
-                    cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayAnswer(' + id +  ', \'' +  title + '\');">'
-                }
-                console.log(basket);
-                var topicDiv = '<div class="col-md-4">'
+                var columnClass = data.length === 2 ? 'mr-5' : ''; // padding in case of 2 cards
+                var topicDiv = '<div class="col-md-4 ' + columnClass + '">'
                 + cardBody
                 + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
                 + '<strong><span id="topicTitle">Set ' + title + '</span></strong>&nbsp;&nbsp;' + icon
