@@ -359,30 +359,30 @@ function updatePassword() {
 						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/acerMath">Acer Mathematics</a>
 					</div>
 				</div> -->
-			</div>
-		</li>
-	
-		<!-- Test Results-->
-		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Test Results
-			</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-				<!-- Mega Test Result submenu -->
-				<div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="megaResultDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Mega Test Results
-					</a>
-					<div class="dropdown-menu" aria-labelledby="megaResultDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol1">MEGA Vol 1</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol2">MEGA Vol 2</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol3">MEGA Vol 3</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol4">MEGA Vol 4</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol5">MEGA Vol 5</a>
-					</div>
+
+
+
+
+
+
+
+
+
+			<!-- Test Result submenu -->
+			<div class="dropdown">
+				<a class="dropdown-item dropdown-toggle" href="#" id="megaResultDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Mega Test Results
+				</a>
+				<div class="dropdown-menu" aria-labelledby="megaResultDropdown">
+					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol1">MEGA Vol 1</a>
+					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol2">MEGA Vol 2</a>
+					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol3">MEGA Vol 3</a>
+					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol4">MEGA Vol 4</a>
+					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol5">MEGA Vol 5</a>
 				</div>
-				<!-- Revision Test Result submenu -->
-				<div class="dropdown">
+			</div>
+			<!-- Revision Test Result submenu -->
+				<!-- <div class="dropdown">
 					<a class="dropdown-item dropdown-toggle" href="#" id="revisionResultDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Revision Test Results
 					</a>
@@ -393,17 +393,27 @@ function updatePassword() {
 						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol4">Revision Vol 4</a>
 						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol5">Revision Vol 5</a>
 					</div>
-				</div>
+				</div> -->
 				<!-- English Test Result -->
-				<a class="nav-link" href="${pageContext.request.contextPath}/connected/result/engResult" style="color: #212529;" role="button">
+				<!-- <a class="nav-link" href="${pageContext.request.contextPath}/connected/result/engResult" style="color: #212529;" role="button">
 					English Test Results
-				</a>
+				</a> -->
 				<!-- Math Test Result -->
-				<a class="nav-link" href="${pageContext.request.contextPath}/connected/result/mathResult" style="color: #212529;" role="button">
+				<!-- <a class="nav-link" href="${pageContext.request.contextPath}/connected/result/mathResult" style="color: #212529;" role="button">
 					Math Test Results
-				</a>
+				</a> -->
+
+
+
+
+
+
+
+
+
 			</div>
 		</li>
+	
 	
 
 

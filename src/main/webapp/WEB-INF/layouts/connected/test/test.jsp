@@ -216,7 +216,6 @@ function checkAnswer(testId, numQuestion) {
 
 </script>
 
-</script>
 <!-- Pop up Test modal -->
 <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-extra-large" role="document">
@@ -243,6 +242,46 @@ function checkAnswer(testId, numQuestion) {
                 </div>
             </div>
             <div class="modal-footer bg-dark text-white">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Test Warning Modal -->
+<div class="modal fade" id="testWarningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning" style="display: block;">
+                <p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>Test Instruction for James An College Class</strong></span></p>
+            </div>
+            <div class="modal-body" style="background-color: #f8f9fa; border-radius: 5px; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="${pageContext.request.contextPath}/image/test.png" style="width: 150px; height: 150px; border-radius: 5%;">
+                </div>
+                <!-- Add your warning message or content here -->
+                <ol style="line-height: 1.6;">
+                    <li><span class="text-primary"><strong>Test Duration</strong></span>
+                        Ensure completion within the 30-minute time limit provided for the test.
+                    </li>
+                    <li><span class="text-primary"><strong>Single Attempt</strong></span>
+                        Each student has a single opportunity to attempt the test, and once initiated, retakes are not permitted.
+                    </li>
+                    <li><span class="text-primary"><strong>Submission</strong></span>
+                        Upon finishing the test, submit your answers using the "Submit" button; changes cannot be made thereafter.
+                    </li>
+                    <li><span class="text-primary"><strong>Feedback</strong></span>
+                        Instantly view both your answers and the correct ones for each question immediately after submission, facilitating review and learning from mistakes.
+                    </li>xs
+                    <li><span class="text-primary"><strong>Test Results</strong></span>
+                        Access detailed reports, including individual answers and class statistics providing insights into your performance relative to peers, under the 'Test Result' menu later.
+                    </li>
+                </ol>
+                <p><strong>Please adhere to these guidelines to ensure a fair and effective assessment process. Good luck with your test!</strong></p>      
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="agreeTestWarning">I agree</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
