@@ -54,25 +54,19 @@
 <script>
 
 const TEST_TYPE = '1,2,3' ;
-const VOLUME = 3; // volume should be 1....
+const VOLUME = 1; // volume should be 1....
 $(function() {
     $.ajax({
         url : '${pageContext.request.contextPath}/connected/summaryTestResult/' + studentId + '/' + TEST_TYPE + '/' + numericGrade + '/' + VOLUME,
-        // url : '${pageContext.request.contextPath}/connected/summaryTestResult/' + studentId + '/' + TEST_TYPE + '/' + numericGrade + '/' + VOLUME,
         method: "GET",
-        // data: {
-        //     studentId: studentId,
-        //     testTypeId: test
-        //     testType: TEST_TYPE,
-        //     grade: numericGrade
-        // },
         success: function(data) {
             $.each(data, function(index, basket) {
-
-				var title = basket.name;
-                var id = basket.value;
+                console.log(basket);
+                debugger
+				var title = basket.testTypeName;
+                var id = basket.id;
                 var icon = '<i class="bi bi-send h5 text-primary" title="unsubmitted yet"></i>';
-                var cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayMaterial(' + id +  ', \'' +  title + '\');">'
+                var cardBody = '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%; min-width: 235px;" onclick="displayReport(' + id +  ');">'
                 var columnClass = data.length === 2 ? 'mr-5' : ''; // padding in case of 2 cards
                 var topicDiv = '<div class="col-md-4 ' + columnClass + '">'
                 + cardBody

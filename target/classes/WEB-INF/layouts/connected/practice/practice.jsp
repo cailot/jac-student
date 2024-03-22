@@ -133,8 +133,9 @@ function displayAnswer(practiceId, setNumber) {
             container.empty(); // remove existing question elements
             // header
             var header = '<div id="stickyHeader" class="h5" style="position: relative; display: flex; justify-content: center; align-items: center; color: #333; text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 5px;">'
-            + '<button onclick="retestRequest(' + value.practiceId + ')" style="position: absolute; left: 20px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;"><i class="bi bi-arrow-clockwise"></i>&nbsp;Retake</button>' 
-            + 'My Score : ' + score + ' (<span id="correctAnswerNum" name="correctAnswerNum" style="color:blue;" title="Student Answer">' + countCorrect + '</span>/<span id="answerNumQuestion" name="answerNumQuestion" style="color:red;" title="Correct Answer">'+ (answerNumQuestion-1) +'</span>)</div>';
+            //+ '<button onclick="retestRequest(' + value.practiceId + ')" style="position: absolute; left: 20px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;"><i class="bi bi-arrow-clockwise"></i>&nbsp;Retake</button>' 
+            + '<button onclick="confirmRetake(' + value.practiceId + ')" style="position: absolute; left: 20px; padding: 5px 10px; background-color: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer;"><i class="bi bi-arrow-clockwise"></i>&nbsp;Retake</button>' 
+            + 'My Score : ' + score + '% (<span id="correctAnswerNum" name="correctAnswerNum" style="color:blue;" title="Student Answer">' + countCorrect + '</span>/<span id="answerNumQuestion" name="answerNumQuestion" style="color:red;" title="Correct Answer">'+ (answerNumQuestion-1) +'</span>)</div>';
             container.append(header);
             for (var i = 1; i < answerNumQuestion; i++) {
                 var questionDiv = $('<div>').addClass('m-4');
@@ -173,6 +174,13 @@ function displayAnswer(practiceId, setNumber) {
     });   
 }
 
+function confirmRetake(practiceId) {
+    var confirmationMessage = "If you want to re-take practice, the old record will be erased and the new record will override it.";
+    var userConfirmed = confirm(confirmationMessage);
+    if (userConfirmed) {
+        retestRequest(practiceId);
+    }
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Submit Answer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,7 +265,8 @@ function calculateScore(studentAnswers, answerSheet) {
     }
     // Calculate the final score as a percentage
     var score = (correctAnswers / totalQuestions) * 100;
-    var rounded = Math.round(score * 100) / 100;
+    //var rounded = Math.round(score * 100) / 100;
+    var rounded = Math.round(score);
     return rounded;
 }
 
@@ -352,4 +361,3 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
         </div>
     </div>
 </div>
-
