@@ -175,12 +175,16 @@ function displayAnswer(practiceId, setNumber) {
 }
 
 function confirmRetake(practiceId) {
-    var confirmationMessage = "If you want to re-take practice, the old record will be erased and the new record will override it.";
-    var userConfirmed = confirm(confirmationMessage);
-    if (userConfirmed) {
+    // Show the warning modal
+    $('#practiceWarningModal').modal('show');
+
+    // Attach the click event handler to the "I agree" button
+    $('#agreePracticeWarning').one('click', function() {
         retestRequest(practiceId);
-    }
+        $('#practiceWarningModal').modal('hide');
+    });
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Submit Answer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,6 +360,30 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
                 </div>
             </div>
             <div class="modal-footer bg-dark text-white">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Practice Warning Modal -->
+<div class="modal fade" id="practiceWarningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="border: 2px solid #ffc107; border-radius: 10px;">
+            <div class="modal-header bg-warning" style="display: block;">
+                <p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>Practice for James An College Class</strong></span></p>
+            </div>
+            <div class="modal-body" style="background-color: #f8f9fa; border-radius: 5px; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <img src="${pageContext.request.contextPath}/image/retake.png" style="width: 150px; height: 150px; border-radius: 5%;">
+                </div>
+                <span class="text-primary"><strong>Retake Practice</strong></span>
+                        Feel free to practice as many times as you'd like! Just remember, each time you retake a practice, your old result will be replaced by the new one.
+                
+                <br><br><p class="text-center"><strong>Good luck with your practice!</strong></p>      
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="agreePracticeWarning">I understand</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

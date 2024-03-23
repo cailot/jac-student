@@ -53,6 +53,44 @@
 
 </style>
 <script>
+$(document).ready(function() {
+    $('#testModal').on('shown.bs.modal', function () {
+        var time = 30 * 60, // 30 minutes in seconds
+            display = document.querySelector('#timerText');
+
+        // Clear any existing interval
+        if (window.timerInterval) {
+            clearInterval(window.timerInterval);
+        }
+
+        startTimer(time, display);
+    });
+
+    $('#testModal').on('hidden.bs.modal', function () {
+        var display = document.querySelector('#timerText');
+        display.textContent = "";
+    });
+});
+
+function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    display.textContent = ""; // Clear the timer display at the start of the function
+    window.timerInterval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            clearInterval(window.timerInterval);
+            display.textContent = "TIME'S UP";
+        }
+    }, 1000);
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Display Material (Pdf/Answer Sheet)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,7 +257,7 @@ function checkAnswer(testId, numQuestion) {
 <!-- Pop up Test modal -->
 <div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-extra-large" role="document">
-        <div class="modal-content" style="height: 90vh;">
+         <div class="modal-content" style="height: 85vh;">
             <div class="modal-header bg-primary text-white text-center">
                 <h5 class="modal-title w-100" id="testModalLabel"></h5>
                 <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
@@ -235,10 +273,18 @@ function checkAnswer(testId, numQuestion) {
                     </div>
                     <div class="col-md-3 bg-white p-3 border" style="height: 85vh;">
                         <div style="display: flex; flex-direction: column; height: 100%;">
+                            <!-- TIMER -->
+                            <div id="timer" class="text-center" style="font-size: 20px; font-weight: bold;">
+                                <i class="bi bi-stopwatch"></i>&nbsp;&nbsp;<span id="timerText"></span>
+                            </div>
                             <!-- ANSWER SHEET -->
                             <div class="answerSheet" style="overflow-y: auto; flex-grow: 1;"></div>
                         </div>
                     </div>
+
+
+
+
                 </div>
             </div>
             <div class="modal-footer bg-dark text-white">
@@ -248,11 +294,10 @@ function checkAnswer(testId, numQuestion) {
     </div>
 </div>
 
-
 <!--Test Warning Modal -->
 <div class="modal fade" id="testWarningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="border: 2px solid #ffc107; border-radius: 10px;">
             <div class="modal-header bg-warning" style="display: block;">
                 <p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>Test Instruction for James An College Class</strong></span></p>
             </div>
@@ -273,7 +318,7 @@ function checkAnswer(testId, numQuestion) {
                     </li>
                     <li><span class="text-primary"><strong>Feedback</strong></span>
                         Instantly view both your answers and the correct ones for each question immediately after submission, facilitating review and learning from mistakes.
-                    </li>xs
+                    </li>
                     <li><span class="text-primary"><strong>Test Results</strong></span>
                         Access detailed reports, including individual answers and class statistics providing insights into your performance relative to peers, under the 'Test Result' menu later.
                     </li>
@@ -281,7 +326,7 @@ function checkAnswer(testId, numQuestion) {
                 <p><strong>Please adhere to these guidelines to ensure a fair and effective assessment process. Good luck with your test!</strong></p>      
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="agreeTestWarning">I agree</button>
+                <button type="button" class="btn btn-primary" id="agreeTestWarning">I understand</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
