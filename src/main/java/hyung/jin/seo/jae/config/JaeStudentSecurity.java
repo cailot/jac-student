@@ -104,7 +104,7 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                 protected void configure(HttpSecurity http) throws Exception {
 
                         http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
-                                // disable CSRF protection
+                        // disable CSRF protection
                         http.csrf().disable();
                         http
                                 .antMatcher("/connected/**")

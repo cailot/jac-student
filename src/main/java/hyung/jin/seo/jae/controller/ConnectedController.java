@@ -438,10 +438,20 @@ public class ConnectedController {
 		String[] types = StringUtils.split(StringUtils.defaultString(testType),",");
 		// Loop through each test type in the array
 		for (String type : types) {
+			// can I simply use SimpleBasketDTO for testId & testTypeName ??...
 			StudentTestDTO dto = connectedService.getStudentTest(Long.parseLong(filteredStudentId), Long.parseLong(type), filteredGrade, Integer.parseInt(filteredVolume));
 			if(dto!=null) dtos.add(dto);
 		}		
 		return dtos;
+	}
+
+	@GetMapping("/studentTestResult/{studentTestId}")
+	@ResponseBody
+	public String getReportAddress(@PathVariable String studentTestId) {
+//////////////////////////////////////////////////////////////////////////////////////////////
+		String address = "http://assessment.jamesancollegevic.com/result/65fbc8a50eab1f75597adb65.pdf";
+		String filteredStudentTestId = StringUtils.defaultString(studentTestId, "0");
+		return address;
 	}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
