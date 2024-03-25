@@ -1,6 +1,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <sec:authorize access="isAuthenticated()">
 
 <sec:authentication var="role" property='principal.authorities'/>
@@ -18,11 +19,9 @@
 	</script>
 </sec:authorize>
 
-
 <style>
 .jae-header{
 	padding : 0;
-	/*background-color: #263343;*/
 	background-color: #2d398e;
 }
 
@@ -31,7 +30,6 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 8px 12px;
-	padding-bottom: 8px; /* Added */
 }
 
 .navbar a {
@@ -43,12 +41,13 @@
 	display: flex;
 	list-style: none;
 	padding-left: 0;
+	margin-bottom: 0px;
 }
 
 .navbar_menu li {
 	padding: 8px 12px;
-	padding-top: 16px; /* Updated */
-	padding-bottom: 16px; /* Updated */
+	padding-top: 16px;
+	padding-bottom: 16px;
 }
 
 .navbar_menu li:hover{
@@ -57,7 +56,8 @@
 }
 
 .custom-icon {
-	font-size: 2rem;
+	font-size: 1.5rem;
+	color: yellow;
 }
 
 .navbar_icon li {
@@ -68,28 +68,63 @@
 	text-decoration: none;
 }
 
-/* Added padding-bottom to .navbar_icon class */
 .navbar_icon {
-	padding-bottom: 8px; /* Added */
+	padding-bottom: 8px;
 }
 
-/* Adjusting font color for submenu items */
-.dropdown-menu a.dropdown-item {
-	color: #212529; /* Change to the desired font color */
+.nav-item.dropdown:hover .dropdown-menu {
+	display: block;
 }
 
-/* Ensuring visibility of second level submenu */
-.dropdown-menu .dropdown-menu {
-    display: none; /* Initially hide the second level submenu */
+.dropdown-menu {
+    background-color: #bee0ec; /* Background color of the submenu */
+    border: 1px solid #1a6985; /* Border around the submenu */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 1); /* Shadow for a subtle elevation effect */
+    padding: 8px 0; /* Padding inside the submenu */
+}
+
+.dropdown-menu > .dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-menu > .dropdown-submenu > .dropdown-menu {
+    display: none !important;
     position: absolute;
-    top: 0;
     left: 100%;
+    top: 0;
+
+	transition: visibility 0.5s ease-in-out, opacity 0.2s ease-in-out;
+    visibility: hidden;
+    opacity: 0;
 }
 
-/* Show second level submenu when hovering over "MEGA Test" */
-.dropdown-menu .dropdown:hover > .dropdown-menu {
-    display: block;
+.dropdown-menu > .dropdown-submenu:hover > .dropdown-menu {
+    display: block !important;
+
+	visibility: visible;
+    opacity: 1;
 }
+
+/* Styling for individual dropdown items */
+.dropdown-item {
+    padding: 8px 20px;
+    color: #333; /* Text color */
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s; /* Smooth transition for background color change */
+}
+
+/* Hover effect for dropdown items */
+.dropdown-item:hover {
+    background-color: #f8f9fa; /* Background color on hover */
+}
+
+.dropdown-menu .dropdown-item {
+    color: #2d398e; /* Font color of submenu items */
+	font-weight: bold;
+}
+
 
 @media screen and (max-width: 768px){
 	.navbar{
@@ -105,12 +140,9 @@
 	.navbar_icon{
 		justify-content: center;
 		width: 100%;
-		
 	}
 }
-
 </style>
-
 
 <script>
 
@@ -220,7 +252,7 @@ function updatePassword() {
 
 </script>
 
-<div class="container-fluid jae-header">
+<div class="container-fluid jae-header pt-3 pb-3">
 <nav class="navbar">
 	<div class="navbar_logo">
 		<a href="${pageContext.request.contextPath}/connected/lesson">
@@ -231,31 +263,31 @@ function updatePassword() {
 	<ul class="navbar_menu">
 		<!-- Homework -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			  Homework
+			<a class="nav-link" href="" id="navbarDropdown1" role="button" aria-haspopup="true" aria-expanded="false">
+				<i class="bi bi-pencil-square custom-icon mr-2"></i><span class="h4">Homework</span>
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/engHomework">English Homework</a>
-			  	<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/mathHomework">Mathematics Homework</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/writeHomework">Writing</a>
-				<a class="dropdown-item" style="color: #212529;" href="${pageContext.request.contextPath}/connected/shortAnswer">Short Answer</a>
+				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/engHomework">English Homework</a>
+			  	<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/mathHomework">Mathematics Homework</a>
+				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/writeHomework">Writing</a>
+				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/shortAnswer">Short Answer</a>
 			</div>
 		</li>
 		<!-- Extra Materials -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="${pageContext.request.contextPath}/connected/extraMaterial" role="button">
-			Extra Materials
+				<i class="bi bi-journals custom-icon mr-2"></i><span class="h4">Extra Materials</span>
 			</a>
 		</li>
 		<!-- Practice -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Practice
-			</a>
+			<a class="nav-link" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<span class="material-icons mr-1 custom-icon">directions_run</span><span class="h4">Practice</span>
+			</a>			
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
 				<!-- Mega Practice submenu -->
-				<div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="megaPracticeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<div class="dropdown-submenu">
+					<a class="dropdown-item" href="#" id="megaPracticeDropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						Mega Practice
 					</a>
 					<div class="dropdown-menu" aria-labelledby="megaPracticeDropdown">
@@ -264,19 +296,9 @@ function updatePassword() {
 						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/megaGA">MEGA General Ability</a>
 					</div>
 				</div>
-				<!-- Revision Practice submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="revisionPracticeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Revision Practice
-					</a>
-					<div class="dropdown-menu" aria-labelledby="revisionPracticeDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/revisionEng">Revision English</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/revisionMath">Revision Mathematics</a>
-					</div>
-				</div> -->
 				<!-- NAPLAN submenu -->
-				<div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="naplanPracticeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<div class="dropdown-submenu">
+					<a class="dropdown-item" href="#" id="naplanPracticeDropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						NAPLAN
 					</a>
 					<div class="dropdown-menu" aria-labelledby="naplanPracticeDropdown">
@@ -285,40 +307,18 @@ function updatePassword() {
 						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/naplanRead">NAPLAN Reading</a>
 					</div>
 				</div>
-				<!-- EDU submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="eduPracticeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						EDU
-					</a>
-					<div class="dropdown-menu" aria-labelledby="eduPracticeDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/eduNR">Edu Numerical Reasoning</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/eduMath">Edu Mathematics</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/eduRC">Edu Reading Comprehension</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/eduVR">Edu Verbal Reasoning</a>
-					</div>
-				</div> -->
-				<!-- Acer submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="acerPracticeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						ACER
-					</a>
-					<div class="dropdown-menu" aria-labelledby="acerPracticeDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/acerH">Acer Humanities</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/practice/acerMath">Acer Mathematics</a>
-					</div>
-				</div> -->
 			</div>
 		</li>
 
 		<!-- Test -->
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Test
+			<a class="nav-link" href="#" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="bi bi-pencil custom-icon mr-2"></i><span class="h4">Test</span> 
 			</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+			<div class="dropdown-menu" aria-labelledby="navbarDropdown4">
 				<!-- Mega Test submenu -->
-				<div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="megaTestDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<div class="dropdown-submenu">
+					<a class="dropdown-item" href="#" id="megaTestDropdown" role="button" aria-haspopup="true" aria-expanded="false">
 						Mega Test
 					</a>
 					<div class="dropdown-menu" aria-labelledby="megaTestDropdown">
@@ -327,100 +327,26 @@ function updatePassword() {
 						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/test/megaGA">MEGA General Ability</a>
 					</div>
 				</div>
-				<!-- Revision Test submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="revisionTestDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Revision Test
+				<!-- Test Result submenu -->
+				<div class="dropdown-submenu">
+					<a class="dropdown-item" href="#" id="megaResultDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						Mega Test Results
 					</a>
-					<div class="dropdown-menu" aria-labelledby="revisionTestDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/revisionEng">Revision English</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/revisionMath">Revision Mathematics</a>
+					<div class="dropdown-menu" aria-labelledby="megaResultDropdown">
+						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol1">MEGA Vol 1</a>
+						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol2">MEGA Vol 2</a>
+						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol3">MEGA Vol 3</a>
+						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol4">MEGA Vol 4</a>
+						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol5">MEGA Vol 5</a>
 					</div>
-				</div> -->
-				<!-- Class Test submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="classTestDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Class Test
-					</a>
-					<div class="dropdown-menu" aria-labelledby="classTestDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/eduNR">Edu Numerical Reasoning</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/eduMath">Edu Mathematics</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/eduRC">Edu Reading Comprehension</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/eduVR">Edu Verbal Reasoning</a>
-					</div>
-				</div> -->
-				<!-- VSSE submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="vsseTestDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						ACER
-					</a>
-					<div class="dropdown-menu" aria-labelledby="vsseTestDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/acerH">Acer Humanities</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/acerMath">Acer Mathematics</a>
-					</div>
-				</div> -->
-
-
-
-
-
-
-
-
-
-			<!-- Test Result submenu -->
-			<div class="dropdown">
-				<a class="dropdown-item dropdown-toggle" href="#" id="megaResultDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Mega Test Results
-				</a>
-				<div class="dropdown-menu" aria-labelledby="megaResultDropdown">
-					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol1">MEGA Vol 1</a>
-					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol2">MEGA Vol 2</a>
-					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol3">MEGA Vol 3</a>
-					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol4">MEGA Vol 4</a>
-					<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/megaVol5">MEGA Vol 5</a>
 				</div>
 			</div>
-			<!-- Revision Test Result submenu -->
-				<!-- <div class="dropdown">
-					<a class="dropdown-item dropdown-toggle" href="#" id="revisionResultDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Revision Test Results
-					</a>
-					<div class="dropdown-menu" aria-labelledby="revisionResultDropdown">
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol1">Revision Vol 1</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol2">Revision Vol 2</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol3">Revision Vol 3</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol4">Revision Vol 4</a>
-						<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/result/revisionVol5">Revision Vol 5</a>
-					</div>
-				</div> -->
-				<!-- English Test Result -->
-				<!-- <a class="nav-link" href="${pageContext.request.contextPath}/connected/result/engResult" style="color: #212529;" role="button">
-					English Test Results
-				</a> -->
-				<!-- Math Test Result -->
-				<!-- <a class="nav-link" href="${pageContext.request.contextPath}/connected/result/mathResult" style="color: #212529;" role="button">
-					Math Test Results
-				</a> -->
-
-
-
-
-
-
-
-
-
-			</div>
 		</li>
-	
-	
-
-
+		
 		<!-- Link to Jac-eLearning -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="${pageContext.request.contextPath}/online/lesson" role="button">
-				Jac-eLearning
+				<i class="bi bi-plugin custom-icon mr-2"></i><span class="h4">Jac-eLearning</span>
 			</a>
 		</li>
 
