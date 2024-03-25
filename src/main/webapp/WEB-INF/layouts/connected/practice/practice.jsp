@@ -1,5 +1,5 @@
 <style>
-    .english-homework {
+    .topic-card {
         background-color: #d1ecf1; 
         padding: 20px; 
         border-radius: 10px; 
