@@ -40,13 +40,15 @@ $(function() {
 
 </script>
 
-<div class="col-md-12" style="padding: 30px;">
+<div class="col-md-12 pt-3">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Humanities (ACER)</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(168, 179, 247, 1);">Acer Humanities</h2>
     </div>
 </div>
 
-<div id="topicContainer" class="row"></div>
+<div class="container mt-3" style="background: linear-gradient(to right, #f1f3ff 0%, #b1b9f9 100%); border-radius: 15px;">
+    <div id="topicContainer" class="row mt-5 mb-5 justify-content-center"></div>
+</div>
 
 <!-- Include test.jsp -->
 <jsp:include page="test.jsp" />

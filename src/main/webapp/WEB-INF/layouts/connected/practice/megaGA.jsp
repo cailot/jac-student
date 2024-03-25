@@ -41,13 +41,15 @@ $(function() {
 
 </script>
 
-<div class="col-md-12" style="padding: 30px;">
+<div class="col-md-12 pt-3">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">MEGA General Ability</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(235, 177, 249, 1);">Mega General Ability</h2>
     </div>
 </div>
 
-<div id="topicContainer" class="row"></div>
+<div class="container mt-3" style="background: linear-gradient(to right, #f7eef9 0%, #F8e2fd 100%); border-radius: 15px;">
+    <div id="topicContainer" class="row mt-5 mb-5 justify-content-center"></div>
+</div>
 
 <!-- Include test.jsp -->
 <jsp:include page="practice.jsp" />

@@ -269,7 +269,7 @@ function updatePassword() {
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/engHomework">English Homework</a>
 			  	<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/mathHomework">Mathematics Homework</a>
-				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/writeHomework">Writing</a>
+				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/writeHomework">Writing Homework</a>
 				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/shortAnswer">Short Answer</a>
 			</div>
 		</li>
@@ -353,7 +353,7 @@ function updatePassword() {
 	</ul>
 	<ul class="navbar_icon" style="margin: 0; padding: 0;">
 		<sec:authorize access="isAuthenticated()">
-			<div class="card-body jae-background-color text-right" style="display: flex; align-items: center; justify-content: space-between; padding-top: 0px;">
+			<div class="card-body jae-background-color text-right" style="display: flex; justify-content: space-between; padding-top: 20px;">
 				<div>
 					<span class="card-text text-warning font-weight-bold font-italic h5" style="margin-left: 25px; cursor: pointer;" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
 					<span style="color: white;">&nbsp;&nbsp;(</span>

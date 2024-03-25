@@ -328,13 +328,15 @@ function countCorrectAnswers(studentAnswers, answerSheet) {
 
 </script>
 
-<div class="col-md-12" style="padding: 30px;">
+<div class="col-md-12 pt-3">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Mega Volume 4 Results</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(168, 179, 247, 1);">Mega Volume 4 Results</h2>
     </div>
 </div>
 
-<div id="topicContainer" class="row"></div>
+<div class="container mt-3" style="background: linear-gradient(to right, #f1f3ff 0%, #b1b9f9 100%); border-radius: 15px;">
+    <div id="topicContainer" class="row mt-5 mb-5 justify-content-center"></div>
+</div>
 
 <!-- Pop up Practice modal -->
 <div class="modal fade" id="practiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
