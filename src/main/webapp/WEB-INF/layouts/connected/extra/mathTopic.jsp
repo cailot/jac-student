@@ -97,13 +97,14 @@ function displayMaterial(id, title) {
 }
 </script>
 
-<div class="col-md-12" style="padding: 30px;">
+<div class="col-md-12 pt-3">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Math Topics</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(58, 232, 22, 1);">Math Topics</h2>
     </div>
 </div>
-
-<div id="topicContainer" class="row"></div>
+<div class="container mt-3" style="background: linear-gradient(to right, #e6fde2 0%, #b9fba8 100%); border-radius: 15px;">
+    <div id="topicContainer" class="row mt-5 mb-5"></div>
+</div>
 
 <!-- Pop up Video modal -->
 <div class="modal fade" id="materialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

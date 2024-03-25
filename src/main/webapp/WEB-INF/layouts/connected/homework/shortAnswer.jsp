@@ -101,64 +101,71 @@ function displayMaterial(weekNumber, elementId) {
 </script>
 
 <input type="hidden" id="academicYear" name="academicYear" />
-<div class="col-md-12" style="padding: 30px;">
+<div class="col-md-12 pt-3">
     <div class="card-body text-center">
-        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase;">Short Answer</h2>
+        <h2 style="color: #6c757d; font-weight: bold; text-transform: uppercase; text-shadow: 2px 2px 4px rgba(247, 247, 161, 1);">Short Answer</h2>
     </div>
 </div>
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus2Week').textContent, 'm2Percentage')">
-        <div class="alert alert-info english-homework" role="alert">
-            <p id="m2OnlineLesson" style="margin: 30px;">
-                <strong>Set</strong> <span id="minus2Week"></span>
-                &nbsp;&nbsp;<i class="bi bi-journal-text h5 text-primary"></i>
-            </p>
-            <%--
-            <div class="progress" style="margin: 30px;">
-                <div id="m2PercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
-                    <span id="m2Percentage" class="ml-auto">0%</span>
+<div class="container mt-3" style="background: linear-gradient(to right, #f9f9d5 0%, #f7f7a1 100%); border-radius: 15px;">
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus2Week').textContent, 'm2Percentage')">
+                <div class="alert alert-info english-homework" role="alert">
+                    <p id="m2OnlineLesson" style="margin: 30px;">
+                        <strong>Set</strong> <span id="minus2Week"></span>
+                        &nbsp;&nbsp;<i class="bi bi-journal-text h5 text-primary"></i>
+                    </p>
+                    <%--
+                    <div class="progress" style="margin: 30px;">
+                        <div id="m2PercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
+                            <span id="m2Percentage" class="ml-auto">0%</span>
+                        </div>
+                    </div>
+                    --%>
                 </div>
             </div>
-            --%>
         </div>
-    </div>
-</div>
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus1Week').textContent, 'm1Percentage')">
-        <div class="alert alert-info english-homework" role="alert">
-            <p id="m1OnlineLesson" style="margin: 30px;">
-                <strong>Set</strong> <span id="minus1Week"></span>
-                &nbsp;&nbsp;<i class="bi bi-journal-text h5 text-primary"></i>
-            </p>
-            <%--
-            <div class="progress" style="margin: 30px;">
-                <div id="m1PercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
-                    <span id="m1Percentage" class="ml-auto">0%</span>
+        <div class="col-md-6">
+            <div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(document.getElementById('minus1Week').textContent, 'm1Percentage')">
+                <div class="alert alert-info english-homework" role="alert">
+                    <p id="m1OnlineLesson" style="margin: 30px;">
+                        <strong>Set</strong> <span id="minus1Week"></span>
+                        &nbsp;&nbsp;<i class="bi bi-journal-text h5 text-primary"></i>
+                    </p>
+                    <%--
+                    <div class="progress" style="margin: 30px;">
+                        <div id="m1PercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">
+                            <span id="m1Percentage" class="ml-auto">0%</span>
+                        </div>
+                    </div>
+                    --%>
                 </div>
             </div>
-            --%>
         </div>
     </div>
-</div>
-<!-- This Week -->
-<div class="col-md-6">
-    <div class="card-body mx-auto" style="max-width: 75%;">
-        <div class="alert alert-info english-homework" role="alert" style="background-color: lightgrey;">
-            <p style="margin: 30px;">
-                <strong>Set</strong> <span id="academicWeek"></span>
-               &nbsp;&nbsp;<i class="bi bi-lock-fill h5 text-secondary"></i>
-            </p>
-            <%--
-            <div class="progress" style="margin: 30px;">
-                <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                    <span class="ml-auto"></span>
+    <div class="row mb-4">
+        <!-- This Week -->
+        <div class="col-md-6">
+            <div class="card-body mx-auto" style="max-width: 75%;">
+                <div class="alert alert-info english-homework" role="alert" style="background-color: lightgrey;">
+                    <p style="margin: 30px;">
+                        <strong>Set</strong> <span id="academicWeek"></span>
+                    &nbsp;&nbsp;<i class="bi bi-lock-fill h5 text-secondary"></i>
+                    </p>
+                    <%--
+                    <div class="progress" style="margin: 30px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <span class="ml-auto"></span>
+                        </div>
+                    </div>
+                    --%>
                 </div>
             </div>
-            --%>
         </div>
+        <div class="offset-md-6"></div>
     </div>
-</div>
-<div class="offset-md-6"></div>
+</div>    
+
 <!-- Pop up Video modal -->
 <div class="modal fade" id="homeworkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-extra-large" role="document">
