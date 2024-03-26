@@ -115,5 +115,4 @@
 			</div>
 		</div>
 	</div>
-	<!-- <p class="text-center mt-5">At Connected Class, learning is not just a journey - it's an adventure! So buckle up and get ready to explore, discover, and unleash your full potential with us.<br>Your amazing learning adventure starts here!</p> -->
 </div>
