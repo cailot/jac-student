@@ -62,7 +62,7 @@
 	
 </style>
 
-<div class="container mt-5" style="background-image: url('${pageContext.request.contextPath}/image/welcome4.jpeg'); background-size: cover;">
+<div class="container mt-5" style="background-image: url('${pageContext.request.contextPath}/image/welcome1.jpeg'); background-size: cover;">
 	<h1 class="text-center font-italic jae-color mb-4" style="text-shadow: 2px 2px 4px rgba(255, 255, 255, 1);">Welcome to Connected Class!</h1>
 	<p class="lead text-center text-secondary mb-5">Your ultimate learning companion at James An College</p>
 	<div class="row">
