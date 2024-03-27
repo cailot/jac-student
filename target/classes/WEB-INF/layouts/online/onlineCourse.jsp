@@ -324,25 +324,27 @@ function getTimeForDayAndTime(day, time) {
 		<div class="iframe-container" style="display: flex; justify-content: center;">
 			<iframe id="lessonVideo" src="" allow="autoplay; encrypted-media" allowfullscree]></iframe>
 		</div>
-		
-		<div class="card-body">
-            <div class="alert alert-info" role="alert">
-				<p id="onlineLesson" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
-					Online Live Weekly Lesson <strong>Set</strong> <span id="academicWeek"></span>
-					(<span id="onlineLessonDayTitle" name="onlineLessonDayTitle"></span>, <span id="onlineLessonStartTitle" name="onlineLessonStartTitle"></span> - <span id="onlineLessonEndTitle" name="onlineLessonEndTitle"></span>&nbsp;&nbsp;<i id="micIcon" name="micIcon" class="bi bi-mic-fill text-secondary h5" title="Live"></i>)
-					&nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
-				</p>
-            </div>
-            <div id="recordAcademicMinusOneWeekBlock"class="alert alert-primary" role="alert">
-                <p id="recordAcademicMinusOneWeek" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
-                    Recorded Lesson &nbsp;<strong>Set</strong> <span id="academicMinusOneWeek"></span>&nbsp;(<span id="recordedLessonInfo"></span>)
-					<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>    
-                </p>
-            </div>
-			<div class="text-right">
-				<a href="${pageContext.request.contextPath}/connected/lesson" class="btn btn-primary" target="_blank">Access To Connected Class</a>
+		<div class="parent-container" style="display: flex; justify-content: center;">
+			<div class="card-body" style="max-width: 80%; margin: auto;">
+				<!-- Your code here -->
+				<div class="alert alert-info" role="alert">
+					<p id="onlineLesson" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
+						Online Live Weekly Lesson <strong>Set</strong> <span id="academicWeek"></span>
+						(<span id="onlineLessonDayTitle" name="onlineLessonDayTitle"></span>, <span id="onlineLessonStartTitle" name="onlineLessonStartTitle"></span> - <span id="onlineLessonEndTitle" name="onlineLessonEndTitle"></span>&nbsp;&nbsp;<i id="micIcon" name="micIcon" class="bi bi-mic-fill text-secondary h5" title="Live"></i>)
+						&nbsp;<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>
+					</p>
+				</div>
+				<div id="recordAcademicMinusOneWeekBlock"class="alert alert-primary" role="alert">
+					<p id="recordAcademicMinusOneWeek" data-video-url="" style="margin-left: 30px; margin-top: 20px;">
+						Recorded Lesson &nbsp;<strong>Set</strong> <span id="academicMinusOneWeek"></span>&nbsp;(<span id="recordedLessonInfo"></span>)
+						<i class="bi bi-caret-right-square text-primary" title="Play Video"></i>    
+					</p>
+				</div>
+				<div class="text-right">
+					<a href="${pageContext.request.contextPath}/connected/lesson" class="btn btn-primary" target="_blank">Access To Connected Class</a>
+				</div>
 			</div>
-        </div>	
+		</div>	
     </div>
 </div>
 
