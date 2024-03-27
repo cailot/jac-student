@@ -19,131 +19,6 @@
 	</script>
 </sec:authorize>
 
-<style>
-.jae-header{
-	padding : 0;
-	background-color: #2d398e;
-}
-
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 8px 12px;
-}
-
-.navbar a {
-	text-decoration: none;
-	color: white;
-}
-
-.navbar_menu{
-	display: flex;
-	list-style: none;
-	padding-left: 0;
-	margin-bottom: 0px;
-}
-
-.navbar_menu li {
-	padding: 8px 12px;
-	padding-top: 16px;
-	padding-bottom: 16px;
-}
-
-.navbar_menu li:hover{
-	background-color: '#e9ecef';
-	border-radius: 4px;
-}
-
-.custom-icon {
-	font-size: 1.5rem;
-	color: yellow;
-}
-
-.navbar_icon li {
-	padding: 8px 12px;
-}
-
-.navbar_logo a {
-	text-decoration: none;
-}
-
-.navbar_icon {
-	padding-bottom: 8px;
-}
-
-.nav-item.dropdown:hover .dropdown-menu {
-	display: block;
-}
-
-.dropdown-menu {
-    background-color: #bee0ec; /* Background color of the submenu */
-    border: 1px solid #1a6985; /* Border around the submenu */
-    border-radius: 4px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 1); /* Shadow for a subtle elevation effect */
-    padding: 8px 0; /* Padding inside the submenu */
-}
-
-.dropdown-menu > .dropdown-submenu {
-    position: relative;
-}
-
-.dropdown-menu > .dropdown-submenu > .dropdown-menu {
-    display: none !important;
-    position: absolute;
-    left: 100%;
-    top: 0;
-
-	transition: visibility 0.5s ease-in-out, opacity 0.2s ease-in-out;
-    visibility: hidden;
-    opacity: 0;
-}
-
-.dropdown-menu > .dropdown-submenu:hover > .dropdown-menu {
-    display: block !important;
-
-	visibility: visible;
-    opacity: 1;
-}
-
-/* Styling for individual dropdown items */
-.dropdown-item {
-    padding: 8px 20px;
-    color: #333; /* Text color */
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s; /* Smooth transition for background color change */
-}
-
-/* Hover effect for dropdown items */
-.dropdown-item:hover {
-    background-color: #f8f9fa; /* Background color on hover */
-}
-
-.dropdown-menu .dropdown-item {
-    color: #2d398e; /* Font color of submenu items */
-	font-weight: bold;
-}
-
-
-@media screen and (max-width: 768px){
-	.navbar{
-		flex-direction: column;
-		align-items: flex-start;
-		padding: 8px 12px;
-	}
-	.navbar_menu{
-		flex-direction: column;
-		align-items: center;
-		width: 100%;
-	}
-	.navbar_icon{
-		justify-content: center;
-		width: 100%;
-	}
-}
-</style>
-
 <script>
 
 $(function() {
@@ -263,10 +138,10 @@ function updatePassword() {
 	<ul class="navbar_menu">
 		<!-- Homework -->
 		<li class="nav-item dropdown">
-			<a class="nav-link" href="" id="navbarDropdown1" role="button" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 				<i class="bi bi-pencil-square custom-icon mr-2"></i><span class="h4">Homework</span>
 			</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+			<div class="dropdown-menu">
 				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/engHomework">English Homework</a>
 			  	<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/mathHomework">Mathematics Homework</a>
 				<a class="dropdown-item" href="${pageContext.request.contextPath}/connected/writeHomework">Writing Homework</a>
@@ -281,10 +156,10 @@ function updatePassword() {
 		</li>
 		<!-- Practice -->
 		<li class="nav-item dropdown">
-			<a class="nav-link" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<span class="material-icons mr-1 custom-icon">directions_run</span><span class="h4">Practice</span>
 			</a>			
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown3">
+			<div class="dropdown-menu">
 				<!-- Mega Practice submenu -->
 				<div class="dropdown-submenu">
 					<a class="dropdown-item" href="#" id="megaPracticeDropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -312,10 +187,10 @@ function updatePassword() {
 
 		<!-- Test -->
 		<li class="nav-item dropdown">
-			<a class="nav-link" href="#" id="navbarDropdown4" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				<i class="bi bi-pencil custom-icon mr-2"></i><span class="h4">Test</span> 
 			</a>
-			<div class="dropdown-menu" aria-labelledby="navbarDropdown4">
+			<div class="dropdown-menu">
 				<!-- Mega Test submenu -->
 				<div class="dropdown-submenu">
 					<a class="dropdown-item" href="#" id="megaTestDropdown" role="button" aria-haspopup="true" aria-expanded="false">
