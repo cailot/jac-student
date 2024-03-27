@@ -72,4 +72,7 @@ public interface EnrolmentService {
 	// return clazz Id for online session search
 	Long findClazzId4OnlineSession(long studentId, int year, int week);
 
+	// check if enrolement is still valid
+	// boolean isEnrolmentValid(long studentId);
+
 }

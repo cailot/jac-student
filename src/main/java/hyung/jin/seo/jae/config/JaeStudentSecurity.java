@@ -39,36 +39,6 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                         ); // excluding folders list
 	}
 
-        /* 
-        @Configuration
-        @Order(1)
-        public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
-
-                @Override
-                protected void configure(HttpSecurity http) throws Exception {
-                        http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
-                        // disable CSRF protection
-                        http.csrf().disable();
-                        http
-                        .antMatcher("/online/**")
-                        .authorizeRequests(requests -> requests
-                                .antMatchers("/online/", "/online/login").permitAll())
-                                // .antMatchers("/css/bootstrap-icons.min.css").permitAll() // Allow access to bootstrap-icons.min.css; otherwise it doesn't work, why ??
-                                // .anyRequest().authenticated())
-                        .formLogin(login -> login
-                                .loginPage("/online/login") // login page link
-                                .loginProcessingUrl("/online/processLogin")
-                                .defaultSuccessUrl("/online/lesson")// redirect link after login
-                                .permitAll())
-                        .logout(logout -> logout
-                                .logoutUrl("/online/logout") // specify logout URL
-                                .logoutSuccessUrl("/online/login")// redirect url after logout
-                                .invalidateHttpSession(true)// make session unavailable
-                                .permitAll());
-                }
-        }
-
-*/
         @Configuration
         @Order(1)
         public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
