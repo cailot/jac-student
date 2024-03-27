@@ -92,7 +92,7 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Long> {
 	@Query("SELECT e.clazz.id FROM Enrolment e WHERE e.student.id = ?1 AND e.clazz.cycle.year =?2 AND ?3 >= e.startWeek AND ?3 <= e.endWeek AND e.clazz.course.online = true")
 	Optional<Long> findClazzId4fOnlineSession(long studentId, int year, int week);
 
-	// return enrolment year and start & end week
+	// return enrolment id by student id, year and week
 	@Query(value = "SELECT en.id "
 	+ "FROM Enrolment en " 
 	+ "LEFT JOIN Class cl ON en.clazzId = cl.id " 
