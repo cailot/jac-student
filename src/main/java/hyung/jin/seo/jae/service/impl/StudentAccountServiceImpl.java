@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,6 +53,7 @@ public class StudentAccountServiceImpl implements StudentAccountService {
 				if(ids==null || ids.size() == 0){
 					// No enrolment
 					account.setEnabled(JaeConstants.INACTIVE);
+					throw new DisabledException("User enrolment is not valid");
 				}
 			}
 		}catch(Exception e){

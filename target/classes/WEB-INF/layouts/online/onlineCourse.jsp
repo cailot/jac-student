@@ -300,7 +300,7 @@ function getTimeForDayAndTime(day, time) {
 	}
 
 </style>
-<div class="row">
+<div class="container-fluid">
     <div class="col-lg-12">
         <div class="card-body jae-background-color text-center">
             <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
@@ -321,7 +321,7 @@ function getTimeForDayAndTime(day, time) {
 			</div>
 		</sec:authorize>
         <!-- HTML with additional container -->
-		<div class="iframe-container">
+		<div class="iframe-container" style="display: flex; justify-content: center;">
 			<iframe id="lessonVideo" src="" allow="autoplay; encrypted-media" allowfullscree]></iframe>
 		</div>
 		
@@ -534,7 +534,7 @@ function getTimeForDayAndTime(day, time) {
 <!-- Realtime Video Warning Modal -->
 <div class="modal fade" id="realtimeWarning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="border: 2px solid #ffc107; border-radius: 10px;">
             <div class="modal-header bg-warning" style="display: block;">
 				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger" id="onlineGrade" name="onlineGrade"></span></strong></span></p>
 				<script>
@@ -578,7 +578,7 @@ function getTimeForDayAndTime(day, time) {
 <!-- Record Video Warning Modal -->
 <div class="modal fade" id="recordWarning" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="border: 2px solid #ffc107; border-radius: 10px;">
             <div class="modal-header bg-warning" style="display: block;">
 				<p style="text-align: center; margin-bottom: 0;"><span style="font-size:18px"><strong>James An College Year <span class="text-danger" id="recordGrade" name="recordGrade"></span></strong></span></p>
 				<script>
