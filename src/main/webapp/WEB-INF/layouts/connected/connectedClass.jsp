@@ -62,8 +62,8 @@
 	
 </style>
 
-<div class="container mt-5" style="background-image: url('${pageContext.request.contextPath}/image/cc-welcome.jpeg'); background-size: cover;">
-	<h1 class="text-center font-italic jae-color mb-4" style="text-shadow: 2px 2px 4px rgba(255, 255, 255, 1);">Welcome to Connected Class!</h1>
+<div class="container mt-5" style="background-image: url('${pageContext.request.contextPath}/image/cc-welcome.jpg'); background-size: cover;">
+	<h1 class="text-center font-italic jae-color mb-4" style="text-shadow: 5px 5px 5px rgba(170, 221, 238, 1);">Welcome to Connected Class!</h1>
 	<p class="lead text-center text-secondary mb-5">Your ultimate learning companion at James An College</p>
 	<div class="row">
 		<div class="col-md-6">
@@ -103,8 +103,8 @@
 				<div class="card-header bg-primary text-white text-center"></div>
 				<div class="card-body text-primary">
 					<p class="card-text text-center text-success font-italic">At Connected Class, learning is not just a journey - it's an adventure!</p>
-					<p class="card-text text-left text-info font-italic">Buckle up and get ready to explore, discover, and unleash your full potentials.</p>
-					<p class="h5 text-right font-weight-bold font-italic jae-color">Your amazing learning adventure starts here !! 
+					<p class="card-text text-left text-info font-italic" style="margin-bottom: 0px;">Buckle up and get ready to explore, discover, and unleash your full potentials.</p>
+					<p class="h5 text-right font-weight-bold font-italic jae-color" style="margin-bottom: 0px;">Your amazing learning adventure starts here !! 
 						<span style="display: inline-block; transform: rotate(45deg);">
 							<i class="bi bi-airplane-fill text-warning h3"></i>
 						</sapn>

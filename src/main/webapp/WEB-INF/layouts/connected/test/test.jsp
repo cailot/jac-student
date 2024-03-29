@@ -149,66 +149,114 @@ function displayMaterial(testId, setNumber) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-// 			Display Answer (Pdf/submitted Answer)
+// 			Display Answer (Video/Pdf)
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function displayAnswer(testId, setNumber) {
-   // set dialogSet value as weekNumber
-    // document.getElementById("dialogAnswerSet").innerHTML = setNumber;
-    document.getElementById("dialogSet").innerHTML = setNumber;  
+   // set dialogAnswerSet value as weekNumber
+    document.getElementById("dialogAnswerSet").innerHTML = setNumber;
+    document.getElementById("dialogAnswerPdfSet").innerHTML = setNumber;    
     $.ajax({
         url : '${pageContext.request.contextPath}/connected/testAnswer/' + studentId + '/' + testId,
         method: "GET",
         success: function(test) {
             // console.log(test);
-
-            document.getElementById("pdfViewer").data = test.pdfPath;
-            // manipulate answer sheet
-            var studentAnswers = test.answers;
-            var numQuestion = studentAnswers.length; // replace with the actual property name
-            var container = $('.answerSheet');
-            container.empty(); // remove existing question elements
-            // header
-            var header = '<div class="h5 bg-primary" style="position: relative; display: flex; justify-content: center; align-items: center; color: #ffffff; text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 5px;">'
-            + 'Total Questions : &nbsp;&nbsp;<span id="numQuestion" name="numQuestion" title="Total Question">'+ numQuestion +'</span></div>';
-            container.append(header);
-            for (var i = 0; i < numQuestion; i++) {
-                var questionDiv = $('<div>').addClass('mt-5 mb-4');
-                var questionLabel = $('<div>').addClass('form-check form-check-inline h5 ml-1').text(' ' + (i+1) + '. ');
-                questionLabel.css('width', '20px');
-                questionDiv.append(questionLabel);
-                ['A', 'B', 'C', 'D', 'E'].forEach(function(option, index) {
-                    var optionDiv = $('<div>').addClass('form-check form-check-inline h5 ml-1');
-                    var input = $('<input>').addClass('form-check-input mr-3 ml-1').attr({
-                        type: 'radio',
-                        name: 'inlineRadioOptions' + (i+1),
-                        id: 'inlineRadio' + (i+1) + (index + 1), // append the question number to the id
-                        value: index + 1,
-                        disabled: true
+            if(test.videoPath==null || test.videoPath==''){ // display pdf with answer sheet
+                document.getElementById("onlyPdfViewer").data = test.pdfPath;
+                // manipulate answer sheet
+                var studentAnswers = test.answers;
+                var numQuestion = studentAnswers.length; // replace with the actual property name
+                var container = $('.onlyPdfAnswerSheet');
+                container.empty(); // remove existing question elements
+                // header
+                var header = '<div class="h5 bg-primary" style="position: relative; display: flex; justify-content: center; align-items: center; color: #ffffff; text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 5px;">'
+                + 'Total Questions : &nbsp;&nbsp;<span id="numQuestion" name="numQuestion" title="Total Question">'+ numQuestion +'</span></div>';
+                container.append(header);
+                for (var i = 0; i < numQuestion; i++) {
+                    var questionDiv = $('<div>').addClass('mt-5 mb-4');
+                    var questionLabel = $('<div>').addClass('form-check form-check-inline h5 ml-1').text(' ' + (i+1) + '. ');
+                    // Set a consistent width for the question label container
+                    questionLabel.css('width', '50px'); // Adjust the width as needed
+                    questionDiv.append(questionLabel);
+                    ['A', 'B', 'C', 'D', 'E'].forEach(function (option, index) {
+                        var optionDiv = $('<div>').addClass('custom-control custom-control-inline h6');
+                        var label = $('<label>').addClass('custom-control-label circle').attr('for', 'customCheck' + i + (index + 1)).text(option);
+                        if (test.students[i] == index + 1 && test.answers[i].answer == index + 1) {
+                            // If student's answer and correct answer are the same, add 'correct' class
+                            label.addClass('correct');
+                        } else if (test.students[i] == index + 1) {
+                            // If only student's answer is this option, add 'student' class
+                            label.addClass('student');
+                        } else if (test.answers[i].answer == index + 1) {
+                            // If only correct answer is this option, add 'answer' class
+                            label.addClass('answer');
+                        }
+                        if (test.students[i] != test.answers[i].answer) {
+                            // If student's answer and correct answer are different, add 'different' class to the question div
+                            questionDiv.addClass('different');
+                        }
+                        optionDiv.append(label);
+                        questionDiv.append(optionDiv);
                     });
-                     // Check if the current option matches the student's answer for the current question
-                    if (studentAnswers[i].answer === index + 1) {
-                        input.attr('checked', true);
-                    }
-                    var label = $('<label>').addClass('form-check-label').attr('for', 'inlineRadio' + (i+1) + (index + 1)).text(option);
-                    optionDiv.append(input, label);
-                    questionDiv.append(optionDiv);
-                });
-                container.append(questionDiv);
-            }
+                    container.append(questionDiv);    
+                }
+                // pop-up pdf & answer sheet
+                $('#testAnswerPdfModal').modal('show');                
 
-            // var footer = '<div><button type="submit" class="btn btn-primary w-100" onclick="checkAnswer(' + testId + ', ' +  numQuestion +')">SUBMIT</button></div>';
-            // container.append(footer);
-
-            // pop-up pdf & answer sheet
-            $('#testModal').modal('show');
-
+            }else{ // display video/pdf with answer sheet
+                var videoPlayer = document.getElementById("answerVideoPlayer");
+                videoPlayer.src = test.videoPath;
+                document.getElementById("answerPdfViewer").data = test.pdfPath;
+                // manipulate answer sheet
+                var studentAnswers = test.students;
+                var numQuestion = studentAnswers.length;
+                var result = calculateScore(test.students, test.answers);
+                var score = result.score;
+                var countCorrect = result.numCorrect;
+                var container = $('.resultSheet');
+                container.empty(); // remove existing question elements
+                // debugger;
+                // header
+                var header = '<div class="h5 bg-primary" style="position: relative; display: flex; justify-content: center; align-items: center; color: #ffffff; text-align: center; margin-bottom: 20px; padding: 10px; background-color: #f8f9fa; border: 2px solid #e9ecef; border-radius: 5px;">'
+                + 'My Score : ' + score + '% (<span id="correctAnswerNum" name="correctAnswerNum" style="color:blue;" title="Student Answer">' + countCorrect + '</span>/<span id="answerNumQuestion" name="answerNumQuestion" style="color:red;" title="Correct Answer">'+ (numQuestion) +'</span>)</div>';
+                container.append(header);
+                for (var i = 0; i < numQuestion; i++) {
+                    var questionDiv = $('<div>').addClass('mt-5 mb-4');
+                    var questionLabel = $('<div>').addClass('form-check form-check-inline h5 ml-1').text(' ' + (i+1) + '. ');
+                    // Set a consistent width for the question label container
+                    questionLabel.css('width', '50px'); // Adjust the width as needed
+                    questionDiv.append(questionLabel);
+                    ['A', 'B', 'C', 'D', 'E'].forEach(function (option, index) {
+                        var optionDiv = $('<div>').addClass('custom-control custom-control-inline h6');
+                        var label = $('<label>').addClass('custom-control-label circle').attr('for', 'customCheck' + i + (index+1)).text(option);
+                        if (test.students[i] == index+1 && test.answers[i].answer == index+1) {
+                            // If student's answer and correct answer are the same, add 'correct' class
+                            label.addClass('correct');
+                        } else if (test.students[i] == index+1) {
+                            // If only student's answer is this option, add 'student' class
+                            label.addClass('student');
+                        } else if (test.answers[i].answer == index+1) {
+                            // If only correct answer is this option, add 'answer' class
+                            label.addClass('answer');
+                        }
+                        if (test.students[i] != test.answers[i].answer) {
+                            // If student's answer and correct answer are different, add 'different' class to the question div
+                            questionDiv.addClass('different');
+                        }
+                        optionDiv.append(label);
+                        questionDiv.append(optionDiv);
+                    });
+                    container.append(questionDiv);    
+                }
+                
+                // pop-up pdf & answer sheet
+                $('#testAnswerModal').modal('show');
+            }    
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
         }
     });   
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Submit Answer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,6 +300,32 @@ function checkAnswer(testId, numQuestion) {
     });
 }
 
+//////////////////////////////////////////////////////////////////
+// Calculate score by comparing student answers and answer sheet
+//////////////////////////////////////////////////////////////////
+function calculateScore(studentAnswers, answerSheet) {
+    // Check if both arrays have the same length
+    if (!studentAnswers || !answerSheet || studentAnswers.length !== answerSheet.length) {
+        return 0;
+    }
+    var totalQuestions = answerSheet.length 
+    // Iterate through the arrays and compare corresponding elements
+    var correctAnswers = 0;
+    for (var i = 0; i < totalQuestions; i++) {
+        var studentAnswer = studentAnswers[i];
+        var correctAnswer = answerSheet[i].answer;
+
+        if (studentAnswer === correctAnswer) {
+            correctAnswers++;
+        }
+    }
+    // Calculate the final score as a percentage
+    var score = (correctAnswers / totalQuestions) * 100;
+    //var rounded = Math.round(score * 100) / 100;
+    var rounded = Math.round(score);
+    return {numCorrect: correctAnswers, score : rounded};
+}
+
 </script>
 
 <!-- Pop up Test modal -->
@@ -281,10 +355,74 @@ function checkAnswer(testId, numQuestion) {
                             <div class="answerSheet" style="overflow-y: auto; flex-grow: 1;"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-dark text-white">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Pop up Answer modal for Pdf only-->
+<div class="modal fade" id="testAnswerPdfModal" tabindex="-1" role="dialog" aria-labelledby="testAnswerPdfModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-extra-large" role="document">
+        <div class="modal-content" style="height: 90vh;">
+            <div class="modal-header bg-primary text-white text-center">
+                <h5 class="modal-title w-100" id="testAnswerPdfModalLabel"></h5>
+                <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body bg-light">
+                <div class="row">
+                    <div class="col-md-9 bg-white p-3 border">
+                        <object id="onlyPdfViewer" data="" type="application/pdf" style="width: 100%; height: 80vh;">
+                            <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="your_pdf_url">click here to download the PDF file.</a></p>
+                        </object>
+                    </div>
+                    <div class="col-md-3 bg-white p-3 border" style="height: 85vh;">
+                        <div style="display: flex; flex-direction: column; height: 100%;">
+                            <!-- ANSWER SHEET -->
+                            <div class="onlyPdfAnswerSheet" style="overflow-y: auto; flex-grow: 1;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer bg-dark text-white">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-
+<!-- Pop up Answer modal for Video/Pdf-->
+<div class="modal fade" id="testAnswerModal" tabindex="-1" role="dialog" aria-labelledby="testAnswerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-extra-large" role="document">
+        <div class="modal-content" style="height: 90vh;">
+            <div class="modal-header bg-primary text-white text-center">
+                <h5 class="modal-title w-100" id="testAnswerModalLabel"></h5>
+                <button type="button" class="close position-absolute" style="right: 1rem;" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body bg-light">
+                <div class="row">
+                    <div class="col-md-6 d-flex flex-column justify-content-center bg-white p-3 border">
+                        <div style="display: flex; flex-direction: column; height: 80vh;">
+                            <video id="answerVideoPlayer" controls controlsList="nodownload" style="flex: 6;">
+                                <source src="" type="video/mp4">
+                            </video>
+                            <div style="overflow-y: auto; flex: 1;"></div>
+                            <div class="resultSheet" style="overflow-y: auto; flex: 3;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 bg-white p-3 border">
+                        <object id="answerPdfViewer" data="" type="application/pdf" style="width: 100%; height: 80vh;">
+                            <p>It appears you don't have a PDF plugin for this browser. No biggie... you can <a href="your_pdf_url">click here to download the PDF file.</a></p>
+                        </object>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer bg-dark text-white">

@@ -127,8 +127,9 @@ function displayAnswer(practiceId, setNumber) {
             document.getElementById("answerPdfViewer").data = value.pdfPath;
             // manipulate answer sheet
             var answerNumQuestion = value.answers.length;
-            var score = calculateScore(value.students, value.answers);
-            var countCorrect = countCorrectAnswers(value.students, value.answers);
+            var result = calculateScore(value.students, value.answers);
+            var score = result.score;
+            var countCorrect = result.numCorrect;    
             var container = $('.resultSheet');
             container.empty(); // remove existing question elements
             // header
@@ -271,30 +272,8 @@ function calculateScore(studentAnswers, answerSheet) {
     var score = (correctAnswers / totalQuestions) * 100;
     //var rounded = Math.round(score * 100) / 100;
     var rounded = Math.round(score);
-    return rounded;
-}
-
-///////////////////////////////////////////////////////////////////////
-// Count correct answers by comparing student answers and answer sheet
-//////////////////////////////////////////////////////////////////////
-function countCorrectAnswers(studentAnswers, answerSheet) {
-    // Check if both arrays have the same length
-    if (!studentAnswers || !answerSheet || studentAnswers.length !== answerSheet.length) {
-        return 0;
-    }
-    var totalQuestions = answerSheet[0]; // Assuming the first element is the total count
-
-    // Iterate through the arrays and compare corresponding elements
-    var correctAnswers = 0;
-    for (var i = 1; i <= totalQuestions; i++) {
-        var studentAnswer = studentAnswers[i];
-        var correctAnswer = answerSheet[i];
-
-        if (studentAnswer === correctAnswer) {
-            correctAnswers++;
-        }
-    }
-    return correctAnswers;
+    // return rounded;
+    return {numCorrect: correctAnswers, score : rounded};
 }
 
 </script>

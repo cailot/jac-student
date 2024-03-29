@@ -1,9 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script>
 
-const TEST_TYPE = 1; // 1 is MEGA English 
-const MOVIE = 0;
-const PDF = 1;
+const TEST_TYPE = 1; // 1 is MEGA English
 const DONE= 'DONE';
 
 $(function() {
@@ -26,11 +24,14 @@ $(function() {
                 var topicDiv = '<div class="col-md-4 ' + columnClass + '">'
                 + cardBody
                 + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
-                + '<strong><span id="topicTitle">Set ' + title + '</span></strong>&nbsp;&nbsp;' + icon
+                + '<strong><span id="topicTitle">Volume ' + title + '</span></strong>&nbsp;&nbsp;' + icon
                 + '</p></div></div></div>';
                 $('#topicContainer').append(topicDiv);    
             });
-            document.getElementById("testModalLabel").innerHTML = 'MEGA English Test - Set <span id="dialogSet" name="dialogSet" class="text-warning"></span>';
+            // always 3 update in case of video & pdf resources provided
+            document.getElementById("testModalLabel").innerHTML = 'MEGA English Test - Volume <span id="dialogSet" name="dialogSet" class="text-warning"></span>';
+            document.getElementById("testAnswerModalLabel").innerHTML = 'MEGA English Test - Volume <span id="dialogAnswerSet" name="dialogAnswerSet" class="text-warning"></span>';
+            document.getElementById("testAnswerPdfModalLabel").innerHTML = 'MEGA English Test - Volume <span id="dialogAnswerPdfSet" name="dialogAnswerPdfSet" class="text-warning"></span>';            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);

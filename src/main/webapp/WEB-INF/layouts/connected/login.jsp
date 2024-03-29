@@ -19,11 +19,12 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('${pageContext.request.contextPath}/image/cc-login.jpeg');
+    background-image: url('${pageContext.request.contextPath}/image/cc-login.jpg');
     background-size: cover;
-    animation: animateBackground 20s linear infinite; /* Adjust duration and timing function as needed */
+   /* animation: animateBackground 20s linear infinite; */
 }
 
+/*
 @keyframes animateBackground {
     0% {
         transform: scale(1);
@@ -35,9 +36,10 @@
         transform: scale(1);
     }
 }
+*/
 .card {
 	border: none;
-	border-radius: 10px;
+	border-radius: 0px;
 	box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
 	transition: transform 0.3s ease;
 	margin-bottom: 15px;
@@ -53,7 +55,7 @@
     <div class="background-animation"></div>
     <div class="row h-100 justify-content-center align-items-center">		
 		<div class="card">
-            <h3 class="card-header bg-primary text-center" style="color: #B5eafd !important;">Connected Class</h3>
+            <h3 class="card-header bg-primary text-white text-center">Connected Class</h3>
 			<div class="card-body">
                 <form:form  action="${pageContext.request.contextPath}/connected/processLogin" method="POST">
                     <div class="row mb-1">
@@ -74,7 +76,7 @@
 								<label>Username</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
-									<span class="input-group-text bg-primary text-white"><i class="bi bi-person-fill text-warning" aria-hidden="true"></i></span>
+									<span class="input-group-text bg-primary text-white"><i class="bi bi-person-fill text-white" aria-hidden="true"></i></span>
 									</div>
 									<input type="text" class="form-control" name="username" placeholder="Enter your student ID" />
 								</div>
@@ -89,7 +91,7 @@
 								<label>Password</label>
 								<div class="input-group">
 									<div class="input-group-prepend">
-									<span class="input-group-text bg-primary text-white"><i class="bi bi-unlock-fill text-warning" aria-hidden="true"></i></span>
+									<span class="input-group-text bg-primary text-white"><i class="bi bi-unlock-fill text-white" aria-hidden="true"></i></span>
 									</div>
 									<input type="password" name="password" class="form-control" placeholder="Enter your password"/>
 								</div>
@@ -100,7 +102,7 @@
 					<div class="row mb-3">
 						<div class="col-md-12">
 							<input type="hidden" name="redirect" value="">
-							<input type="submit" class="btn btn-primary btn-lg btn-block" style="color: #B5eafd !important;" value="Login" name="submit">
+							<input type="submit" class="btn btn-primary btn-lg btn-block text-white" value="Login" name="submit">
 						</div>
 					</div>
 					<div class="row">

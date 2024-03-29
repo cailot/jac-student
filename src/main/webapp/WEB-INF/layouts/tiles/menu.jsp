@@ -151,13 +151,13 @@ function updatePassword() {
 		<!-- Extra Materials -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="${pageContext.request.contextPath}/connected/extraMaterial" role="button">
-				<i class="bi bi-journals custom-icon mr-2"></i><span class="h4">Extra Materials</span>
+				<i class="bi bi-pencil-square custom-icon mr-2"></i><span class="h4">Extra Materials</span>
 			</a>
 		</li>
 		<!-- Practice -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<span class="material-icons mr-1 custom-icon">directions_run</span><span class="h4">Practice</span>
+				<i class="bi bi-pencil-square custom-icon mr-2"></i><span class="h4">Practice</span>
 			</a>			
 			<div class="dropdown-menu">
 				<!-- Mega Practice submenu -->
@@ -188,7 +188,7 @@ function updatePassword() {
 		<!-- Test -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				<i class="bi bi-pencil custom-icon mr-2"></i><span class="h4">Test</span> 
+				<i class="bi bi-pencil-square custom-icon mr-2"></i><span class="h4">Test</span> 
 			</a>
 			<div class="dropdown-menu">
 				<!-- Mega Test submenu -->
@@ -221,7 +221,7 @@ function updatePassword() {
 		<!-- Link to Jac-eLearning -->
 		<li class="nav-item dropdown">
 			<a class="nav-link" href="${pageContext.request.contextPath}/online/lesson" role="button">
-				<i class="bi bi-plugin custom-icon mr-2"></i><span class="h4">Jac-eLearning</span>
+				<i class="bi bi-pencil-square custom-icon mr-2"></i><span class="h4">Jac-eLearning</span>
 			</a>
 		</li>
 

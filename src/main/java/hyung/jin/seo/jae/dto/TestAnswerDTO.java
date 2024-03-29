@@ -29,6 +29,8 @@ public class TestAnswerDTO implements Serializable {
 
 	private List<TestAnswerItem> answers;
 
+	private List<Integer> students;
+
 	public TestAnswerDTO(TestAnswer work){
 		this.id = String.valueOf(work.getId());
 		this.videoPath = work.getVideoPath();

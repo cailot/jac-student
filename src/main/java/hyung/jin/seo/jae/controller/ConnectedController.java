@@ -318,15 +318,7 @@ public class ConnectedController {
 		TestAnswerDTO dto = connectedService.findTestAnswerByTest(Long.parseLong(filteredTestId));
 		// get student's answer....
 		List<Integer> answers = connectedService.getStudentTestAnswer(Long.parseLong(filteredStudentId), Long.parseLong(filteredTestId));
-		// convert List<Integer> to List<TestAnswerItem>
-		List<TestAnswerItem> items = new ArrayList<>();
-		for(int i=0; i< answers.size(); i++){
-			TestAnswerItem item = new TestAnswerItem();
-			item.setQuestion(i+1);
-			item.setAnswer(answers.get(i));
-			items.add(item);
-		}
-		dto.setAnswers(items);
+		dto.setStudents(answers);
 		return dto;
 	}
 
