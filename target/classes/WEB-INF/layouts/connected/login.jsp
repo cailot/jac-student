@@ -19,7 +19,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('${pageContext.request.contextPath}/image/cc-login.jpg');
+    background-image: url('${pageContext.request.contextPath}/image/cc-login.png');
     background-size: cover;
    /* animation: animateBackground 20s linear infinite; */
 }
