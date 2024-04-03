@@ -80,7 +80,8 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                                 .antMatcher("/connected/**")
                                 .authorizeRequests(requests -> requests
                                 // .antMatchers("/connected/", "/connected/login").permitAll())
-                                .antMatchers("/connected/lesson").authenticated() // Secure /online/lesson
+                                // .antMatchers("/connected/lesson").authenticated() // Secure /online/lesson
+                                .antMatchers("/connected/**").authenticated() // Secure all /connected/* paths
                                 .antMatchers("/connected/login").permitAll())
                                 .formLogin(login -> login
                                         .loginPage("/connected/login") // login page link
