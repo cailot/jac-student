@@ -1,8 +1,10 @@
 package hyung.jin.seo.jae.service.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.annotation.SuppressAjWarnings;
@@ -14,6 +16,7 @@ import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
 import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
+import hyung.jin.seo.jae.dto.PracticeScheduleDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StudentPracticeDTO;
 import hyung.jin.seo.jae.dto.StudentTestDTO;
@@ -23,6 +26,7 @@ import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
 import hyung.jin.seo.jae.model.PracticeAnswer;
+import hyung.jin.seo.jae.model.PracticeSchedule;
 import hyung.jin.seo.jae.model.StudentPractice;
 import hyung.jin.seo.jae.model.StudentTest;
 import hyung.jin.seo.jae.model.Test;
@@ -32,6 +36,7 @@ import hyung.jin.seo.jae.repository.ExtraworkRepository;
 import hyung.jin.seo.jae.repository.HomeworkRepository;
 import hyung.jin.seo.jae.repository.PracticeAnswerRepository;
 import hyung.jin.seo.jae.repository.PracticeRepository;
+import hyung.jin.seo.jae.repository.PracticeScheduleRepository;
 import hyung.jin.seo.jae.repository.StudentPracticeRepository;
 import hyung.jin.seo.jae.repository.StudentTestRepository;
 import hyung.jin.seo.jae.repository.TestAnswerRepository;
@@ -64,6 +69,9 @@ public class ConnectedServiceImpl implements ConnectedService {
 
 	@Autowired
 	private StudentTestRepository studentTestRepository;
+
+	@Autowired
+	private PracticeScheduleRepository practiceScheduleRepository;
 
 	
 	@Override
@@ -106,6 +114,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 			dtos = testRepository.findAll();
 		}catch(Exception e){
 			System.out.println("No Test found");
+		}
+		return dtos;
+	}
+
+	@Override
+	public List<PracticeSchedule> allPracticeSchedules() {
+		List<PracticeSchedule> dtos = new ArrayList<>();
+		try{
+			dtos = practiceScheduleRepository.findAll();
+		}catch(Exception e){
+			System.out.println("No Practice Schedule found");
 		}
 		return dtos;
 	}
@@ -162,6 +181,13 @@ public class ConnectedServiceImpl implements ConnectedService {
 	@Override
 	public StudentTest getStudentTest(Long id) {
 		Optional<StudentTest> test = studentTestRepository.findById(id);
+		if(!test.isPresent()) return null;
+		return test.get();
+	}
+
+	@Override
+	public PracticeSchedule getPracticeSchedule(Long id) {
+		Optional<PracticeSchedule> test = practiceScheduleRepository.findById(id);
 		if(!test.isPresent()) return null;
 		return test.get();
 	}
@@ -228,6 +254,14 @@ public class ConnectedServiceImpl implements ConnectedService {
 	public StudentTest addStudentTest(StudentTest crs) {
 		StudentTest test = studentTestRepository.save(crs);
 		return test;
+	}
+
+	@SuppressAjWarnings("null")
+	@Override
+	@Transactional
+	public PracticeSchedule addPracticeSchedule(PracticeSchedule ps) {
+		PracticeSchedule schedule = practiceScheduleRepository.save(ps);
+		return schedule;
 	}
 
 	@Override
@@ -397,6 +431,27 @@ public class ConnectedServiceImpl implements ConnectedService {
 
 	@Override
 	@Transactional
+	public PracticeSchedule updatePracticeSchedule(PracticeSchedule newWork, Long id) {
+		// search by getId
+		PracticeSchedule existing = practiceScheduleRepository.findById(id).get();
+		// update info
+		int newYear = newWork.getYear();
+		existing.setYear(newYear);
+		int newWeek = newWork.getWeek();
+		existing.setWeek(newWeek);
+		boolean newActive = newWork.isActive();
+		existing.setActive(newActive);
+		String newInfo = newWork.getInfo();
+		existing.setInfo(newInfo);
+		Set<Practice> newPracs = newWork.getPractices();
+		existing.setPractices(newPracs);
+		// update the existing record
+		PracticeSchedule updated = practiceScheduleRepository.save(existing);
+		return updated;	
+	}
+
+	@Override
+	@Transactional
 	public void deleteHomework(Long id) {
 		try{
 		    homeworkRepository.deleteById(id);
@@ -454,6 +509,25 @@ public class ConnectedServiceImpl implements ConnectedService {
 			System.out.println("Nothing to delete");
 		}
 	}
+
+	@Override
+	@Transactional
+	public void deletePracticeSchedule(Long id) {
+		PracticeSchedule practiceSchedule = practiceScheduleRepository.findById(id).orElse(null);
+		if (practiceSchedule != null) {
+			// Retrieve the associated practices
+			Set<Practice> practices = practiceSchedule.getPractices();		
+			// Remove the associations between PracticeSchedule and Practice entities
+			practiceSchedule.setPractices(new LinkedHashSet<>());
+			practiceScheduleRepository.save(practiceSchedule); // Update to remove associations
+			// Now you can safely delete the PracticeSchedule record
+			practiceScheduleRepository.delete(practiceSchedule);
+		} else {
+			// Handle the case where the PracticeSchedule record doesn't exist
+		}
+
+	}
+
 
 	@Override
 	public HomeworkDTO getHomeworkInfo(int subject, int year, int week) {
@@ -534,6 +608,17 @@ public class ConnectedServiceImpl implements ConnectedService {
 			dtos = testRepository.filterTestByTypeNGradeNVolume(type, grade, volume);
 		}catch(Exception e){
 			System.out.println("No Test found");
+		}
+		return dtos;
+	}
+
+	@Override
+	public List<PracticeScheduleDTO> listPracticeSchedule(int year, int week) {
+		List<PracticeScheduleDTO> dtos = new ArrayList<>();
+		try{
+			dtos = practiceScheduleRepository.filterPracticeScheduleByYearNWeek(year, week);
+		}catch(Exception e){
+			System.out.println("No Practice Schedule found");
 		}
 		return dtos;
 	}
