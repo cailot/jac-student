@@ -27,6 +27,7 @@ import hyung.jin.seo.jae.dto.ExtraworkDTO;
 import hyung.jin.seo.jae.dto.HomeworkDTO;
 import hyung.jin.seo.jae.dto.PracticeAnswerDTO;
 import hyung.jin.seo.jae.dto.PracticeDTO;
+import hyung.jin.seo.jae.dto.PracticeScheduleDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.dto.StudentTestDTO;
 import hyung.jin.seo.jae.dto.TestAnswerDTO;
@@ -35,6 +36,7 @@ import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
+import hyung.jin.seo.jae.model.PracticeSchedule;
 import hyung.jin.seo.jae.model.PracticeType;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentPractice;
@@ -468,6 +470,31 @@ public class ConnectedController {
 		 } 
         return ResponseEntity.ok("\"Success\"");
     }
+
+
+	// get practice schedule
+	@GetMapping("/getPracticeSchedule/{year}/{week}/{grade}")
+	@ResponseBody
+	public List<PracticeDTO> getPracticeSchedule(@PathVariable int year, @PathVariable int week, @PathVariable int grade) {
+		List<PracticeDTO> dtos = new ArrayList<>();
+		// 1. get PracticeScheduleDTO by year & week
+		List<PracticeScheduleDTO> schedules = connectedService.listPracticeSchedule(year, week);
+		// 2. get PracticeDTO from PracticeScheduleDTO
+		for(PracticeScheduleDTO schedule : schedules){
+			// 3. get PracticeDTO
+			List<PracticeDTO> practices = schedule.getPractices();
+			for(PracticeDTO practice : practices){
+				// 4. get and compare grade
+				int practiceGrade = Integer.parseInt(StringUtils.defaultString(practice.getGrade(), "0"));
+				if(grade == practiceGrade){
+					// 5. add to list
+					dtos.add(practice);
+				}
+			}
+		}
+		// 6. return dtos
+		return dtos;
+	}
 
 	// helper method converting practice answers Map to List
 	private List<Integer> convertPracticeAnswers(List<Map<String, Object>> answers) {
