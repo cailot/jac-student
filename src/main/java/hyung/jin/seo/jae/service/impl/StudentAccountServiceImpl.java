@@ -71,7 +71,6 @@ public class StudentAccountServiceImpl implements StudentAccountService {
 		}catch(Exception e){
 			System.out.println("No student found");
 		}	
-		
 	}
 
 	@Override

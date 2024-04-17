@@ -27,23 +27,4 @@ public class JaeWebConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .maxAge(3600);
     }
-
-	
-    // @Bean
-    // public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    //     http.authorizeHttpRequests(configurer -> 
-    //         configurer
-    //                 .anyRequest()
-    //                 .authenticated()
-    //         )
-    //         .formLogin(form -> 
-    //         form
-    //             .loginPage("/login")
-    //             .loginProcessingUrl("/authenticateUser")   
-    //             .permitAll()
-    //     );
-
-    //     return http.build();
-    // }
-
 }
