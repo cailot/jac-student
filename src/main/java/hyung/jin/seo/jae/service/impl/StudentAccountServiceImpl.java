@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.CycleDTO;
 import hyung.jin.seo.jae.dto.StudentAccount;
@@ -63,6 +64,7 @@ public class StudentAccountServiceImpl implements StudentAccountService {
 	}
 
 	@Override
+	@Transactional
 	public void updatePassword(Long id, String password) {
 		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		String encodedPassword = passwordEncoder.encode(password);
