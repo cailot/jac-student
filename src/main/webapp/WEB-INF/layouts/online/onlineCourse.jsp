@@ -300,9 +300,8 @@ function getTimeForDayAndTime(day, time) {
 	}
 
 </style>
-<div class="container-fluid">
-    <div class="col-lg-12">
-        <div class="card-body jae-background-color text-center">
+<div class="container-fluid pl-0 pr-0">
+        <div class="card-body jae-background-color text-center pt-4">
             <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light align-middle h1">Jac-eLearning Student Lecture</span>           
         </div>
@@ -345,7 +344,10 @@ function getTimeForDayAndTime(day, time) {
 				</div>
 			</div>
 		</div>	
-    </div>
+    
+	
+	
+	
 </div>
 
 
@@ -605,6 +607,10 @@ function getTimeForDayAndTime(day, time) {
         </div>
     </div>
 </div>
+<h6 class="text-center" style="position: fixed; bottom: 0; width: 100%;">
+	2015 - <%=new java.util.Date().getYear() + 1900%>&copy;&nbsp; All rights reserved.&nbsp;&nbsp;
+	<div class="copyright-font-color">James An College</div>
+</h6>
 
 <!-- Success Alert -->
 <div id="success-alert" class="modal fade">

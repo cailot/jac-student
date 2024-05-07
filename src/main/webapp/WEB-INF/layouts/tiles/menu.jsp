@@ -145,8 +145,7 @@ function updatePassword() {
 <nav class="navbar">
 	<div class="navbar_logo">
 		<a href="${pageContext.request.contextPath}/connected/lesson">
-			<img src="${pageContext.request.contextPath}/image/logo.png" title="JAC Connected Class" style="filter: brightness(0) invert(1);width:45px;" >
-			&nbsp;&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/image/cc.png" title="JAC Connected Class" style="width:80px;" >
+			<img src="${pageContext.request.contextPath}/image/logo-cc-white.png" title="JAC Connected Class" style="filter: brightness(0) invert(1);width:65px;" >
 		</a>
 	</div>
 	<ul class="navbar_menu">
