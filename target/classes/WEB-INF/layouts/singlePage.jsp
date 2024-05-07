@@ -23,15 +23,6 @@
 		<div class="row justify-content-center align-items-center">
 			<tiles:insertAttribute name="body" />
 		</div>
-		<footer class="mt-auto">
-			<div class="row" style="padding: 15px 20px;">
-				<div class="col-12 text-center">
-					2015 - <%=new java.util.Date().getYear() + 1900%> &copy; All rights reserved.
-					<div class="copyright-font-color">James An College</div>
-				</div>
-			</div>
-		</footer>
 	</div>
-	
 </body>
 </html>

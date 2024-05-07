@@ -15,9 +15,9 @@
 }
 
 .background-animation {
-  width: 65%;
+  width: 100%;
   height: 100vh;
-  background-image: url('${pageContext.request.contextPath}/image/5.jpg');
+  background-image: url('${pageContext.request.contextPath}/image/login-7.png');
   background-size: cover;
 }
 
