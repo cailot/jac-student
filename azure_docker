@@ -1,0 +1,16 @@
+# war package
+mvn clean package
+
+# Build and tag the image
+docker build --platform=linux/amd64 -t jac-study .
+docker tag jac-study jaccontainer.azurecr.io/jac-study:latest
+# Login to Azure and ACR
+az login
+az acr login --name jaccontainer
+
+# Push the image to ACR
+docker push jaccontainer.azurecr.io/jac-study:latest
+
+# Deploy to Azure App Service
+# az webapp config container set --name jacweb1 --resource-group james --container-image-name jaccontainer.azurecr.io/jacs:latest --container-registry-url https://jaccontainer.azurecr.io
+
