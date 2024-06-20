@@ -89,6 +89,7 @@
 /Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/service/impl/OnlineSessionServiceImpl.java
 /Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/dto/mobile/AttendanceRollTeacherDTO.java
 /Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/dto/StateDTO.java
+/Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/repository/JaeMySQLDialect.java
 /Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/repository/StudentRepository.java
 /Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/model/Test.java
 /Users/javacoffee/dev/workspace/jac-student/src/main/java/hyung/jin/seo/jae/model/StudentTest.java
