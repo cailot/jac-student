@@ -329,7 +329,7 @@ function calculateScore(studentAnswers, answerSheet) {
 </script>
 
 <!-- Pop up Test modal -->
-<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModalLabel" aria-hidden="true">
+<div class="modal fade" id="testModal" tabindex="-1" role="dialog" aria-labelledby="testModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-extra-large" role="document">
          <div class="modal-content" style="height: 85vh;">
             <div class="modal-header bg-primary text-white text-center">

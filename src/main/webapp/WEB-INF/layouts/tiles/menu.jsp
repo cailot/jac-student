@@ -26,19 +26,6 @@ $(function() {
 	listState('#editState');
     listBranch('#editBranch');
 	listGrade('#editGrade');
-	// get available practice
-	// $.ajax({
-	// 	url : '/student/class/academy',
-    //     method: "GET",
-    //     success: function(response) {
-    //         // save the response into the variable
-    //         academicYear = response[0];
-    //         academicWeek = response[1];
-	// 	},
-	// 	error : function(xhr, status, error) {
-	// 		console.log('Error : ' + error);
-	// 	}
-	// });
 });
 
 

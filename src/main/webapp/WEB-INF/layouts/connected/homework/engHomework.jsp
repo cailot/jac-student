@@ -173,27 +173,8 @@ function displayMaterial(weekNumber, elementId) {
     </div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Pop up Video modal -->
-<div class="modal fade" id="homeworkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="homeworkModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"  data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">

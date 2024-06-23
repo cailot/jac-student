@@ -43,6 +43,76 @@ function displayMaterial(id, title) {
     // set dialogTitle value
     document.getElementById("dialogTitle").innerHTML = title;  
     $.ajax({
+        url: '${pageContext.request.contextPath}/connected/getExtrawork/' + id,
+        method: "GET",
+        success: function(value) {
+            // Add this part for displaying played percentage
+            var videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = value.videoPath;
+
+            var progressPercentage = document.getElementById(id + "topicPercentage");
+            var progressBar = document.getElementById(id + "topicPercentageBar");
+
+            // Define the event listener function
+            var updateProgressBar = function() {
+                var playedPercentage = Math.round((videoPlayer.currentTime / videoPlayer.duration) * 100);
+                if (!playedPercentage || isNaN(playedPercentage)) {
+                    progressPercentage.innerHTML = "0%";
+                    progressBar.style.width = "0%";
+                } else {
+                    progressPercentage.innerHTML = playedPercentage + "%";
+                    progressBar.style.width = playedPercentage + "%";
+                    if (playedPercentage < 30) {
+                        progressBar.className = 'progress-bar bg-danger'; // Red color for less than 30%
+                    } else if (playedPercentage >= 30 && playedPercentage <= 70) {
+                        progressBar.className = 'progress-bar bg-warning'; // Yellow color for 30% - 70%
+                    } else {
+                        progressBar.className = 'progress-bar bg-success'; // Green color for more than 70%
+                    }
+                }
+            }
+
+            // Add the event listener when the video starts playing
+            videoPlayer.addEventListener('timeupdate', updateProgressBar);
+
+            videoPlayer.addEventListener("ended", function() {
+                // Video ended, you can perform additional actions if needed
+                console.log("Video ended");
+            });
+
+            // Remove the event listener and stop the video when the modal is closed
+            $('#materialModal').on('hidden.bs.modal', function () {
+                videoPlayer.removeEventListener('timeupdate', updateProgressBar);
+                videoPlayer.pause(); // Stop the video
+                videoPlayer.currentTime = 0; // Reset the video time
+            });
+
+            // Force reload the PDF by removing and re-adding the object element
+            var pdfContainer = document.getElementById("pdfViewer").parentNode;
+            var oldPdfViewer = document.getElementById("pdfViewer");
+            var newPdfViewer = document.createElement("object");
+            newPdfViewer.id = "pdfViewer";
+            newPdfViewer.data = value.pdfPath + '?t=' + new Date().getTime(); // Append timestamp to prevent caching
+            newPdfViewer.type = "application/pdf";
+            newPdfViewer.style.width = "100%";
+            newPdfViewer.style.height = "80vh";
+            newPdfViewer.innerHTML = '<p>It appears you don\'t have a PDF plugin for this browser. No biggie... you can <a href="' + value.pdfPath + '">click here to download the PDF file.</a></p>';
+            pdfContainer.replaceChild(newPdfViewer, oldPdfViewer);
+
+            // Pop-up video & pdf
+            $('#materialModal').modal('show');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log('Error: ' + errorThrown);
+        }
+    });  
+}
+
+
+function displayMaterial1(id, title) {
+    // set dialogTitle value
+    document.getElementById("dialogTitle").innerHTML = title;  
+    $.ajax({
         url : '${pageContext.request.contextPath}/connected/getExtrawork/' + id,
         method: "GET",
         success: function(value) {
@@ -84,8 +154,18 @@ function displayMaterial(id, title) {
             $('#materialModal').on('hidden.bs.modal', function () {
                 videoPlayer.removeEventListener('timeupdate', updateProgressBar);
             });
-            // console.log('no duration');
-            document.getElementById("pdfViewer").data = value.pdfPath;
+
+            // Force reload the PDF by appending a timestamp to the URL
+            var pdfContainer = document.getElementById("pdfViewer").parentNode;
+            var oldPdfViewer = document.getElementById("pdfViewer");
+            var newPdfViewer = document.createElement("object");
+            newPdfViewer.id = "pdfViewer";
+            newPdfViewer.data = value.pdfPath + '?t=' + new Date().getTime(); // Append timestamp to prevent caching
+            newPdfViewer.type = "application/pdf";
+            newPdfViewer.style.width = "100%";
+            newPdfViewer.style.height = "80vh";
+            newPdfViewer.innerHTML = '<p>It appears you don\'t have a PDF plugin for this browser. No biggie... you can <a href="' + value.pdfPath + '">click here to download the PDF file.</a></p>';
+            pdfContainer.replaceChild(newPdfViewer, oldPdfViewer);
               
             // pop-up video & pdf
             $('#materialModal').modal('show');
@@ -107,7 +187,7 @@ function displayMaterial(id, title) {
 </div>
 
 <!-- Pop up Video modal -->
-<div class="modal fade" id="materialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="materialModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-extra-large" role="document">
         <div class="modal-content" style="height: 90vh;">
             <div class="modal-header bg-primary text-white text-center">
