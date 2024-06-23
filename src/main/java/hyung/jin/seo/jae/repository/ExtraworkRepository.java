@@ -26,7 +26,7 @@ public interface ExtraworkRepository extends JpaRepository<Extrawork, Long>{
 	List<ExtraworkDTO> filterExtraworkByGrade(String grade);
 
 	// summarise Extawork by grade
-	@Query(value = "SELECT e.name, e.id FROM Extrawork e WHERE e.gradeId = ?1", nativeQuery = true)   
+	@Query(value = "SELECT e.name, e.id FROM Extrawork e WHERE e.gradeId = ?1 AND e.active = 1", nativeQuery = true)   
 	List<Object[]> summaryExtrawork(String grade);
 
 }

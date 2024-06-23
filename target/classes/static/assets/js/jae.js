@@ -94,7 +94,7 @@ function clearFormData(elementId) {
 //	List state
 function listState(selectElementId) {
 	$.ajax({
-		url: getContextPath() + '/code/state',
+		url: '/code/state',
 		type: 'GET',
 		success: function (data) {
 			// Update display info
@@ -113,7 +113,7 @@ function listState(selectElementId) {
 //	List branch
 function listBranch(selectElementId) {
 	$.ajax({
-		url: getContextPath() + '/code/branch',
+		url: '/code/branch',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
@@ -130,7 +130,7 @@ function listBranch(selectElementId) {
 //	List grade
 function listGrade(selectElementId) {
 	$.ajax({
-		url: getContextPath() + '/code/grade',
+		url: '/code/grade',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
@@ -147,7 +147,7 @@ function listGrade(selectElementId) {
 //	List subject
 function listSubject(selectElementId) {
 	$.ajax({
-		url: getContextPath() + '/code/subject',
+		url: '/code/subject',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
@@ -164,7 +164,7 @@ function listSubject(selectElementId) {
 //	List practice type
 function listPracticeType(selectElementId) {
 	$.ajax({
-		url: getContextPath() + '/code/practiceType',
+		url: '/code/practiceType',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
@@ -181,7 +181,7 @@ function listPracticeType(selectElementId) {
 //	List test type
 function listTestType(selectElementId) {
 	$.ajax({
-		url: getContextPath() + '/code/testType',
+		url: '/code/testType',
 		type: 'GET',
 		success: function (data) {
 			$.each(data, function (index, state) {
