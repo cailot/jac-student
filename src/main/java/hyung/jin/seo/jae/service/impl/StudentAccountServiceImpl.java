@@ -17,17 +17,22 @@ import org.springframework.transaction.annotation.Transactional;
 import hyung.jin.seo.jae.dto.CycleDTO;
 import hyung.jin.seo.jae.dto.StudentAccount;
 import hyung.jin.seo.jae.model.Student;
+import hyung.jin.seo.jae.model.User;
 import hyung.jin.seo.jae.service.StudentAccountService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
 import hyung.jin.seo.jae.repository.EnrolmentRepository;
 import hyung.jin.seo.jae.repository.StudentRepository;
+import hyung.jin.seo.jae.repository.UserRepository;
 
 @Service
 public class StudentAccountServiceImpl implements StudentAccountService {
 
 	@Autowired
 	private StudentRepository studentRepository;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	private EnrolmentRepository enrolmentRepository;
@@ -37,6 +42,7 @@ public class StudentAccountServiceImpl implements StudentAccountService {
 
 	private List<CycleDTO> cycles;
 
+	/*
 	// when student login, the below method will be executed to save StudentAccount as UserDetails
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -62,6 +68,49 @@ public class StudentAccountServiceImpl implements StudentAccountService {
 		}
 		return account;
 	}
+*/
+
+
+@Override
+public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    try {
+        boolean isStudent = username.length() == 8;
+        if (isStudent) { // normal case for student
+            Object[] result = studentRepository.checkStudentAccount(Long.parseLong(username));
+            if (result != null && result.length > 0) {
+                Object[] obj = (Object[]) result[0];
+                StudentAccount account = new StudentAccount(obj);
+                // Check enrolment is valid if student is active
+                int currentYear = getYear();
+                int currentWeek = getWeek();
+                // Check if student is enrolled in any class for current week
+                List<Long> ids = enrolmentRepository.checkEnrolmentTime(Long.parseLong(username), currentYear, currentWeek);
+                if (ids == null || ids.isEmpty()) {
+                    // No enrolment
+                    account.setEnabled(JaeConstants.INACTIVE);
+                    throw new DisabledException("User enrolment is not valid");
+                }
+                return account;
+            } else {
+                throw new UsernameNotFoundException("Student not found");
+            }
+        } else { // admin case
+            Object[] result = userRepository.checkUserAccount(username);
+			if (result != null && result.length > 0) {
+                Object[] obj = (Object[]) result[0];
+                User account = new User(obj);                
+                return account;
+            } else {
+                throw new UsernameNotFoundException("Admin not found");
+            }
+        }
+    } catch (Exception e) {
+        throw new UsernameNotFoundException("User: " + username + " was not found in the database", e);
+    }
+}
+
+
+
 
 	@Override
 	@Transactional

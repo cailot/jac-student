@@ -14,8 +14,9 @@
 		var studentId = '${id}';
 		var firstName = '${firstName}';
 		var lastName = '${lastName}';
-		// var academicYear;
-    	// var academicWeek;
+		// Determine if numericGrade is a number
+		var isStudent = !isNaN(+numericGrade);
+		//console.log(isStudent); // Logs true if numericGrade is a number, otherwise false
 	</script>
 </sec:authorize>
 
@@ -34,6 +35,8 @@ $(function() {
 // 			Display grade
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 function displayGrade() {
+	if(role === '[Administrator]') return 'Administrator';
+	if(role === '[Staff]') return 'Staff';
 	var numericPart = role.replace(/[\[\]]/g, ''); // replace '[' & ']' with an empty string
 	var grade = gradeName(numericPart);
 	return grade;
@@ -230,7 +233,7 @@ function updatePassword() {
 		<sec:authorize access="isAuthenticated()">
 			<div class="card-body jae-background-color text-right" style="display: flex; justify-content: space-between; padding-top: 20px;">
 				<div>
-					<span class="card-text text-warning font-weight-bold font-italic h5" style="margin-left: 25px; cursor: pointer;" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
+					<span class="card-text text-warning font-weight-bold font-italic h5" style="margin-left: 25px; cursor: pointer;" id="studentName" onclick="if(isStudent) { clearPassword(); retrieveStudentInfo(); }">${firstName} ${lastName}</span>
 					<span style="color: white;">&nbsp;&nbsp;(</span>
 					<span class="card-text h5" id="studentGrade" name="studentGrade" style="color: white;"></span>
 					<span style="color: white;">)  </span>

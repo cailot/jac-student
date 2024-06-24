@@ -9,31 +9,83 @@
         max-width: 90%;
         max-height: 90%;
     }
+    /* Define CSS styles for the decorated-header class */
+.decorated-header {
+    font-size: 25px; /* Change the font size */
+    color: #007bff; /* Change the text color */
+    text-shadow: 1px 1px 2px #000; /* Add a text shadow for depth */
+    font-weight: bold; /* Make the text bold */
+    text-align: left; /* Center-align the text */
+    margin-left: 50px;
+    margin-bottom: 10px; /* Add some space below the header */
+}
 </style>
 <script>
 $(function() {
-    $.ajax({
-        url : '${pageContext.request.contextPath}/connected/summaryExtrawork/' + numericGrade,
-        method: "GET",
-        success: function(data) {
+    // check if student or Admin/Staff
+    if(isStudent){
+        $.ajax({
+            url : '${pageContext.request.contextPath}/connected/summaryExtrawork/' + numericGrade,
+            method: "GET",
+            success: function(data) {
 
-            $.each(data, function(index, basket) {
-				var title = basket.name;
-                var id = basket.value;
-               // console.log(basket);
-                var topicDiv = '<div class="col-md-4">'
-                +  '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id + ', \'' +  title + '\');">'
-                + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
-                + '<strong><span id="topicTitle">' + title + '</span></strong>&nbsp;&nbsp;<i class="bi bi-calculator h5 text-primary"></i></p>'
-                + '<div class="progress" style="margin: 30px;"><div id="' + id + 'topicPercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">'
-                + '<span id="'+ id + 'topicPercentage" class="ml-auto">0%</span></div></div></div></div></div>';
-                $('#topicContainer').append(topicDiv);    
-			});
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log('Error : ' + errorThrown);
+                $.each(data, function(index, basket) {
+                    var title = basket.name;
+                    var id = basket.value;
+                // console.log(basket);
+                    var topicDiv = '<div class="col-md-4">'
+                    +  '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id + ', \'' +  title + '\');">'
+                    + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
+                    + '<strong><span id="topicTitle">' + title + '</span></strong>&nbsp;&nbsp;<i class="bi bi-calculator h5 text-primary"></i></p>'
+                    + '<div class="progress" style="margin: 30px;"><div id="' + id + 'topicPercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">'
+                    + '<span id="'+ id + 'topicPercentage" class="ml-auto">0%</span></div></div></div></div></div>';
+                    $('#topicContainer').append(topicDiv);    
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('Error : ' + errorThrown);
+            }
+        });
+    }else{ // Administrator or Staff
+        // call all from P2 to S10    
+        // Define an async function to make AJAX calls and return promises
+        function fetchSummaryExtrawork(i) {
+            return $.ajax({
+                url: '${pageContext.request.contextPath}/connected/summaryExtrawork/' + i,
+                method: "GET"
+            }).then(data => {
+                return { iteration: i, data: data }; // Return both iteration and data for ordering
+            });
         }
-    });
+        // Collect all promises
+        let promises = [];
+        for (let i = 1; i <= 9; i++) {
+            promises.push(fetchSummaryExtrawork(i));
+        }
+        // Use Promise.all to wait for all AJAX calls to complete
+        Promise.all(promises).then(results => {
+            // Sort results by iteration to ensure correct order
+            results.sort((a, b) => a.iteration - b.iteration).forEach(result => {
+                var iteration = result.iteration;
+                var data = result.data;
+                var headerText = 'Year ' + (iteration + 1); // Adjusted to use iteration directly
+                var headerDiv = '<div class="col-12"><h2 class="decorated-header">' + headerText + '</h2></div>';
+                $('#topicContainer').append(headerDiv);
+                $.each(data, function(index, basket) {
+                    var title = basket.name;
+                    var id = basket.value;
+                    var topicDiv = '<div class="col-md-4">'
+                    + '<div class="card-body mx-auto" style="cursor: pointer; max-width: 75%;" onclick="displayMaterial(' + id + ', \'' + title + '\');">'
+                    + '<div class="alert alert-info topic-card" role="alert"><p id="onlineLesson" style="margin: 30px;">'
+                    + '<strong><span id="topicTitle">' + title + '</span></strong>&nbsp;&nbsp;<i class="bi bi-calculator h5 text-primary"></i></p>'
+                    + '<div class="progress" style="margin: 30px;"><div id="' + id + 'topicPercentageBar" class="" role="progressbar" style="width: 0%;" aria-valuemin="0" aria-valuemax="100">'
+                    + '<span id="'+ id + 'topicPercentage" class="ml-auto">0%</span></div></div></div></div></div>';
+                    $('#topicContainer').append(topicDiv);
+                });
+            });
+        }).catch(error => console.error('Error fetching data:', error));
+    }
+
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

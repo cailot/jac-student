@@ -36,7 +36,6 @@ import hyung.jin.seo.jae.model.Extrawork;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.Homework;
 import hyung.jin.seo.jae.model.Practice;
-import hyung.jin.seo.jae.model.PracticeSchedule;
 import hyung.jin.seo.jae.model.PracticeType;
 import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.StudentPractice;
