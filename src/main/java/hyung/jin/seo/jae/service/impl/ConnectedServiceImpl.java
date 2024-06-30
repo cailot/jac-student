@@ -42,7 +42,6 @@ import hyung.jin.seo.jae.repository.StudentTestRepository;
 import hyung.jin.seo.jae.repository.TestAnswerRepository;
 import hyung.jin.seo.jae.repository.TestRepository;
 import hyung.jin.seo.jae.service.ConnectedService;
-import hyung.jin.seo.jae.utils.JaeConstants;
 
 @Service
 public class ConnectedServiceImpl implements ConnectedService {
