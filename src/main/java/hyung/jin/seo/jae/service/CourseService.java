@@ -11,6 +11,15 @@ public interface CourseService {
 
 	// list all Course by grade
 	List<CourseDTO> findByGrade(String grade);
+
+	// list all Course by grade & year
+	List<CourseDTO> findByGradeNYear(String grade, int year);
+
+	// list onsite Course by grade
+	List<CourseDTO> findOnsiteByGrade(String grade);
+
+	// list online Course by grade
+	List<CourseDTO> findOnlineByGrade(String grade);
 	
 	// return total count
 	long checkCount();
@@ -22,5 +31,8 @@ public interface CourseService {
 	Course addCourse(Course course);	
 
 	// update Course
-	CourseDTO updateCourse(Course course);
+	CourseDTO updateCourse(Course course, Long id);
+
+	// delete Course
+	void deleteCourse(Long id);
 }

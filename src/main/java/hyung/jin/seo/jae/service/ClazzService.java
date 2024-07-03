@@ -1,8 +1,6 @@
 package hyung.jin.seo.jae.service;
 
 import java.util.List;
-import java.util.Optional;
-
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.model.Clazz;
 
@@ -30,7 +28,7 @@ public interface ClazzService {
 	List<ClazzDTO> filterOnSiteClazz(String state, String branch, String grade);
 
 	// bring on-site class list for dropdown list in Teacher page
-	List<ClazzDTO> filterOnSiteClazz(String state, String branch, String grade, String year);
+	List<ClazzDTO> filterOnSiteClazz(String state, String branch, String grade, int year);
 
 	// bring class Ids
 	List<Long> filterClazzIds(String state, String branch, String grade);
@@ -73,4 +71,7 @@ public interface ClazzService {
 
 	// get online class by grade and year
 	Clazz getOnlineByGradeNYear(String grade, int year);
+
+	// delete class
+	void deleteClass(Long id);
 }

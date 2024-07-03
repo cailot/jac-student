@@ -2,6 +2,7 @@ package hyung.jin.seo.jae.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.dto.CycleDTO;
-import hyung.jin.seo.jae.dto.OnlineSessionDTO;
+import hyung.jin.seo.jae.dto.SubjectDTO;
 import hyung.jin.seo.jae.model.Clazz;
 import hyung.jin.seo.jae.model.Course;
 import hyung.jin.seo.jae.model.Cycle;
+import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.service.ClazzService;
+import hyung.jin.seo.jae.service.CodeService;
 import hyung.jin.seo.jae.service.CycleService;
 import hyung.jin.seo.jae.service.CourseService;
 import hyung.jin.seo.jae.utils.JaeConstants;
@@ -42,6 +46,9 @@ public class ClazzController {
 
 	@Autowired
 	private CourseService courseService;
+
+	@Autowired
+	private CodeService codeService;
 
 	// search classes by grade & year
 	@GetMapping("/search")
@@ -96,38 +103,12 @@ public class ClazzController {
 		model.addAttribute(JaeConstants.CLASS_LIST, dtos);
 		return "classListPage";
 	}
-
-	// // bring onsite classes in database
-	// @GetMapping("/listOnsiteClass")
-	// public String listOnsiteClasses(@RequestParam(value = "listState", required = false) String state,
-	// 		@RequestParam(value = "listBranch", required = false) String branch,
-	// 		@RequestParam(value = "listGrade", required = false) String grade,
-	// 		@RequestParam(value = "listYear", required = false) String year,
-	// 		@RequestParam(value = "listActive", required = false) String active, Model model) {
-	// 	// System.out.println(state + "\t" + branch + "\t" + grade + "\t" + year + "\t" + active + "\t");
-	// 	List<ClazzDTO> dtos = clazzService.listOnsiteClazz(state, branch, grade, year);
-	// 	model.addAttribute(JaeConstants.CLASS_LIST, dtos);
-	// 	return "classListPage";
-	// }
-
-	// // bring online classes in database
-	// @GetMapping("/listOnlineClass")
-	// public String listOnlineClasses(@RequestParam(value = "listState", required = false) String state,
-	// 		@RequestParam(value = "listBranch", required = false) String branch,
-	// 		@RequestParam(value = "listGrade", required = false) String grade,
-	// 		@RequestParam(value = "listYear", required = false) String year,
-	// 		@RequestParam(value = "listActive", required = false) String active, Model model) {
-	// 	// System.out.println(state + "\t" + branch + "\t" + grade + "\t" + year + "\t" + active + "\t");
-	// 	List<ClazzDTO> dtos = clazzService.listOnlineClazz(state, branch, grade, year);
-	// 	model.addAttribute(JaeConstants.CLASS_LIST, dtos);
-	// 	return "classListPage";
-	// }
 	
 	// bring all classes in database
 	@GetMapping("/listCycle")
 	public String listCycle(@RequestParam(value = "listYear", required = true) String year, Model model) {
 		List<CycleDTO> dtos = null;
-		if(StringUtils.isNotEmpty(year) && !(JaeConstants.ALL.equalsIgnoreCase(year))) {
+		if(StringUtils.isNotEmpty(year) && !("0".equalsIgnoreCase(year))) {
 			int yearParam = Integer.parseInt(year);
 			dtos = cycleService.listCycles(yearParam);
 		}else{
@@ -159,23 +140,30 @@ public class ClazzController {
 		int year = cycleService.academicYear();
 		int week = cycleService.academicWeeks();
 		List<CourseDTO> dtos = courseService.findByGrade(grade);
-		// set year
-		for (CourseDTO dto : dtos) {
-			dto.setYear(year);
+		// associate subjects
+		for(CourseDTO dto : dtos){
+			Course course = courseService.getCourse(Long.parseLong(dto.getId()));
+			List<Subject> subjects = course.getSubjects();
+			for(Subject subject : subjects){
+				SubjectDTO subDTO = new SubjectDTO(subject);
+				dto.addSubject(subDTO);
+			}
 		}
 		// if new academic year is going to start, display next year classes
 		if (week > JaeConstants.ACADEMIC_START_COMMING_WEEKS) {
-			List<CourseDTO> nexts = new ArrayList<>();
-			// display next year courses by increasing price
-			for (CourseDTO dto : dtos) {
-				CourseDTO next = dto.clone();
-				next.setYear(year + 1);
-				// next.setPrice(next.getPrice() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_PRICE_INCREASE);
-				next.setDescription(next.getDescription() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX);
-				nexts.add(next);
-			}
-			// add next year courses to the end of the list
-			if (nexts.size() > 0) {
+			List<CourseDTO> nexts = courseService.findByGradeNYear(grade, year+1);
+			if(nexts.size() > 0){
+				for(CourseDTO next : nexts){
+					// update description
+					next.setDescription(next.getDescription() + JaeConstants.ACADEMIC_NEXT_YEAR_COURSE_SUFFIX);
+					// associate subjects
+					Course nextCourse = courseService.getCourse(Long.parseLong(next.getId()));
+					List<Subject> nextSubs = nextCourse.getSubjects();
+					for(Subject nextSub : nextSubs){
+						SubjectDTO nextSubDTO = new SubjectDTO(nextSub);
+						next.addSubject(nextSubDTO);
+					}
+				}
 				dtos.addAll(nexts);
 			}
 		}
@@ -220,6 +208,11 @@ public class ClazzController {
 	public CourseDTO getCourse(@PathVariable("id") Long id) {
 		Course course = courseService.getCourse(id);
 		CourseDTO dto = new CourseDTO(course);
+		List<Subject> subjects = course.getSubjects();
+		for(Subject subject : subjects){
+			SubjectDTO subDTO = new SubjectDTO(subject);
+			dto.addSubject(subDTO);
+		}
 		return dto;
 	}
 
@@ -240,9 +233,20 @@ public class ClazzController {
 		try {
 			// 1. create Course
 			Course course = formData.convertToCourse();
-			// 2. save Class
+			// 2. associate Subjects
+			List<SubjectDTO> subjects = formData.getSubjects();
+			for(SubjectDTO subject : subjects){
+				Subject sub =  codeService.getSubject(Long.parseLong(subject.getId()));
+				course.addSubject(sub);
+			}
+			// 3. associate Cycle
+			Cycle cycle = cycleService.findCycleByYear(formData.getYear());
+			course.setCycle(cycle);
+			// 4. set active to true as default
+			course.setActive(true);
+			// 5. save Course
 			courseService.addCourse(course);
-			// 3. return success;
+			// 6. return success;
 			return ResponseEntity.ok("\"Course register success\"");
 		} catch (Exception e) {
 			String message = "Error registering Course: " + e.getMessage();
@@ -261,14 +265,11 @@ public class ClazzController {
 			clazz.setActive(true);
 			// 3. get Course
 			Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));
-			// 4. get Cycle
-			Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
-			// 5. assign Course & Cycle
+			// 4. assign Course & Cycle
 			clazz.setCourse(course);
-			clazz.setCycle(cycle);
-			// 6. add Class
+			// 5. add Class
 			clazzService.addClazz(clazz);
-			// 3. return success;
+			// 6. return success;
 			return ResponseEntity.ok("\"Class register success\"");
 		} catch (Exception e) {
 			String message = "Error registering Class: " + e.getMessage();
@@ -302,14 +303,11 @@ public class ClazzController {
 			Clazz clazz = formData.convertToOnlyClass();
 			// 2. get Course
 			Course course = courseService.getCourse(Long.parseLong(formData.getCourseId()));
-			// 3. get Cycle
-			Cycle cycle = cycleService.findCycleByDate(formData.getStartDate());
-			// 4. assign Course & Cycle
+			// 3. assign Course & Cycle
 			clazz.setCourse(course);
-			clazz.setCycle(cycle);
-			// 5. save Class
+			// 4. save Class
 			clazzService.updateClazz(clazz);
-			// 6. return flag
+			// 5. return flag
 			return ResponseEntity.ok("\"Class update success\"");
 		} catch (Exception e) {
 			String message = "Error updating class: " + e.getMessage();
@@ -324,9 +322,15 @@ public class ClazzController {
 		try {
 			// 1. create Course
 			Course course = formData.convertToCourse();
-			// 2. save Class
-			courseService.updateCourse(course);
-			// 3. return flag
+			// 2. associate Subjects
+			List<SubjectDTO> subjects = formData.getSubjects();
+			for(SubjectDTO subject : subjects){
+				Subject sub =  codeService.getSubject(Long.parseLong(subject.getId()));
+				course.addSubject(sub);
+			}
+			// 3. save Class
+			courseService.updateCourse(course, Long.parseLong(formData.getId()));
+			// 4. return flag
 			return ResponseEntity.ok("\"Course update success\"");
 		} catch (Exception e) {
 			String message = "Error updating course: " + e.getMessage();
@@ -366,12 +370,54 @@ public class ClazzController {
 	@GetMapping("/classes4Teacher")
 	@ResponseBody
 	List<ClazzDTO> getClassesForTeacher(@RequestParam("state") String state, @RequestParam("branch") String branch,
-			@RequestParam("grade") String grade, @RequestParam("year") String year) {
+			@RequestParam("grade") String grade, @RequestParam("year") int year) {
 		// List<ClazzDTO> dtos = clazzService.findClazzForCourseIdNCycle(courseId,
 		// year);
 		List<ClazzDTO> dtos = clazzService.filterOnSiteClazz(state, branch, grade, year);
 		return dtos;
 	}
 
-	
+	// get online course url
+	@GetMapping("/getOnlineAddress/{grade}/{week}")
+	@ResponseBody
+	public String getOnlineCourse(@PathVariable("grade") int grade, @PathVariable("week") int week) {	
+		// 1. get URL from stored data by administrator
+		String info = "https://us02web.zoom.us/rec/play/ma2pfFazOsXqFla1dreILhb5Xjffq-85oAksTr9TgxjNdPfHDRKQMz7hcxuJrbpUaE6ofpw0wQ0WCt4s.qQEHvpWXF4BWgnru?canPlayFromShare=true&from=share_recording_detail&startTime=1706506287000&componentName=rec-play&originRequestUrl=https%3A%2F%2Fus02web.zoom.us%2Frec%2Fshare%2FmnB4w4HZI80oTYn_UyQCkveSxmITcw0Xs-Myw9pN4DUx4Dv-HrOaosI4si2jeOmr.32ShDyR6f2WnTe3j%3FstartTime%3D1706506287000";
+		info ="https://us02web.zoom.us/rec/share/pBvQsJ7smzy0kGHPyB8Hpp5Z1gwIsEl7EIeLDr-FvxX6CpFaC24FhU12j1Hc6wIF.t-Su391-4i26Htif?startTime=1707715876000";
+		// System.out.println(grade + " : " +  week);
+		// 3. return info
+		return info;
+	}
+
+	// remove cycle by Id
+	@PutMapping("/deleteCycle/{id}")
+	@ResponseBody
+	public ResponseEntity<String> deleteCycle(@PathVariable("id") Long id) {
+		try{
+			cycleService.deleteCycle(id);
+			return ResponseEntity.ok("\"Cycle delete success\"");		
+		}catch(Exception e){
+			String message = "Error deleting cycle: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
+	}
+
+	// delete course by Id
+	@DeleteMapping(value = "/deleteCourse/{courseId}")
+	@ResponseBody
+    public ResponseEntity<String> removeCourse(@PathVariable String courseId) {
+        Long id = Long.parseLong(StringUtils.defaultString(courseId, "0"));
+		courseService.deleteCourse(id);
+		return ResponseEntity.ok("\"Course deleted successfully\"");
+    }
+
+	// delete class by Id
+	@DeleteMapping(value = "/deleteClass/{classId}")
+	@ResponseBody
+	public ResponseEntity<String> removeClass(@PathVariable String classId) {
+		Long id = Long.parseLong(StringUtils.defaultString(classId, "0"));
+		clazzService.deleteClass(id);
+		return ResponseEntity.ok("\"classId deleted successfully\"");
+	}
+
 }

@@ -14,50 +14,48 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Long> {
 
 	// bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in
 	// courseInfo.jsp
-	@Query(value = "SELECT en.id, en.registerDate, en.cancelled, en.cancellationReason, en.startWeek, en.endWeek, en.info, "
-			+
-			"COALESCE(inv.id, 0) AS invoiceId, en.credit, en.discount, " +
-			"COALESCE(inv.amount, 0.0) AS amount, COALESCE(inv.paidAmount, 0.0) AS paidAmount, " +
-			"inv.paymentDate, en.studentId, en.clazzId, co.description, cl.price, co.online, cy.year, co.grade, cl.day "
-			+
-			"FROM Enrolment en " +
-			"LEFT JOIN Invoice inv ON en.invoiceId = inv.id " +
-			"JOIN Class cl ON en.clazzId = cl.id " +
-			"JOIN Course co ON cl.courseId = co.id " +
-			"JOIN Cycle cy ON cl.cycleId = cy.id " +
-			"WHERE en.studentId = :studentId AND en.old = 0", nativeQuery = true)
-	List<Object[]> findEnrolmentByStudentId(@Param("studentId") long studentId);
+	@Query("SELECT en.id, en.registerDate, en.cancelled, en.cancellationReason, en.startWeek, en.endWeek, en.info, " +
+           "COALESCE(inv.id, 0) AS invoiceId, en.credit, en.discount, " +
+           "COALESCE(inv.amount, 0.0) AS amount, COALESCE(inv.paidAmount, 0.0) AS paidAmount, " +
+           "inv.paymentDate, en.student.id, en.clazz.id, co.description, co.price, co.online, cy.year, co.grade, cl.day " +
+           "FROM Enrolment en " +
+           "LEFT JOIN en.invoice inv " +
+           "JOIN en.clazz cl " +
+           "JOIN cl.course co " +
+           "JOIN cl.course.cycle cy " +
+           "WHERE en.student.id = :studentId AND en.old = false")
+    List<Object[]> findEnrolmentByStudentId(@Param("studentId") long studentId);
 
 	// get start and end week by student id and year in studentList.jsp
 	@Query(value = "SELECT en.startWeek, en.endWeek FROM Enrolment en LEFT JOIN Class cl ON en.clazzId = cl.id JOIN Cycle cy ON cl.cycleId = cy.id WHERE en.studentId = :studentId AND cy.year = :year", nativeQuery = true)
 	List<Object[]> findStartAndEndWeekByStudentIdAndYear(@Param("studentId") long studentId, @Param("year") int year);
 
 	// bring latest EnrolmentDTO by student id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount,  e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.clazz.id = ?1 and e.old = false")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount,  e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.clazz.id = ?1 and e.old = false")
 	List<EnrolmentDTO> findEnrolmentByClazzId(long clazzId);
 
 	// bring latest EnrolmentDTO by invoice id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.invoice.id = ?1 and e.old = false")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.invoice.id = ?1 and e.old = false")
 	List<EnrolmentDTO> findEnrolmentByInvoiceId(long invoiceId);
 
 	// bring latest EnrolmentDTO by clazz id & student id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.clazz.id = ?1 and e.student.id = ?2 and e.old = false")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.clazz.id = ?1 and e.student.id = ?2 and e.old = false")
 	List<EnrolmentDTO> findEnrolmentByClazzIdAndStudentId(long clazzId, long studentId);
 
 	// bring latest EnrolmentDTO by invoice id & student id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.invoice.id = ?1 and e.student.id = ?2 and e.old = false")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.invoice.id = ?1 and e.student.id = ?2 and e.old = false")
 	List<EnrolmentDTO> findEnrolmentByInvoiceIdAndStudentId(long invoiceId, long studentId);
 
 	// bring latest EnrolmentDTO by invoice id & student id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.invoice.id = ?1 and e.student.id = ?2")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.invoice.id = ?1 and e.student.id = ?2")
 	List<EnrolmentDTO> findAllEnrolmentByInvoiceIdAndStudentId(long invoiceId, long studentId);
 
 	// bring EnrolmentDTO by id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount,  e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.id = ?1 and e.old = false")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount,  e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.id = ?1 and e.old = false")
 	EnrolmentDTO findActiveEnrolmentById(long id);
 
 	// bring latest EnrolmentDTO by clazz id & invoice id
-	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.price, e.clazz.course.online, e.clazz.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.clazz.id = ?1 and e.invoice.id = ?2 and e.old = false")
+	@Query("SELECT new hyung.jin.seo.jae.dto.EnrolmentDTO(e.id, e.registerDate, e.cancelled, e.cancellationReason, e.startWeek, e.endWeek, e.info, e.credit, e.discount, e.invoice.id, e.invoice.amount, e.invoice.paidAmount, e.invoice.paymentDate, e.student.id, e.clazz.id, e.clazz.course.name, e.clazz.course.price, e.clazz.course.online, e.clazz.course.cycle.year, e.clazz.course.grade, e.clazz.day) FROM Enrolment e WHERE e.clazz.id = ?1 and e.invoice.id = ?2 and e.old = false")
 	List<EnrolmentDTO> findEnrolmentByClazzIdAndInvoiceId(long clazzId, long invoiceId);
 
 	// return class id by student id
@@ -89,14 +87,23 @@ public interface EnrolmentRepository extends JpaRepository<Enrolment, Long> {
 	Integer getStudentNumberByClazzId(@Param("clazzId") long clazzId, @Param("week") int week);
 
 	// return clazz id by student id, year, week and online
-	@Query("SELECT e.clazz.id FROM Enrolment e WHERE e.student.id = ?1 AND e.clazz.cycle.year =?2 AND ?3 >= e.startWeek AND ?3 <= e.endWeek AND e.clazz.course.online = true")
+	@Query("SELECT e.clazz.id FROM Enrolment e WHERE e.student.id = ?1 AND e.clazz.course.cycle.year =?2 AND ?3 >= e.startWeek AND ?3 <= e.endWeek AND e.clazz.course.online = true")
 	Optional<Long> findClazzId4fOnlineSession(long studentId, int year, int week);
 
 	// return enrolment id by student id, year and week
-	@Query(value = "SELECT en.id "
-	+ "FROM Enrolment en " 
-	+ "LEFT JOIN Class cl ON en.clazzId = cl.id " 
-	+ "JOIN Cycle cy ON cl.cycleId = cy.id " 
-	+ "WHERE (en.studentId = :studentId) AND (cy.year = :year) AND (:week BETWEEN en.startWeek AND en.endWeek) AND en.old = 0", nativeQuery = true)
-	List<Long> checkEnrolmentTime(@Param("studentId") long studentId, @Param("year") int year, @Param("week") int week);
+	// @Query(value = "SELECT en.id "
+	// + "FROM Enrolment en " 
+	// + "LEFT JOIN Class cl ON en.clazzId = cl.id " 
+	// + "JOIN Cycle cy ON cl.cycleId = cy.id " 
+	// + "WHERE (en.studentId = :studentId) AND (cy.year = :year) AND (:week BETWEEN en.startWeek AND en.endWeek) AND en.old = 0", nativeQuery = true)
+	// List<Long> checkEnrolmentTime(@Param("studentId") long studentId, @Param("year") int year, @Param("week") int week);
+	@Query("SELECT en.id FROM Enrolment en " +
+             "LEFT JOIN en.clazz cl " +
+             "JOIN cl.course.cycle cy " +
+             "WHERE en.student.id = ?1 " +
+             "AND cy.year = ?2 " +
+             "AND ?3 BETWEEN en.startWeek AND en.endWeek " +
+             "AND en.old = 0")
+	List<Long> checkEnrolmentTime(long studentId, int year, int week);
+	
 }

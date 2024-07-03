@@ -25,9 +25,7 @@ public class ClazzDTO implements Serializable{
 
 	private String branch;
     
-    //private String fee;
-
-	private String name;
+ 	private String name;
    
    	private String description; // Course.description
 
@@ -37,20 +35,20 @@ public class ClazzDTO implements Serializable{
 
 	private boolean active;
 
-	private double price;
+	private double price; // Course.price
 
    	private String courseId;
 
-	@JsonIgnore
-	private String cycleId;
+	// @JsonIgnore
+	// private String cycleId;
 
 	private String grade; // Course.grade
 
 	private boolean online; // Course.online
 
-	private String year; // Cycle.year
+	private String year; // Course.Cycle.year
 
-	public ClazzDTO(long id, String state, String branch, double price, String day, String name, LocalDate startDate, boolean active, long courseId, long cycleId, String grade, boolean online, String description, int year) {
+	public ClazzDTO(long id, String state, String branch, double price, String day, String name, LocalDate startDate, boolean active, long courseId, String grade, boolean online, String description, int year) {
 		this.id = Long.toString(id);
 		this.state = state;
 		this.branch = branch;
@@ -60,7 +58,6 @@ public class ClazzDTO implements Serializable{
 		this.startDate = startDate.toString();
 		this.active = active;
 		this.courseId = Long.toString(courseId);
-		this.cycleId = Long.toString(cycleId);
 		this.grade = grade;
 		this.description = description;	
 		this.year = Integer.toString(year);
@@ -75,11 +72,10 @@ public class ClazzDTO implements Serializable{
 		this.startDate = clazz.getStartDate().toString();
 		this.active = clazz.isActive();
 		this.courseId = Long.toString(clazz.getCourse().getId());
-		this.cycleId = Long.toString(clazz.getCycle().getId());
 		this.grade = clazz.getCourse().getGrade();
 		this.description = clazz.getCourse().getDescription();
-		this.year = Integer.toString(clazz.getCycle().getYear());
-		this.price = clazz.getPrice();
+		this.year = Integer.toString(clazz.getCourse().getCycle().getYear());
+		this.price = clazz.getCourse().getPrice();
 	}
 
 
@@ -92,7 +88,6 @@ public class ClazzDTO implements Serializable{
 		if(StringUtils.isNotBlank(startDate)) clazz.setStartDate(LocalDate.parse(startDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));	
 		if(StringUtils.isNotBlank(day)) clazz.setDay(this.day);
 		clazz.setActive(this.active);
-		clazz.setPrice(this.price);
     	return clazz;
     }
 

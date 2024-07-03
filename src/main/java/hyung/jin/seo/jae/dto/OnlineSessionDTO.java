@@ -52,7 +52,7 @@ public class OnlineSessionDTO implements Serializable{
 		this.day = session.getDay();
 		this.startTime = session.getStartTime();
 		this.endTime = session.getEndTime();
-		this.year = session.getClazz().getCycle().getYear();
+		this.year = session.getClazz().getCourse().getCycle().getYear();
 		this.registerDate = session.getRegisterDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 		this.clazzId = (session.getClazz()!=null) ? String.valueOf(session.getClazz().getId()) : "";
 	}

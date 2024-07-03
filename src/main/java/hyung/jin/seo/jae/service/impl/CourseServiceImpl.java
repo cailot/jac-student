@@ -3,16 +3,16 @@ package hyung.jin.seo.jae.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.CourseDTO;
 import hyung.jin.seo.jae.model.Course;
+import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.repository.CourseRepository;
-import hyung.jin.seo.jae.repository.SubjectRepository;
 import hyung.jin.seo.jae.service.CourseService;
 
 @Service
@@ -20,9 +20,6 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Autowired
 	private CourseRepository courseRepository;
-
-	@Autowired
-	private SubjectRepository subjectRepository;
 
 	@Override
 	public long checkCount() {
@@ -32,17 +29,11 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public List<CourseDTO> allCourses() {
-		List<Course> crs = new ArrayList<>();
+		List<CourseDTO> dtos = new ArrayList<>();
 		try{
-			crs = courseRepository.findAll();
+			dtos = courseRepository.getAll();
 		}catch(Exception e){
 			System.out.println("No course found");
-		}
-		// courseRepository.findAll();
-		List<CourseDTO> dtos = new ArrayList<>();
-		for(Course course: crs){
-			CourseDTO dto = new CourseDTO(course);
-			dtos.add(dto);
 		}
 		return dtos;
 	}
@@ -50,21 +41,27 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public List<CourseDTO> findByGrade(String grade) {
 		// 1. get courses
-		List<Course> crs = courseRepository.findByGrade(grade);
-		// 2. get subjects
-		List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
-		// 3. create DTOs
 		List<CourseDTO> dtos = new ArrayList<>();
-		for(Course course: crs){
-			CourseDTO dto = new CourseDTO(course);
-			// 4. assign subjects to classes
-			for(String subject : subjects){
-				dto.addSubject(subject);
-			}
-			dtos.add(dto);
+		try{
+			dtos = courseRepository.getByGrade(grade);
+		}catch(Exception e){
+			System.out.println("No course found");
 		}
 		return dtos;
 	}
+
+	@Override
+	public List<CourseDTO> findByGradeNYear(String grade, int year) {
+		// 1. get courses
+		List<CourseDTO> dtos = new ArrayList<>();
+		try{
+			dtos = courseRepository.getByGradeNYear(grade, year);
+		}catch(Exception e){
+			System.out.println("No course found");
+		}
+		return dtos;
+	}
+
 
 	@Override
 	public Course getCourse(Long id) {
@@ -77,15 +74,17 @@ public class CourseServiceImpl implements CourseService {
 	}
 	
 	@Override
+	@Transactional
 	public Course addCourse(Course course) {
 		Course add = courseRepository.save(course);
 		return add;
 	}
 
 	@Override
-	public CourseDTO updateCourse(Course course) {
+	@Transactional
+	public CourseDTO updateCourse(Course course, Long id) {
 		// search by Id
-		Course existing = courseRepository.findById(course.getId()).orElseThrow(() -> new EntityNotFoundException("Course Not Found"));
+		Course existing = courseRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Course Not Found"));
 		// update grade
 		String newGrade = course.getGrade();
 		existing.setGrade(newGrade);
@@ -98,9 +97,47 @@ public class CourseServiceImpl implements CourseService {
 		// update description
 		String newDescription = course.getDescription();
 		existing.setDescription(newDescription);
+		// update price
+		double newPrice = course.getPrice();
+		existing.setPrice(newPrice);
+		// update associated subjects
+		List<Subject> newSubjects = course.getSubjects();
+		existing.setSubjects(newSubjects);
 		// update the existing record
 		Course updated = courseRepository.save(existing);
 		CourseDTO dto = new CourseDTO(updated);
 		return dto;
 	}
+
+
+	@Override
+	public List<CourseDTO> findOnsiteByGrade(String grade) {
+		// 1. get courses
+		List<CourseDTO> dtos = courseRepository.findOnsiteByGrade(grade);
+		// 2. get subjects
+		//List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
+		return dtos;
+	}
+
+	@Override
+	public List<CourseDTO> findOnlineByGrade(String grade) {
+		// 1. get courses
+		List<CourseDTO> dtos = courseRepository.findOnlineByGrade(grade);
+		// 2. get subjects
+		//List<String> subjects = subjectRepository.findSubjectAbbrForGrade(grade);
+		return dtos;
+	}
+
+	@Override
+	@Transactional
+	public void deleteCourse(Long id) {
+		// 1. get Course
+		Course course = courseRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Course Not Found"));
+		// 2. remove the associations between subjects and Course
+		course.setSubjects(new ArrayList<>());
+		courseRepository.save(course);
+		// 3. set flag to false
+		courseRepository.updateCourseSetActiveFalseById(id);
+	}
+	
 }

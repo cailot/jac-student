@@ -230,8 +230,6 @@ public class JaeController {
 		return "megaVol5ResultPage";
 	}
 
-
-
 	// revision vol 1 result
 	@GetMapping("/connected/result/revisionVol1")
 	public String dispayRevisionVol1Result() {
@@ -272,6 +270,14 @@ public class JaeController {
 	@GetMapping("/connected/result/engResult")
 	public String dispayEnglishResult() {
 		return "engResultPage";
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Accessment
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	@GetMapping("/assessment/test")
+	public String assessmentTest() {
+		return "assessmentTestPage";
 	}
 
 }

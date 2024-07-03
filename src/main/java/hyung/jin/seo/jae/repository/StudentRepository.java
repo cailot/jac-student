@@ -46,7 +46,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
         "AND s.grade LIKE :grade " +
         "AND e.discount != '" + "100%" + "' " +
         "AND e.clazz.id IN (" +
-        "SELECT cla.id FROM Clazz cla WHERE cla.cycle.id IN (" +
+        "SELECT cla.id FROM Clazz cla WHERE cla.course.cycle.id IN (" +
         "SELECT cyc.id FROM Cycle cyc WHERE cyc.year = :year))")
 	List<StudentDTO> listActiveStudent(@Param("state") String state, @Param("branch") String branch, @Param("grade") String grade, @Param("year") int year);
 
@@ -61,7 +61,7 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
         "AND s.grade LIKE :grade " +
         "AND e.discount != '" + "100%" + "' " +
         "AND e.clazz.id IN (" +
-        "SELECT cla.id FROM Clazz cla WHERE cla.cycle.id IN (" +
+        "SELECT cla.id FROM Clazz cla WHERE cla.course.cycle.id IN (" +
         "SELECT cyc.id FROM Cycle cyc WHERE cyc.year = :year))")
 	List<StudentDTO> listInactiveStudent(@Param("state") String state, @Param("branch") String branch, @Param("grade") String grade, @Param("year") int year);
 

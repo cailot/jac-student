@@ -42,12 +42,12 @@ public class Clazz{ // bridge table between Course & Cycle
 	@JoinColumn(name = "courseId")
 	private Course course;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "cycleId")
-	private Cycle cycle;
+	// @ManyToOne(cascade = CascadeType.ALL)
+	// @JoinColumn(name = "cycleId")
+	// private Cycle cycle;
 	
-    @Column(columnDefinition = "DECIMAL(10,2)")
-	private double price;
+    // @Column(columnDefinition = "DECIMAL(10,2)")
+	// private double price;
 
 	@CreationTimestamp
     private LocalDate registerDate;
@@ -85,9 +85,5 @@ public class Clazz{ // bridge table between Course & Cycle
 	   CascadeType.DETACH
    	})
     private Set<Attendance> attendances = new HashSet<>();
-
-
-
-
 
 }

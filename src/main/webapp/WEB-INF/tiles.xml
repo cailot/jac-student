@@ -216,6 +216,11 @@
 		<put-attribute name="body" value="/WEB-INF/layouts/connected/result/mathResult.jsp" />
 	</definition>
 
+	<!-- ASSESSMET TEST MENU -->
+	<definition name="assessmentTestPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Assessment Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/assessTest.jsp" />
+	</definition>
 
 
 

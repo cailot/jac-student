@@ -10,6 +10,7 @@ import javax.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.ClazzDTO;
 import hyung.jin.seo.jae.model.Clazz;
@@ -109,15 +110,11 @@ public class ClazzServiceImpl implements ClazzService {
 		// day
 		String newDay = clazz.getDay();
 		existing.setDay(newDay);
-		// price
-		double newPrice = clazz.getPrice();
-		existing.setPrice(newPrice);
 		// active
 		boolean newActive = clazz.isActive();
 		existing.setActive(newActive);
 		// update Course & Cycle
 		existing.setCourse(clazz.getCourse());
-		existing.setCycle(clazz.getCycle());
 		// update the existing record
 		Clazz updated = clazzRepository.save(existing);
 		ClazzDTO dto = new ClazzDTO(updated);
@@ -127,7 +124,7 @@ public class ClazzServiceImpl implements ClazzService {
 	@Override
 	public List<ClazzDTO> listClazz(String state, String branch, String grade, String year) {
 		List<ClazzDTO> dtos = null;
-		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
+		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, "0"))) {
 			dtos = clazzRepository.findClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
 		} else {
 			dtos = clazzRepository.findClassForStateNBranchNGrade(state, branch, grade);
@@ -246,20 +243,20 @@ public class ClazzServiceImpl implements ClazzService {
 	}
 
 	@Override
-	public List<ClazzDTO> filterOnSiteClazz(String state, String branch, String grade, String year) {
+	public List<ClazzDTO> filterOnSiteClazz(String state, String branch, String grade, int year) {
 		List<ClazzDTO> dtos = new ArrayList<>();
-		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
-			dtos = clazzRepository.findOnSiteClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
-		} else {
-			dtos = clazzRepository.findOnSiteClassForStateNBranchNGrade(state, branch, grade);
-		}
+		// if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
+			dtos = clazzRepository.findOnSiteClassForStateNBranchNGradeNYear(state, branch, grade, year);
+		// } else {
+			// dtos = clazzRepository.findOnSiteClassForStateNBranchNGrade(state, branch, grade);
+		// }
 		return dtos;
 	}
 
 	@Override
 	public List<ClazzDTO> listOnsiteClazz(String state, String branch, String grade, String year) {
 		List<ClazzDTO> dtos = null;
-		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
+		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, "0"))) {
 			dtos = clazzRepository.findOnsiteClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
 		} else {
 			dtos = clazzRepository.findOnsiteClassForStateNBranchNGrade(state, branch, grade);
@@ -270,7 +267,7 @@ public class ClazzServiceImpl implements ClazzService {
 	@Override
 	public List<ClazzDTO> listOnlineClazz(String state, String branch, String grade, String year) {
 		List<ClazzDTO> dtos = null;
-		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, JaeConstants.ALL))) {
+		if (StringUtils.isNotBlank(year) && (!StringUtils.equals(year, "0"))) {
 			dtos = clazzRepository.findOnlineClassForStateNBranchNGradeNYear(state, branch, grade, Integer.parseInt(year));
 		} else {
 			dtos = clazzRepository.findOnlineClassForStateNBranchNGrade(state, branch, grade);
@@ -283,6 +280,19 @@ public class ClazzServiceImpl implements ClazzService {
 		Optional<Clazz> option = clazzRepository.getClazz4OnlineSession(grade, year);
 		Clazz clazz = option.orElse(null);
 		return clazz;
+	}
+
+	@Override
+	@Transactional
+	public void deleteClass(Long id) {
+		// 1. get class
+		Clazz existing = clazzRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Clazz Not Found"));
+		// 2. delete associated enrolment & attendance
+		existing.setEnrolments(null);
+		existing.setAttendances(null);
+		clazzRepository.save(existing);
+		// 3. delete class
+		clazzRepository.deleteById(id);
 	}
 
 }

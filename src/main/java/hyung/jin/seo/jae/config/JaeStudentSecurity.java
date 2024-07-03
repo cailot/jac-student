@@ -41,7 +41,6 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
         @Configuration
         @Order(1)
         public static class OnlineSecurityConfig extends WebSecurityConfigurerAdapter {
-
                 @Override
                 protected void configure(HttpSecurity http) throws Exception {
                         http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
@@ -68,10 +67,8 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
         @Configuration
         @Order(2)
         public static class ConnectedSecurityConfig extends WebSecurityConfigurerAdapter {
- 
                 @Override
                 protected void configure(HttpSecurity http) throws Exception {
-
                         http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
                         // disable CSRF protection
                         http.csrf().disable();
@@ -96,6 +93,21 @@ public class JaeStudentSecurity extends WebSecurityConfigurerAdapter{
                 }
         }
 
+        @Configuration
+        @Order(3)
+        public static class AssessSecurityConfig extends WebSecurityConfigurerAdapter {
+                @Override
+                protected void configure(HttpSecurity http) throws Exception {
+
+                        http.headers(headers -> headers.frameOptions().sameOrigin());// allow iframe to embed PDF in body
+                        // disable CSRF protection
+                        http.csrf().disable();
+                        http
+                                .antMatcher("/assessment/**")
+                                .authorizeRequests(requests -> requests
+                                .antMatchers("/assessment/test").permitAll());     
+                }
+        }
         
         
         @Bean

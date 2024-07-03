@@ -32,16 +32,31 @@ public class CourseDTO implements Serializable, Cloneable{
     
     private String grade;
 
-	private int year;
+	private int year; // Cycle.year
+
+	private double price;
 
 	private boolean online;
 
-	private List<String> subjects = new ArrayList<>();
+	private String cycleId;
 
-	public void addSubject(String subject){
+	private List<SubjectDTO> subjects = new ArrayList<>();
+
+	public void addSubject(SubjectDTO subject){
 		subjects.add(subject);
 	}
 
+	public Course convertToCourse() {
+    	Course course = new Course();
+    	if(StringUtils.isNotBlank(id)) course.setId(Long.parseLong(this.id));
+    	if(StringUtils.isNotBlank(name)) course.setName(this.name);
+    	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
+    	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+    	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
+		course.setOnline(this.online);
+		course.setPrice(this.price);
+    	return course;
+    }
 
 	public CourseDTO(Course course) {
     	this.id = (course.getId()!=null) ? course.getId().toString() : "";
@@ -50,25 +65,18 @@ public class CourseDTO implements Serializable, Cloneable{
     	this.registerDate = (course.getRegisterDate()!=null) ? course.getRegisterDate().toString() : "";
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
 		this.online = course.isOnline();
+		this.price = course.getPrice();
     }
     
-    public Course convertToCourse() {
-    	Course course = new Course();
-    	if(StringUtils.isNotBlank(id)) course.setId(Long.parseLong(this.id));
-    	if(StringUtils.isNotBlank(name)) course.setName(this.name);
-    	if(StringUtils.isNotBlank(description)) course.setDescription(this.description);
-    	if(StringUtils.isNotBlank(registerDate)) course.setRegisterDate(LocalDate.parse(registerDate, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-    	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
-		course.setOnline(this.online);
-    	return course;
-    }
-
-	public CourseDTO(long id, String name, String description, String grade, boolean online){
+	public CourseDTO(long id, String name, String description, String grade, boolean online, double price, long cycleId, int year){
 		this.id = Long.toString(id);
 		this.name = name;
 		this.description = description;
 		this.grade = grade;
-		this.online = online;		
+		this.online = online;
+		this.price = price;		
+		this.cycleId = Long.toString(cycleId);
+		this.year = year;
 	}
 
 
