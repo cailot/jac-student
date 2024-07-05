@@ -32,11 +32,11 @@ public interface CycleService {
 	// check if date belongs to holiday
 	boolean isBelongToHoliday(String date);
 
-	// get academic start Sunday
-	String academicStartSunday(int year, int week);
+	// get academic start Monday
+	String academicStartMonday(int year, int week);
 
-	// get academic end Saturday
-	String academicEndSaturday(int year, int week);
+	// get academic end Sunday
+	String academicEndSunday(int year, int week);
 
 	// get date by week and day
 	LocalDate getDateByWeekAndDay(int year, int week, String day);
