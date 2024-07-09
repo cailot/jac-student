@@ -133,8 +133,8 @@ public class JaeInvoiceController {
 			List<EnrolmentDTO> enrolments = enrolmentService.findAllEnrolmentByInvoiceAndStudent(invoiceId, stdId);
 			for(EnrolmentDTO enrol : enrolments){
 				// 9-1. set period of enrolment to extra field
-				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				String start = cycleService.academicStartMonday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSunday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 				enrol.setExtra(start + " ~ " + end);
 			}
 			// get Material list - no need to get material list
@@ -175,8 +175,8 @@ public class JaeInvoiceController {
 			if(isFreeOnline) continue;
 			
 			// 3-1. set period of enrolment to extra field
-			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-			String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+			String start = cycleService.academicStartMonday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+			String end = cycleService.academicEndSunday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 			enrol.setExtra(start + " ~ " + end);
 			// 3-2. set headerGrade
 			if(!headerGrade.contains(enrol.getGrade())){
@@ -276,8 +276,8 @@ public class JaeInvoiceController {
 			
 				enrol.setInvoiceId(String.valueOf(invoId));				
 				// 9-1. set period of enrolment to extra field
-				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				String start = cycleService.academicStartMonday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSunday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 				enrol.setExtra(start + " ~ " + end);
 
 				// 10-1. set headerGrade
@@ -340,8 +340,8 @@ public class JaeInvoiceController {
 			
 				enrol.setInvoiceId(String.valueOf(invoId));
 				// 11-2. set period of enrolment to extra field
-				String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
-				String end = cycleService.academicEndSaturday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
+				String start = cycleService.academicStartMonday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+				String end = cycleService.academicEndSunday(Integer.parseInt(enrol.getYear()), enrol.getEndWeek());
 				enrol.setExtra(start + " ~ " + end);
 				// 12-2. set headerGrade
 				if(!headerGrade.contains(enrol.getGrade())){
@@ -415,7 +415,7 @@ public class JaeInvoiceController {
 			boolean isFreeOnline = enrol.isOnline() && enrol.getDiscount().equalsIgnoreCase(JaeConstants.DISCOUNT_FREE);
 			if(isFreeOnline) continue;
 			
-			String start = cycleService.academicStartSunday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
+			String start = cycleService.academicStartMonday(Integer.parseInt(enrol.getYear()), enrol.getStartWeek());
 			if(!headerGrade.contains(enrol.getGrade())){
 				headerGrade.add(enrol.getGrade().toUpperCase());
 			}

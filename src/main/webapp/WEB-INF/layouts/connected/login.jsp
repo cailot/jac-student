@@ -42,7 +42,7 @@
 <div id="background" class="col-md-12" style="padding-left: 0px; padding-right: 0px;">
 	<div class="background-animation">
 		<div class="left-container">
-			<h3 class="text-white text-center" ><img src="${pageContext.request.contextPath}/image/logo.png"></img></h3>
+			<h3 class="text-white text-center" ><a href="${pageContext.request.contextPath}/assessment/start"><img src="${pageContext.request.contextPath}/image/logo.png"></img></a></h3>
 			<h6 class="text-secondary text-center mb-4" style="background: #ffffff !important;">Sign In To James An College</h6>
 			<div class="card-container">			
 				<div class="row h-100 justify-content-center align-items-center">						

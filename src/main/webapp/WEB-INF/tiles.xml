@@ -217,9 +217,29 @@
 	</definition>
 
 	<!-- ASSESSMET TEST MENU -->
-	<definition name="assessmentTestPage" extends="single.definition">
+	<definition name="assessmentWelcomePage" extends="single.definition">
 		<put-attribute name="title" value="James An College Assessment Page" />
-		<put-attribute name="body" value="/WEB-INF/layouts/assessment/assessTest.jsp" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/welcome.jsp" />
+	</definition>
+	<definition name="assessmentApplyPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Assessment Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/application.jsp" />
+	</definition>
+	<definition name="assessmentListPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Assessment Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/list.jsp" />
+	</definition>
+	<definition name="assessmentMathPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Assessment Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/math.jsp" />
+	</definition>
+		<definition name="assessmentEngishPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Assessment Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/english.jsp" />
+	</definition>
+	<definition name="assessmentGAPage" extends="single.definition">
+		<put-attribute name="title" value="James An College Assessment Page" />
+		<put-attribute name="body" value="/WEB-INF/layouts/assessment/ga.jsp" />
 	</definition>
 
 

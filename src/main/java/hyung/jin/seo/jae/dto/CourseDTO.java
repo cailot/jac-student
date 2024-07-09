@@ -36,6 +36,8 @@ public class CourseDTO implements Serializable, Cloneable{
 
 	private double price;
 
+	private boolean active;
+
 	private boolean online;
 
 	private String cycleId;
@@ -55,6 +57,7 @@ public class CourseDTO implements Serializable, Cloneable{
     	if(StringUtils.isNotBlank(grade)) course.setGrade(this.grade);
 		course.setOnline(this.online);
 		course.setPrice(this.price);
+		course.setActive(true);
     	return course;
     }
 
@@ -66,9 +69,10 @@ public class CourseDTO implements Serializable, Cloneable{
     	this.grade = (course.getGrade()!=null) ? course.getGrade() : "";
 		this.online = course.isOnline();
 		this.price = course.getPrice();
+		this.active = course.isActive();
     }
     
-	public CourseDTO(long id, String name, String description, String grade, boolean online, double price, long cycleId, int year){
+	public CourseDTO(long id, String name, String description, String grade, boolean online, double price, long cycleId, int year, boolean active){
 		this.id = Long.toString(id);
 		this.name = name;
 		this.description = description;
@@ -77,17 +81,18 @@ public class CourseDTO implements Serializable, Cloneable{
 		this.price = price;		
 		this.cycleId = Long.toString(cycleId);
 		this.year = year;
+		this.active = active;
 	}
 
 
 	// for new academic year Object
-	@Override
-	public CourseDTO clone() {
-		try{
-			return (CourseDTO) super.clone();
-		}catch(CloneNotSupportedException e){
-			// Handle clone not supported exception
-			return new CourseDTO();
-		}
-	}
+	// @Override
+	// public CourseDTO clone() {
+	// 	try{
+	// 		return (CourseDTO) super.clone();
+	// 	}catch(CloneNotSupportedException e){
+	// 		// Handle clone not supported exception
+	// 		return new CourseDTO();
+	// 	}
+	// }
 }

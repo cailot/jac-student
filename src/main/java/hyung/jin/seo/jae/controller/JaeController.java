@@ -275,9 +275,33 @@ public class JaeController {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Accessment
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	@GetMapping("/assessment/test")
-	public String assessmentTest() {
-		return "assessmentTestPage";
+	@GetMapping("/assessment/start")
+	public String assessmentWelcome() {
+		return "assessmentWelcomePage";
 	}
 
+	@GetMapping("/assessment/apply")
+	public String assessmentApply() {
+		return "assessmentApplyPage";
+	}
+
+	@GetMapping("/assessment/list")
+	public String assessmentList() {
+		return "assessmentListPage";
+	}
+
+	@GetMapping("/assessment/math")
+	public String assessmentMath() {
+		return "assessmentMathPage";
+	}
+
+	@GetMapping("/assessment/english")
+	public String assessmentEnglish() {
+		return "assessmentEngishPage";
+	}
+
+	@GetMapping("/assessment/ga")
+	public String assessmentGA() {
+		return "assessmentGAPage";
+	}
 }

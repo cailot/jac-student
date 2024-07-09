@@ -12,6 +12,9 @@ public interface CourseService {
 	// list all Course by grade
 	List<CourseDTO> findByGrade(String grade);
 
+	// list all active Course by grade
+	List<CourseDTO> findActiveByGrade(String grade);
+
 	// list all Course by grade & year
 	List<CourseDTO> findByGradeNYear(String grade, int year);
 
@@ -33,6 +36,9 @@ public interface CourseService {
 	// update Course
 	CourseDTO updateCourse(Course course, Long id);
 
-	// delete Course
-	void deleteCourse(Long id);
+	// de-activate Course
+	void deactivateCourse(Long id);
+
+	// re-activate Course
+	void reactivateCourse(Long id);
 }

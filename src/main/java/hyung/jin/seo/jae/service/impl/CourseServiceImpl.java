@@ -51,6 +51,18 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public List<CourseDTO> findActiveByGrade(String grade) {
+		// 1. get courses
+		List<CourseDTO> dtos = new ArrayList<>();
+		try{
+			dtos = courseRepository.getActiveByGrade(grade);
+		}catch(Exception e){
+			System.out.println("No course found");
+		}
+		return dtos;
+	}
+
+	@Override
 	public List<CourseDTO> findByGradeNYear(String grade, int year) {
 		// 1. get courses
 		List<CourseDTO> dtos = new ArrayList<>();
@@ -100,6 +112,9 @@ public class CourseServiceImpl implements CourseService {
 		// update price
 		double newPrice = course.getPrice();
 		existing.setPrice(newPrice);
+		// update active
+		boolean newActive = course.isActive();
+		existing.setActive(newActive);
 		// update associated subjects
 		List<Subject> newSubjects = course.getSubjects();
 		existing.setSubjects(newSubjects);
@@ -130,14 +145,21 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	@Transactional
-	public void deleteCourse(Long id) {
+	public void deactivateCourse(Long id) {
 		// 1. get Course
-		Course course = courseRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Course Not Found"));
+		// Course course = courseRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Course Not Found"));
 		// 2. remove the associations between subjects and Course
-		course.setSubjects(new ArrayList<>());
-		courseRepository.save(course);
+		// course.setSubjects(new ArrayList<>());
+		// courseRepository.save(course);
 		// 3. set flag to false
 		courseRepository.updateCourseSetActiveFalseById(id);
+	}
+
+	@Override
+	@Transactional
+	public void reactivateCourse(Long id) {
+		// 3. set flag to true
+		courseRepository.updateCourseSetActiveTrueById(id);
 	}
 	
 }
