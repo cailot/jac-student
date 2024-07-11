@@ -407,7 +407,7 @@ public class ClazzController {
 	@ResponseBody
     public ResponseEntity<String> removeCourse(@PathVariable String courseId) {
         Long id = Long.parseLong(StringUtils.defaultString(courseId, "0"));
-		courseService.deleteCourse(id);
+		// courseService.deleteCourse(id);
 		return ResponseEntity.ok("\"Course deleted successfully\"");
     }
 

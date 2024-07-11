@@ -1,61 +1,7 @@
 <style>
-    .topic-card {
-        background-color: #d1ecf1; 
-        padding: 20px; 
-        border-radius: 10px; 
-        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); 
-    }
-    .modal-extra-large {
-        max-width: 90%;
-        max-height: 90%;
-    }
-
     input[type="radio"]{
         transform: scale(2);
     }
-
-    /* no square in check box */
-    .custom-control-label::before, .custom-control-label::after {
-        display: none;
-    }
-    .circle {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        border: 1px solid black;
-    }
-
-    .correct {
-        color: white;
-        background-color: red;
-        border-color: red;
-    }
-
-    .student {
-        color: white;
-        background-color: blue;
-        border-color: blue;
-    }
-
-    .answer {
-        color: white;
-        background-color: red;
-        border-color: red;
-    }
-    
-    .different {
-        background-color: #FDEFB2;
-    }
-
-    .answerSheet {
-        position: relative;
-        height: 85vh; /* Example height */
-        overflow-y: auto;
-    }
-
 </style>
 <script>
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +42,7 @@ function display(url) {
         var chosenAnswerNum = $('input[type=radio]:checked').length;
         $('#chosenAnswerNum').text(chosenAnswerNum);
     });
-    var footer = '<div><button type="submit" class="btn btn-primary w-100" onclick="checkAnswer(' + 1 + ', ' +  numQuestion +')">SUBMIT</button></div>';
+    var footer = '<div><button type="submit" class="btn btn-primary w-100" onclick="checkAnswer(' + 1 + ')">SUBMIT</button></div>';
     container.append(footer);
 
     // pop-up pdf & answer sheet
@@ -107,10 +53,10 @@ function display(url) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Submit Answer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function checkAnswer(practiceId, numQuestion) {
+function checkAnswer(assessId) {
     // Collect all the selected answers
     var answers = [];
-    for (var i = 1; i <= numQuestion; i++) {
+    for (var i = 1; i <= 20; i++) {
         var selectedOption = $('input[name=inlineRadioOptions' + i + ']:checked').val();
         var answer = parseInt(selectedOption) || 0; // Convert to integer and default to 0 if NaN
         answers.push({
@@ -120,11 +66,11 @@ function checkAnswer(practiceId, numQuestion) {
     }
     //Make an AJAX call to send the data to the server
     $.ajax({
-        url: '${pageContext.request.contextPath}/connected/addStudentPractice',
+        url: '${pageContext.request.contextPath}/assessment/markAssessment',
         method: 'POST',
         data: JSON.stringify({
-            studentId : studentId,
-            practiceId : practiceId,
+            studentId : 12345, //studentId,
+            assessId : assessId,
             answers : answers
         }),
         contentType: 'application/json',

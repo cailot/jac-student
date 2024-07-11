@@ -102,6 +102,8 @@ public interface JaeConstants {
 	String PRACTICE_LIST = "PracticeList";
 
 	String TEST_LIST = "TestList";
+
+	String ASSESSMENT_LIST = "AssessList";
 	
 	String VSSE = "VSSE";
 
