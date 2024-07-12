@@ -1,9 +1,47 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Assessment</title>
+    <script>
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //		Register Guest Student
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    function addGuest() {
+        // Get from form data
+        var guest = {
+            state : $("#listState").val(),
+            branch : $("#listBranch").val(),
+            grade : $("#listGrade").val(),
+            firstName : $("#firstName").val(),
+            lastName : $("#lastName").val(),
+            email : $("#email").val(),
+            contactNo: $("#contactNo").val()
+        }
+        // Send AJAX to server
+        $.ajax({
+            url: '${pageContext.request.contextPath}/assessment/addGuest',
+            type: 'POST',
+            dataType: 'json',
+            data: JSON.stringify(guest),
+            contentType: 'application/json',
+            success: function (data) {
+                console.log(data);
+                debugger
+                // Navigate with id and grade
+                window.location.href = '${pageContext.request.contextPath}/assessment/list?id=' + data.id + '&grade=' + data.grade;
+            },
+            error: function (xhr, status, error) {
+                if(xhr.status == 417){
+                    $('#warning-alert .modal-body').text(xhr.responseJSON);
+                    $('#warning-alert').modal('show');
+                }else{
+                    console.log('Error Details: ' + error);
+                }
+            }
+        });
+    }
+    </script>
     <style>
         body {
             display: flex;
@@ -48,7 +86,7 @@
 <body>
     <div class="assessment-container">
         <h1>Online Assessment</h1>
-        <form>
+        
             <div class="form-row">
                 <div class="col-md-4">
                     <label for="listState" class="label-form">State</label>
@@ -121,53 +159,11 @@
             </div>
             <!--<a href="${pageContext.request.contextPath}/assessment/list" class="btn btn-primary" role="button">NEXT</a>-->
             <button class="btn btn-primary" onclick="addGuest()">NEXT</button>
+            <!-- <i class="bi bi-pencil-square text-primary fa-lg hand-cursor" data-toggle="tooltip" title="Edit" onclick="addGuest()"> -->
+														
             
-        </form>
+        
     </div>
 
-    <script>
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//		Register Guest Student
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function addGuest() {
-	// Get from form data
-	var guest = {
-		state : $("#listState").val(),
-		branch : $("#listBranch").val(),
-		grade : $("#listGrade").val(),
-		firstName : $("#firstName").val(),
-		lastName : $("#lastName").val(),
-		email : $("#email").val(),
-        contactNo: $("#contactNo").val()
-	}
-    //debugger
-	//console.log(guest);
-
-	// Send AJAX to server
-	$.ajax({
-		url: '${pageContext.request.contextPath}/assessment/addGuest',
-		type: 'POST',
-		dataType: 'json',
-		data: JSON.stringify(guest),
-		contentType: 'application/json',
-		success: function (data) {
-			// Go to the list page
-            console.log(data);
-	
-		},
-		error: function (xhr, status, error) {
-			if(xhr.status==417){
-				$('#warning-alert .modal-body').text(xhr.responseJSON);
-				$('#warning-alert').modal('show');
-			}else{
-				console.log('Error : ' + error);
-			}
-		}
-	});
-}
-
-
-
-    </script>
 </body>
 </html>

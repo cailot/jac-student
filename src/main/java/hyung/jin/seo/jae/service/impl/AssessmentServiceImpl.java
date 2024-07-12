@@ -12,8 +12,10 @@ import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
+import hyung.jin.seo.jae.model.GuestStudent;
 import hyung.jin.seo.jae.repository.AssessmentAnswerRepository;
 import hyung.jin.seo.jae.repository.AssessmentRepository;
+import hyung.jin.seo.jae.repository.GuestStudentRepository;
 import hyung.jin.seo.jae.service.AssessmentService;
 
 @Service
@@ -24,6 +26,9 @@ public class AssessmentServiceImpl implements AssessmentService {
 
 	@Autowired
 	private AssessmentAnswerRepository assessmentAnswerRepository;
+
+	@Autowired
+	private GuestStudentRepository guestStudentRepository;
 
 	@Override
 	public List<Assessment> allAssessments() {
@@ -177,6 +182,13 @@ public class AssessmentServiceImpl implements AssessmentService {
 	public List<Integer> getStudentAssessmentAnswer(Long studentId, Long assessId) {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'getStudentAssessmentAnswer'");
+	}
+
+	@Override
+	@Transactional
+	public GuestStudent addGuestStudent(GuestStudent gs) {
+		GuestStudent guest = guestStudentRepository.save(gs);
+		return guest;
 	}
 
 

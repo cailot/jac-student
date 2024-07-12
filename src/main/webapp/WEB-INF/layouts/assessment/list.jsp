@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -49,7 +48,14 @@
     </div>
 
     <script>
+
+        
         let selectedCount = 0;
+        // Extract 'id' and 'grade' from the current URL
+let currentId = getQueryParam('id');
+let currentGrade = getQueryParam('grade');
+console.log(currentId + '--' + currentGrade);
+
 
         function selectSubject(button) {
             if (!button.classList.contains('selected')) {
@@ -71,6 +77,11 @@
             selectionCount.textContent = `${selectedCount} / 3`;
         }
 
+    function getQueryParam(param) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
 window.showWarning = function(id) {
     // Show the warning modal
     $('#testWarningModal').modal('show');
@@ -78,17 +89,25 @@ window.showWarning = function(id) {
     $('#agreeTestWarning').one('click', function() {
         //displayAssessment(id);
         // if id = 1, link to /assessment/math, if id = 2, link to /assessment/english, if id = 3, link to /assessment/ga
-        if (id == 1) {
-            window.location.href = '${pageContext.request.contextPath}/assessment/math';
-        } else if (id == 2) {
-            window.location.href = '${pageContext.request.contextPath}/assessment/english';
-        } else if (id == 3) {
-            window.location.href = '${pageContext.request.contextPath}/assessment/ga';
-        }
+        // Conditional redirection logic with 'id' and 'grade' appended
+if (id == 1) {
+    window.location.href = '${pageContext.request.contextPath}/assessment/math?id=' + currentId + '&grade=' + currentGrade;
+} else if (id == 2) {
+    window.location.href = '${pageContext.request.contextPath}/assessment/english?id=' + currentId + '&grade=' + currentGrade;
+} else if (id == 3) {
+    window.location.href = '${pageContext.request.contextPath}/assessment/ga?id=' + currentId + '&grade=' + currentGrade;
+}
         
         $('#testWarningModal').modal('hide');
     });
 }
+
+
+function getQueryParam(param) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
     </script>
 
 

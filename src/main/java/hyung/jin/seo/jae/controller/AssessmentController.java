@@ -69,19 +69,18 @@ public class AssessmentController {
 		return dto;
 	}
 
-	// register guest
+	// register guest student
 	@PostMapping("/addGuest")
 	@ResponseBody
-	public ResponseEntity<String> registerGuset(@RequestBody GuestStudentDTO formData) {
+	public GuestStudentDTO registerGuestStudent(@RequestBody GuestStudentDTO formData) {
 		// 1. create barebone
 		GuestStudent work = formData.convertToGuestStudent();
 		// 2. register Assessment
-		//GuestStudent added = assessmentService.addGuestStudent(work);
-		//return ResponseEntity.ok(formData.getId());
-		return ResponseEntity.ok("123");
+		GuestStudent added = assessmentService.addGuestStudent(work);
+		// 3. return dto
+		GuestStudentDTO dto = new GuestStudentDTO(added);
+		return dto;
 	}
-
-
 
 	@GetMapping("/listAssessment")
 	public String listAssessment(

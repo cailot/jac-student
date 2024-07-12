@@ -6,6 +6,7 @@ import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
+import hyung.jin.seo.jae.model.GuestStudent;
 
 public interface AssessmentService {
 
@@ -72,5 +73,9 @@ public interface AssessmentService {
 
 	// delete existing record to take test again
 	// void deleteStudentTest(Long studentId, Long testId); 	
+
+	// register GuestStudent
+	GuestStudent addGuestStudent(GuestStudent gs);
+
 
 }
