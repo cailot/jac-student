@@ -105,8 +105,8 @@
                     <input type="text" id="firstName" class="form-control" placeholder="First Name">
                 </div>
                 <div class="col-md-5">
-                    <label for="familyName" class="label-form">Family Name</label>
-                    <input type="text" id="familyName" class="form-control" placeholder="Family Name">
+                    <label for="lastName" class="label-form">Family Name</label>
+                    <input type="text" id="lastName" class="form-control" placeholder="Family Name">
                 </div>
             </div>
             <div class="form-row mt-4 mb-5">
@@ -116,18 +116,58 @@
                 </div>
                 <div class="col-md-6">
                     <label for="mobileNumber" class="label-form">Mobile Number</label>
-                    <input type="text" id="mobileNumber" class="form-control" placeholder="Mobile Number">
+                    <input type="text" id="contactNo" class="form-control" placeholder="Mobile Number">
                 </div>
             </div>
-            <a href="${pageContext.request.contextPath}/assessment/list" class="btn btn-primary" role="button">NEXT</a>
+            <!--<a href="${pageContext.request.contextPath}/assessment/list" class="btn btn-primary" role="button">NEXT</a>-->
+            <button class="btn btn-primary" onclick="addGuest()">NEXT</button>
+            
         </form>
     </div>
 
     <script>
-        function nextStep() {
-            // Add your next step logic here
-            alert("Proceed to the next step.");
-        }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//		Register Guest Student
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+function addGuest() {
+	// Get from form data
+	var guest = {
+		state : $("#listState").val(),
+		branch : $("#listBranch").val(),
+		grade : $("#listGrade").val(),
+		firstName : $("#firstName").val(),
+		lastName : $("#lastName").val(),
+		email : $("#email").val(),
+        contactNo: $("#contactNo").val()
+	}
+    //debugger
+	//console.log(guest);
+
+	// Send AJAX to server
+	$.ajax({
+		url: '${pageContext.request.contextPath}/assessment/addGuest',
+		type: 'POST',
+		dataType: 'json',
+		data: JSON.stringify(guest),
+		contentType: 'application/json',
+		success: function (data) {
+			// Go to the list page
+            console.log(data);
+	
+		},
+		error: function (xhr, status, error) {
+			if(xhr.status==417){
+				$('#warning-alert .modal-body').text(xhr.responseJSON);
+				$('#warning-alert').modal('show');
+			}else{
+				console.log('Error : ' + error);
+			}
+		}
+	});
+}
+
+
+
     </script>
 </body>
 </html>
