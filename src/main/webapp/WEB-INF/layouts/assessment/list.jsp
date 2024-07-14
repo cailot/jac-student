@@ -36,48 +36,35 @@
             cursor: not-allowed;
         }
     </style>
-</head>
-<body>
-    <div class="assessment-container">
-        <h1>Online Assessment</h1>
-        <button class="btn btn-primary" onclick="showWarning(1)">MATHS</button>
-        <button class="btn btn-primary" onclick="showWarning(2)">ENGLISH</button>
-        <button class="btn btn-primary" onclick="showWarning(3)">GA</button>
-        
-        <button class="btn btn-secondary disabled mt-3" id="selectionCount">0 / 3</button>
-    </div>
 
-    <script>
-
-        
-        let selectedCount = 0;
-        // Extract 'id' and 'grade' from the current URL
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jae.js"></script>
+<script>
+let selectedCount = 0;
+// Extract 'id' and 'grade' from the current URL
 let currentId = getQueryParam('id');
 let currentGrade = getQueryParam('grade');
-console.log(currentId + '--' + currentGrade);
+//console.log(currentId + '--' + currentGrade);
+function selectSubject(button) {
+    if (!button.classList.contains('selected')) {
+        button.classList.add('selected');
+        button.classList.add('btn-success');
+        button.classList.remove('btn-primary');
+        selectedCount++;
+    } else {
+        button.classList.remove('selected');
+        button.classList.remove('btn-success');
+        button.classList.add('btn-primary');
+        selectedCount--;
+    }
+    updateSelectionCount();
+}
 
+function updateSelectionCount() {
+    const selectionCount = document.getElementById('selectionCount');
+    selectionCount.textContent = `${selectedCount} / 3`;
+}
 
-        function selectSubject(button) {
-            if (!button.classList.contains('selected')) {
-                button.classList.add('selected');
-                button.classList.add('btn-success');
-                button.classList.remove('btn-primary');
-                selectedCount++;
-            } else {
-                button.classList.remove('selected');
-                button.classList.remove('btn-success');
-                button.classList.add('btn-primary');
-                selectedCount--;
-            }
-            updateSelectionCount();
-        }
-
-        function updateSelectionCount() {
-            const selectionCount = document.getElementById('selectionCount');
-            selectionCount.textContent = `${selectedCount} / 3`;
-        }
-
-    function getQueryParam(param) {
+function getQueryParam(param) {
     var urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 }
@@ -87,34 +74,46 @@ window.showWarning = function(id) {
     $('#testWarningModal').modal('show');
     // Attach the click event handler to the "I agree" button
     $('#agreeTestWarning').one('click', function() {
-        //displayAssessment(id);
         // if id = 1, link to /assessment/math, if id = 2, link to /assessment/english, if id = 3, link to /assessment/ga
-        // Conditional redirection logic with 'id' and 'grade' appended
-if (id == 1) {
-    window.location.href = '${pageContext.request.contextPath}/assessment/math?id=' + currentId + '&grade=' + currentGrade;
-} else if (id == 2) {
-    window.location.href = '${pageContext.request.contextPath}/assessment/english?id=' + currentId + '&grade=' + currentGrade;
-} else if (id == 3) {
-    window.location.href = '${pageContext.request.contextPath}/assessment/ga?id=' + currentId + '&grade=' + currentGrade;
-}
-        
+        if (id == 1) {
+            window.location.href = '${pageContext.request.contextPath}/assessment/math?id=' + currentId + '&grade=' + currentGrade;
+        } else if (id == 2) {
+            window.location.href = '${pageContext.request.contextPath}/assessment/english?id=' + currentId + '&grade=' + currentGrade;
+        } else if (id == 3) {
+            window.location.href = '${pageContext.request.contextPath}/assessment/ga?id=' + currentId + '&grade=' + currentGrade;
+        }
+    
         $('#testWarningModal').modal('hide');
     });
 }
 
-
-function getQueryParam(param) {
-    var urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
+// Function to disable and change the 'mathTest' button's color if 'math=true' in the URL
+function modifyButtonBasedOnUrl() {
+    var mathParam = getQueryParam('math');
+    if(mathParam === 'true') {
+        // Select the 'mathTest' button by its ID
+        var button = document.getElementById('mathTest');
+        button.style.backgroundColor = 'grey'; // Change color to grey
+        button.disabled = true; // Disable the button
+        button.onclick = null; // Remove onclick event to disable it
+    }
 }
 
-    </script>
+// Call the function when the window loads
+window.onload = modifyButtonBasedOnUrl;
 
+</script>
 
-
-
-
-
+</head>
+<body>
+<div class="assessment-container">
+    <h1>Online Assessment</h1>
+    <button class="btn btn-primary" id="mathTest" onclick="showWarning(1)">MATHS</button>
+    <button class="btn btn-primary" id="englishTest" onclick="showWarning(2)">ENGLISH</button>
+    <button class="btn btn-primary" id="gaTest" onclick="showWarning(3)">GA</button>
+    
+    <button class="btn btn-secondary disabled mt-3" id="selectionCount">0 / 3</button>
+</div>
 
 <!--Test Warning Modal -->
 <div class="modal fade" id="testWarningModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

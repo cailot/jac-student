@@ -229,3 +229,4 @@ function getContextPath(){
 	var contextPath = window.location.pathname.split('/')[1];
 	return '/'  + contextPath;
 }
+

@@ -1,7 +1,9 @@
 package hyung.jin.seo.jae.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,10 +35,12 @@ import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.GuestStudent;
+import hyung.jin.seo.jae.model.GuestStudentAssessment;
 import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.service.AssessmentService;
 import hyung.jin.seo.jae.service.CodeService;
 import hyung.jin.seo.jae.utils.JaeConstants;
+import hyung.jin.seo.jae.utils.JaeUtils;
 
 @Controller
 @RequestMapping("assessment")
@@ -194,37 +199,40 @@ public class AssessmentController {
 	}
 
 	@PostMapping(value = "/markAssessment")
-	@ResponseBody
-    public ResponseEntity<String> markTest(@RequestBody Map<String, Object> payload) {
-        // Extract practiceId and answers from the payload
+	public ResponseEntity<Map<String, String>> markTest(@RequestBody Map<String, Object> payload) {
+		// Extract practiceId and answers from the payload
 		String studentId = StringUtils.defaultString(payload.get("studentId").toString(), "0");
 		String assessId = StringUtils.defaultString(payload.get("assessId").toString(), "0");
 		List<Map<String, Object>> mapAns = (List<Map<String, Object>>) payload.get("answers");
-		// convert the Map of answers to List
+
+		// Convert the Map of answers to List
 		List<Integer> answers = convertAssessmentAnswers(mapAns);
-	
-	
-	/*
-		// compare answers with answer sheet
-		List<TestAnswerItem> corrects = connectedService.getAnswersByTest(Long.parseLong(testId));
-		double score = JaeUtils.calculateTestScore(answers, corrects);
-		// 1. create barebone
-		StudentTest st = new StudentTest();
-		st.setScore(score);
-		// 2. set Student & Test
-		Student student = studentService.getStudent(Long.parseLong(studentId));
-		Test test = connectedService.getTest(Long.parseLong(testId));
-		// 3. associate Student & Test
-		st.setStudent(student);
-		st.setTest(test);
-		// 4. set answers
+
+		// Save it into GuestStudentAssessment
+		GuestStudentAssessment st = new GuestStudentAssessment();
+		GuestStudent student = assessmentService.getGuestStudent(Long.parseLong(studentId));
+		Assessment assess = assessmentService.getAssessment(Long.parseLong(assessId));
+		st.setGuestStudent(student);
+		st.setAssessment(assess);
 		st.setAnswers(answers);
-		// 5. register StudentTest
-		connectedService.addStudentTest(st);
-	*/
-		// 6. return flag
-		return ResponseEntity.ok("\"StudentTest registered\"");
-    }
+		List<AssessmentAnswerItem> corrects = assessmentService.getAnswersByAssessment(Long.parseLong(assessId));
+		double score = JaeUtils.calculateAssessmentScore(answers, corrects);
+		st.setScore(score);
+		assessmentService.addGuestStudentAssessment(st);
+
+		// Build the redirect URL
+		String redirectUrl = "/assessment/list";
+
+		// Return the redirect URL in the response
+		Map<String, String> response = new HashMap<>();
+		response.put("redirectUrl", redirectUrl);
+		response.put("math", "done");
+		// other subject ??
+		return ResponseEntity.ok(response);
+	}
+
+
+
 
 
 

@@ -6,7 +6,9 @@ import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
+import hyung.jin.seo.jae.model.AssessmentAnswerItem;
 import hyung.jin.seo.jae.model.GuestStudent;
+import hyung.jin.seo.jae.model.GuestStudentAssessment;
 
 public interface AssessmentService {
 
@@ -43,15 +45,11 @@ public interface AssessmentService {
 	// get AssessmentAnswer by assessment
 	AssessmentAnswer findAssessmentAnswer(Long assessmentId);
 
-
 	// register AssessmentAnswer
 	AssessmentAnswer addAssessmentAnswer(AssessmentAnswer answer);
 
 	// update AssessmentAnswer info by Id
 	AssessmentAnswer updateAssessmentAnswer(AssessmentAnswer newWork, Long id);
-
-	// get Answer sheet by Assessment
-	// List<AssessmentAnswerItem> getAnswersByAssessment(Long assessId);
 
 	// get Student's answer by Student & Assessment
 	List<Integer> getStudentAssessmentAnswer(Long studentId, Long  assessId);
@@ -76,6 +74,17 @@ public interface AssessmentService {
 
 	// register GuestStudent
 	GuestStudent addGuestStudent(GuestStudent gs);
+
+	// get GuestStudent
+	GuestStudent getGuestStudent(Long id);
+
+	// register GuestStudentAssessment
+	GuestStudentAssessment addGuestStudentAssessment(GuestStudentAssessment gsa);
+
+	// get Answer sheet by Assessment
+	List<AssessmentAnswerItem> getAnswersByAssessment(Long assessId);
+
+
 
 
 }

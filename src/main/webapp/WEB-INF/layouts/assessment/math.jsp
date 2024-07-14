@@ -1,16 +1,24 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script>
 
-const TEST_TYPE = 1; // 1 is MEGA English
-const DONE= 'DONE';
+const SUBJECT = 1; // 1 is English
+var assessId = 0;
+var studentId = 0;
+var grade = 0;
 
 $(function() {
+
+    studentId = getQueryParam('id');
+    grade = getQueryParam('grade');
+    
+
     $.ajax({
-        url : '${pageContext.request.contextPath}/assessment/getPaper/' + 1 + '/' + 2,
+        url : '${pageContext.request.contextPath}/assessment/getAssessInfo/' + grade + '/' + SUBJECT,
         method: "GET",
         success: function(data) {
-            console.log(data);
-            display(data);
+            //console.log(data);
+            assessId = data.id;
+            display(data.pdfPath);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);
@@ -18,6 +26,11 @@ $(function() {
     });
 });
 
+// get query parameter value
+function getQueryParam(param) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
 </script>
 

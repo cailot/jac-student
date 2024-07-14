@@ -17,6 +17,9 @@ public interface AssessmentAnswerRepository extends JpaRepository<AssessmentAnsw
 	@SuppressWarnings("null")
 	Optional<AssessmentAnswer> findById(Long id);
 
+	@SuppressWarnings("null")
+	Optional<AssessmentAnswer> findByAssessmentId(Long id);
+
 	@Query(value = "SELECT * FROM AssessmentAnswer aa where aa.assessmentId = :assessmentId", nativeQuery = true)
 	AssessmentAnswer findAssessmentAnswerByAssessment(Long assessmentId);
 

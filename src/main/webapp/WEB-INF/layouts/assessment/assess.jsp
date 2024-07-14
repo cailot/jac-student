@@ -42,7 +42,7 @@ function display(url) {
         var chosenAnswerNum = $('input[type=radio]:checked').length;
         $('#chosenAnswerNum').text(chosenAnswerNum);
     });
-    var footer = '<div><button type="submit" class="btn btn-primary w-100" onclick="checkAnswer(' + 1 + ')">SUBMIT</button></div>';
+    var footer = '<div><button type="submit" class="btn btn-primary w-100" onclick="checkAnswer()">SUBMIT</button></div>';
     container.append(footer);
 
     // pop-up pdf & answer sheet
@@ -53,7 +53,7 @@ function display(url) {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 			Submit Answer
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-function checkAnswer(assessId) {
+function checkAnswer() {
     // Collect all the selected answers
     var answers = [];
     for (var i = 1; i <= 20; i++) {
@@ -69,23 +69,21 @@ function checkAnswer(assessId) {
         url: '${pageContext.request.contextPath}/assessment/markAssessment',
         method: 'POST',
         data: JSON.stringify({
-            studentId : 12345, //studentId,
+            studentId : studentId,
             assessId : assessId,
             answers : answers
         }),
         contentType: 'application/json',
         success: function(response) {
-             // pdf & answer sheet dialogue disappears
-            $('#practiceModal').modal('hide');
-            $('#success-alert .modal-body').html('Answer is successfully submitted.');
-	        $('#success-alert').modal('show');
-
-			// Attach an event listener to the success alert close event
-			$('#success-alert').on('hidden.bs.modal', function () {
-				// Reload the page after the success alert is closed
-				location.href = window.location.pathname; // Passing true forces a reload from the server and not from the cache
-			});
-
+            // Redirect to the URL provided by the server
+            if (response.redirectUrl) {
+                var math = response.math ? true : false;
+                var english = response.english ? true : false;
+                window.location.href = response.redirectUrl+'?id='+studentId+'&grade='+grade +'&math='+math+'&english='+english;
+            } else {
+                // Reload the page if no redirect URL is provided
+                location.reload(true); // Passing true forces a reload from the server and not from the cache
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log('Error : ' + errorThrown);

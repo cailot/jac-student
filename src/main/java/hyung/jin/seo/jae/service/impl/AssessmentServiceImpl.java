@@ -3,6 +3,9 @@ package hyung.jin.seo.jae.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import javax.swing.text.html.Option;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +15,12 @@ import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
+import hyung.jin.seo.jae.model.AssessmentAnswerItem;
 import hyung.jin.seo.jae.model.GuestStudent;
+import hyung.jin.seo.jae.model.GuestStudentAssessment;
 import hyung.jin.seo.jae.repository.AssessmentAnswerRepository;
 import hyung.jin.seo.jae.repository.AssessmentRepository;
+import hyung.jin.seo.jae.repository.GuestStudentAssessmentRepository;
 import hyung.jin.seo.jae.repository.GuestStudentRepository;
 import hyung.jin.seo.jae.service.AssessmentService;
 
@@ -29,6 +35,9 @@ public class AssessmentServiceImpl implements AssessmentService {
 
 	@Autowired
 	private GuestStudentRepository guestStudentRepository;
+
+	@Autowired
+	private GuestStudentAssessmentRepository guestStudentAssessmentRepository;
 
 	@Override
 	public List<Assessment> allAssessments() {
@@ -48,12 +57,42 @@ public class AssessmentServiceImpl implements AssessmentService {
 		return work.get();
 	}
 
+	@Override
+	public GuestStudent getGuestStudent(Long id) {
+		Optional<GuestStudent> student = guestStudentRepository.findById(id);
+		if(!student.isPresent()) return null;
+		return student.get();
+	}
+
+
 	@Transactional
 	@Override
 	public Assessment addAssessment(Assessment work) {
 		Assessment assessment = assessmentRepository.save(work);
 		return assessment;
 	}
+
+	@Override
+	@Transactional
+	public GuestStudent addGuestStudent(GuestStudent gs) {
+		GuestStudent guest = guestStudentRepository.save(gs);
+		return guest;
+	}
+
+	@Transactional
+	@Override
+	public AssessmentAnswer addAssessmentAnswer(AssessmentAnswer answer) {
+		AssessmentAnswer aa = assessmentAnswerRepository.save(answer);
+		return aa;
+	}
+
+	@Transactional
+	@Override
+	public GuestStudentAssessment addGuestStudentAssessment(GuestStudentAssessment gsa) {
+		GuestStudentAssessment guestAssessment = guestStudentAssessmentRepository.save(gsa);
+		return guestAssessment;
+	}
+
 
 	@Transactional
 	@Override
@@ -157,12 +196,6 @@ public class AssessmentServiceImpl implements AssessmentService {
 		return dto;
 	}
 
-	@Transactional
-	@Override
-	public AssessmentAnswer addAssessmentAnswer(AssessmentAnswer answer) {
-		AssessmentAnswer aa = assessmentAnswerRepository.save(answer);
-		return aa;
-	}
 
 	@Transactional
 	@Override
@@ -185,11 +218,17 @@ public class AssessmentServiceImpl implements AssessmentService {
 	}
 
 	@Override
-	@Transactional
-	public GuestStudent addGuestStudent(GuestStudent gs) {
-		GuestStudent guest = guestStudentRepository.save(gs);
-		return guest;
+	public List<AssessmentAnswerItem> getAnswersByAssessment(Long assessId) {
+		Optional<AssessmentAnswer> answer = assessmentAnswerRepository.findByAssessmentId(assessId);
+		if(answer.isPresent()){
+			return answer.get().getAnswers();
+		}else{
+			return null;
+		}
 	}
+
+	
+
 
 
 

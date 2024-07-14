@@ -26,8 +26,8 @@
             data: JSON.stringify(guest),
             contentType: 'application/json',
             success: function (data) {
-                console.log(data);
-                debugger
+                // console.log(data);
+                // debugger
                 // Navigate with id and grade
                 window.location.href = '${pageContext.request.contextPath}/assessment/list?id=' + data.id + '&grade=' + data.grade;
             },
