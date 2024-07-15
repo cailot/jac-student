@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <script>
 
-const SUBJECT = 1; // 1 is English
+const SUBJECT = 2; // 2 is Math
 var assessId = 0;
 var studentId = 0;
 var grade = 0;

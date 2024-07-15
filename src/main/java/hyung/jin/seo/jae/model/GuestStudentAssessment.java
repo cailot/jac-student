@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,7 +52,11 @@ public class GuestStudentAssessment{ // bridge table between GuestStudent & Asse
 	@Column
 	private double score;
 
-	@ElementCollection
-    @CollectionTable(name = "GuestStudentAssessmentAnswerCollection") // Set the custom table name
+	// @ElementCollection(fetch=FetchType.LAZY)
+    // @CollectionTable(name = "GuestStudentAssessmentAnswerCollection") // Set the custom table name
+    // private List<Integer> answers = new ArrayList<>();
+	@ElementCollection(fetch=FetchType.LAZY)
+    @CollectionTable(name = "GuestStudentAssessmentAnswerCollection", joinColumns = @JoinColumn(name = "guestStudentAssessment_id"))
+    @Column(name = "answers")
     private List<Integer> answers = new ArrayList<>();
 }

@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
+import hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO;
+import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;
@@ -227,9 +229,30 @@ public class AssessmentServiceImpl implements AssessmentService {
 		}
 	}
 
-	
+	@Override
+	public List<String> getSubjectsByStudent(Long studentId) {
+		List<String> subjects = new ArrayList<>();
+		try{
+			subjects = guestStudentAssessmentRepository.findSujbectByGuestStudent(studentId);
+		}catch(Exception e){
+			System.out.println("No subject found");
+		}
+		return subjects;
+	}
 
-
-
+	@Override
+	public List<GuestStudentAssessmentDTO> getGuestStudentAssessmentByStudent(Long studentId) {
+		// Fetch basic details
+		List<GuestStudentAssessmentDTO> dtos = guestStudentAssessmentRepository.findStudentTestResult(studentId);
+		// Fetch and set answers for each DTO
+		for (GuestStudentAssessmentDTO dto : dtos) {
+			Optional<GuestStudentAssessment> guestStudentAssessment = guestStudentAssessmentRepository.findById(dto.getId());
+			if (guestStudentAssessment.isPresent()) {
+				List<Integer> answers = guestStudentAssessment.get().getAnswers();
+				dto.setAnswers(answers);
+			}
+		}
+		return dtos;
+	}
 
 }

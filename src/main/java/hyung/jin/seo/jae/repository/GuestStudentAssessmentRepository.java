@@ -38,14 +38,10 @@ public interface GuestStudentAssessmentRepository extends JpaRepository<GuestStu
         @Modifying
 	void deleteByGuestStudentAndAssessment(Long studentId, Long assessId);
 
-        @Query("SELECT new hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO(" +
-                "st.id, " +
-                "st.registerDate, " +
-                "st.score, " +
-                "st.guestStudent.id, " +
-                "st.assessment.id, " +
-                "st.answers) " +
-                "FROM GuestStudentAssessment st " +
-                "WHERE st.guestStudent.id = :studentId")
+        @Query("SELECT new hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO(st.id, st.registerDate, st.score, st.guestStudent.id, st.assessment.id) FROM GuestStudentAssessment st WHERE st.guestStudent.id = :studentId")
         List<GuestStudentAssessmentDTO> findStudentTestResult(@Param("studentId") Long studentId);	// // bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in
+
+        @Query("SELECT st.assessment.subject.abbr FROM GuestStudentAssessment st WHERE st.guestStudent.id = :studentId")
+        List<String> findSujbectByGuestStudent(@Param("studentId") Long studentId);	// // bring latest EnrolmentDTO by student id, called from retrieveEnrolment() in
+
 }

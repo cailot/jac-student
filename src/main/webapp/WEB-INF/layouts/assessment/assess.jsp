@@ -77,9 +77,10 @@ function checkAnswer() {
         success: function(response) {
             // Redirect to the URL provided by the server
             if (response.redirectUrl) {
-                var math = response.math ? true : false;
-                var english = response.english ? true : false;
-                window.location.href = response.redirectUrl+'?id='+studentId+'&grade='+grade +'&math='+math+'&english='+english;
+                var math = response.MAT ? true : false;
+                var english = response.ENG ? true : false;
+                var ga = response.GA ? true : false;
+                window.location.href = response.redirectUrl+'?id='+studentId+'&grade='+grade +'&math='+math+'&english='+english+'&ga='+ga;
             } else {
                 // Reload the page if no redirect URL is provided
                 location.reload(true); // Passing true forces a reload from the server and not from the cache

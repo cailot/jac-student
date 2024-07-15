@@ -40,28 +40,23 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jae.js"></script>
 <script>
 let selectedCount = 0;
+const totalCount = 3;
 // Extract 'id' and 'grade' from the current URL
 let currentId = getQueryParam('id');
 let currentGrade = getQueryParam('grade');
-//console.log(currentId + '--' + currentGrade);
-function selectSubject(button) {
-    if (!button.classList.contains('selected')) {
-        button.classList.add('selected');
-        button.classList.add('btn-success');
-        button.classList.remove('btn-primary');
-        selectedCount++;
-    } else {
-        button.classList.remove('selected');
-        button.classList.remove('btn-success');
-        button.classList.add('btn-primary');
-        selectedCount--;
-    }
-    updateSelectionCount();
-}
 
 function updateSelectionCount() {
-    const selectionCount = document.getElementById('selectionCount');
-    selectionCount.textContent = `${selectedCount} / 3`;
+    const submitCount = document.getElementById('selectionCount');
+    submitCount.textContent = selectedCount + ' / ' + totalCount;
+    if(selectedCount == totalCount){
+        // enable button click
+        submitCount.classList.remove('btn-secondary');
+        submitCount.className = 'btn btn-primary';
+        submitCount.disabled = false;
+        submitCount.addEventListener('click', sendEmail);
+        // how to change label
+        submitCount.textContent = 'SUBMIT';
+    }
 }
 
 function getQueryParam(param) {
@@ -91,16 +86,64 @@ window.showWarning = function(id) {
 function modifyButtonBasedOnUrl() {
     var mathParam = getQueryParam('math');
     if(mathParam === 'true') {
-        // Select the 'mathTest' button by its ID
         var button = document.getElementById('mathTest');
-        button.style.backgroundColor = 'grey'; // Change color to grey
+        button.className = 'btn btn-secondary'; // Change color to grey
         button.disabled = true; // Disable the button
         button.onclick = null; // Remove onclick event to disable it
+        selectedCount++;
     }
+
+    var engParam = getQueryParam('english');
+    if(engParam === 'true') {
+        var button = document.getElementById('englishTest');
+        button.className = 'btn btn-secondary'; // Change color to grey
+        button.disabled = true; // Disable the button
+        button.onclick = null; // Remove onclick event to disable it
+        selectedCount++;
+    }
+
+    var gaParam = getQueryParam('ga');
+    if(gaParam === 'true') {
+        // Select the 'mathTest' button by its ID
+        var button = document.getElementById('gaTest');
+        button.className = 'btn btn-secondary'; // Change color to grey
+        button.disabled = true; // Disable the button
+        button.onclick = null; // Remove onclick event to disable it
+        selectedCount++;
+    }
+    updateSelectionCount();
 }
 
 // Call the function when the window loads
 window.onload = modifyButtonBasedOnUrl;
+
+//////////////////////////////////////////////////////////////////////////////
+// request sending results via email
+//////////////////////////////////////////////////////////////////////////////
+function sendEmail() {
+    // Send AJAX to server
+    $.ajax({
+        url: '${pageContext.request.contextPath}/assessment/sendResult/' + currentId,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+            // Display the success alert
+			$('#success-alert .modal-body').html('Sending result is now requested. You can close this window and check your email later. Thank you for participating in the assessment.');
+			$('#success-alert').modal('show');
+			$('#success-alert').on('hidden.bs.modal', function (e) {
+                document.getElementById('mathTest').disabled = true;
+                document.getElementById('englishTest').disabled = true;
+                document.getElementById('gaTest').disabled = true;
+                document.getElementById('selectionCount').disabled = true;
+			});
+        },
+        error: function (xhr, status, error) {
+            console.log('Error Details: ' + error);
+        }
+    });
+}
+
 
 </script>
 

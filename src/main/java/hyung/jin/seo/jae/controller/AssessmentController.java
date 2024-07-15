@@ -29,7 +29,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
+import hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO;
 import hyung.jin.seo.jae.dto.GuestStudentDTO;
+import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;
@@ -226,9 +228,41 @@ public class AssessmentController {
 		// Return the redirect URL in the response
 		Map<String, String> response = new HashMap<>();
 		response.put("redirectUrl", redirectUrl);
-		response.put("math", "done");
+		// response.put("math", "done");
 		// other subject ??
+		List<String> subjects = assessmentService.getSubjectsByStudent(Long.parseLong(studentId));
+		for(String subject : subjects){
+			response.put(subject, "done");
+		}
 		return ResponseEntity.ok(response);
+	}
+
+	// create result as Pdfs and send them vi
+	@GetMapping("/sendResult/{studentId}")
+	@ResponseBody
+	public ResponseEntity<String> finaliseResult(@PathVariable Long studentId) {
+		// 1. get GuestStudent info
+		GuestStudent guest = assessmentService.getGuestStudent(studentId);
+		String firstName = guest.getFirstName();
+		String lastName = guest.getLastName();
+		String branch = guest.getBranch();
+		String grade = guest.getGrade();
+		String email = guest.getEmail();
+		// 2. get guest student assessment
+		List<GuestStudentAssessmentDTO> gsas = assessmentService.getGuestStudentAssessmentByStudent(studentId);
+		// 3. get assessment answers
+		for(GuestStudentAssessmentDTO gsa : gsas){
+			List<Integer> gsAnswer = gsa.getAnswers();
+			// print out gsAnswer
+			System.out.println("gsAnswer : " + gsAnswer);
+		}
+		// 4. create PDF
+
+		// 5. send email
+
+
+		// AssessmentAnswerDTO answer = assessmentService.getAssessmentAnswer(studentId);
+		return ResponseEntity.ok("\"Assessment result proccessed successfully\"");
 	}
 
 

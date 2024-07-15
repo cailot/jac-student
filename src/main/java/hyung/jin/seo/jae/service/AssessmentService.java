@@ -4,6 +4,8 @@ import java.util.List;
 
 import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
+import hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO;
+import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;
@@ -84,7 +86,11 @@ public interface AssessmentService {
 	// get Answer sheet by Assessment
 	List<AssessmentAnswerItem> getAnswersByAssessment(Long assessId);
 
+	// get subjects by student
+	List<String> getSubjectsByStudent(Long studentId);
 
+	// get guest student assessment by student
+	List<GuestStudentAssessmentDTO> getGuestStudentAssessmentByStudent(Long studentId);
 
 
 }
