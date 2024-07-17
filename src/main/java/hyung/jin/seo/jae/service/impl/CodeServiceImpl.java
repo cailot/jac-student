@@ -186,6 +186,17 @@ public class CodeServiceImpl implements CodeService {
 	}
 
 	@Override
+	public BranchDTO getBranch(String code) {
+		BranchDTO dto = null;
+		try{
+			dto = branchRepository.findBranchByCode(code);
+		}catch(Exception e){
+			System.out.println("No branch found");
+		}
+		return dto;
+	}
+
+	@Override
 	public List<GradeDTO> allGrades() {
 		List<GradeDTO> dtos = new ArrayList<>();
 		try{

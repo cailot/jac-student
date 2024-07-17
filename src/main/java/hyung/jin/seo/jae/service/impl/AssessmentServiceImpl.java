@@ -184,6 +184,21 @@ public class AssessmentServiceImpl implements AssessmentService {
 		return answer;
 	}
 
+	// @Override
+	// public AssessmentAnswerDTO getAssessmentAnswer(Long assessmentId) {
+	// 	AssessmentAnswerDTO dto = null;
+	// 	try{
+	// 		dto = assessmentAnswerRepository.getAssessmentAnswerByAssessment(assessmentId);
+	// 		// if(answer!=null){
+	// 		// 	dto = new AssessmentAnswerDTO(answer);
+	// 		// }
+	// 	}catch(Exception e){
+	// 		System.out.println("No AssessmentAnswer found");
+	// 	}
+	// 	return dto;
+	// }
+
+
 	@Override
 	public AssessmentAnswerDTO getAssessmentAnswer(Long assessmentId) {
 		AssessmentAnswerDTO dto = null;

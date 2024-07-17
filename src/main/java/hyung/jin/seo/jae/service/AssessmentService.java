@@ -5,7 +5,6 @@ import java.util.List;
 import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
 import hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO;
-import hyung.jin.seo.jae.dto.SimpleBasketDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;

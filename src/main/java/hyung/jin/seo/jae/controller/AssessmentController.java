@@ -29,18 +29,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
+import hyung.jin.seo.jae.dto.BranchDTO;
+import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO;
 import hyung.jin.seo.jae.dto.GuestStudentDTO;
+import hyung.jin.seo.jae.dto.InvoiceDTO;
+import hyung.jin.seo.jae.dto.MaterialDTO;
+import hyung.jin.seo.jae.dto.MoneyDTO;
+import hyung.jin.seo.jae.dto.OutstandingDTO;
 import hyung.jin.seo.jae.dto.SimpleBasketDTO;
+import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.GuestStudent;
 import hyung.jin.seo.jae.model.GuestStudentAssessment;
+import hyung.jin.seo.jae.model.Invoice;
+import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.service.AssessmentService;
 import hyung.jin.seo.jae.service.CodeService;
+import hyung.jin.seo.jae.service.EmailService;
+import hyung.jin.seo.jae.service.PdfService;
 import hyung.jin.seo.jae.utils.JaeConstants;
 import hyung.jin.seo.jae.utils.JaeUtils;
 
@@ -54,6 +65,11 @@ public class AssessmentController {
 	@Autowired
 	private AssessmentService assessmentService;
 
+	@Autowired
+	private PdfService pdfService;
+
+	@Autowired
+	private EmailService emailService;
 
 	// register test
 	@PostMapping("/addAssessment")
@@ -241,34 +257,38 @@ public class AssessmentController {
 	@GetMapping("/sendResult/{studentId}")
 	@ResponseBody
 	public ResponseEntity<String> finaliseResult(@PathVariable Long studentId) {
-		// 1. get GuestStudent info
+		// 1. create basket for pdf
+		Map<String, Object> ingredients = new HashMap<String, Object>();		
+		// 2. get GuestStudent info
 		GuestStudent guest = assessmentService.getGuestStudent(studentId);
-		String firstName = guest.getFirstName();
-		String lastName = guest.getLastName();
-		String branch = guest.getBranch();
-		String grade = guest.getGrade();
-		String email = guest.getEmail();
-		// 2. get guest student assessment
+		ingredients.put(JaeConstants.STUDENT_INFO, guest);
+		// 3. get guest student assessment
 		List<GuestStudentAssessmentDTO> gsas = assessmentService.getGuestStudentAssessmentByStudent(studentId);
-		// 3. get assessment answers
+		List<AssessmentAnswerDTO> aas = new ArrayList<>();
+		// 4. get assessment answers
 		for(GuestStudentAssessmentDTO gsa : gsas){
 			List<Integer> gsAnswer = gsa.getAnswers();
 			// print out gsAnswer
 			System.out.println("gsAnswer : " + gsAnswer);
+			AssessmentAnswerDTO aa = assessmentService.getAssessmentAnswer(gsa.getAssessmentId());
+			aas.add(aa);
 		}
-		// 4. create PDF
-
-		// 5. send email
-
+		//  correcct answers
+		for(AssessmentAnswerDTO aa : aas){
+			List<AssessmentAnswerItem> corrects = aa.getAnswers();
+			// print out corrects
+			System.out.println("corrects : " + corrects);
+		}
+		ingredients.put(JaeConstants.STUDENT_ANSWER, gsas);
+		ingredients.put(JaeConstants.CORRECT_ANSWER, aas);
+		// 5. create PDF
+		byte[] pdfData = pdfService.generateAssessmentPdf(ingredients);
+		// 6. send email
+		emailService.sendEmailWithAttachment("jin@gmail.com", "cailot@naver.com", "Sending from Spring Boot", "This is a test messasge", "receipt.pdf", pdfData);
 
 		// AssessmentAnswerDTO answer = assessmentService.getAssessmentAnswer(studentId);
 		return ResponseEntity.ok("\"Assessment result proccessed successfully\"");
 	}
-
-
-
-
-
 
 	// helper method converting test answers Map to List
 	private List<Integer> convertAssessmentAnswers(List<Map<String, Object>> answers) {
@@ -281,4 +301,6 @@ public class AssessmentController {
 		}
 		return answerList;
 	}
+
+
 }

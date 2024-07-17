@@ -314,28 +314,56 @@ public class JaeUtils {
         return rounded;
 	}
 
-		// calculate test score by comparing student answers and answer sheet
-		public static double calculateAssessmentScore(List<Integer> studentAnswers, List<AssessmentAnswerItem> answerSheet) {
-			// Check if both lists have the same size
-			if ((studentAnswers==null) || (answerSheet==null) || (studentAnswers.size() != answerSheet.size())) {
-				return 0;
-			}
-			int totalQuestions = answerSheet.size();
-	
-			// Iterate through the lists and compare corresponding elements
-			int correctAnswers = 0;
-			for (int i = 0; i < totalQuestions; i++) {
-				int studentAnswer = studentAnswers.get(i);
-				int correctAnswer = answerSheet.get(i).getAnswer();
-	
-				if (studentAnswer == correctAnswer) {
-					correctAnswers++;
-				}
-			}
-			// Calculate the final score as a percentage
-			double score = ((double) correctAnswers / totalQuestions) * 100;
-			double rounded = Math.round(score * 100.0) / 100.0;
-			return rounded;
+	// calculate test score by comparing student answers and answer sheet
+	public static double calculateAssessmentScore(List<Integer> studentAnswers, List<AssessmentAnswerItem> answerSheet) {
+		// Check if both lists have the same size
+		if ((studentAnswers==null) || (answerSheet==null) || (studentAnswers.size() != answerSheet.size())) {
+			return 0;
 		}
+		int totalQuestions = answerSheet.size();
+
+		// Iterate through the lists and compare corresponding elements
+		int correctAnswers = 0;
+		for (int i = 0; i < totalQuestions; i++) {
+			int studentAnswer = studentAnswers.get(i);
+			int correctAnswer = answerSheet.get(i).getAnswer();
+
+			if (studentAnswer == correctAnswer) {
+				correctAnswers++;
+			}
+		}
+		// Calculate the final score as a percentage
+		double score = ((double) correctAnswers / totalQuestions) * 100;
+		double rounded = Math.round(score * 100.0) / 100.0;
+		return rounded;
+	}
+	
+	// return grade name
+	public static String getGradeName(String value) {
+		String gradeText = "";
+		switch(value) {
+			case "1": gradeText = "P2"; break;
+			case "2": gradeText = "P3"; break;
+			case "3": gradeText = "P4"; break;
+			case "4": gradeText = "P5"; break;
+			case "5": gradeText = "P6"; break;
+			case "6": gradeText = "S7"; break;
+			case "7": gradeText = "S8"; break;
+			case "8": gradeText = "S9"; break;
+			case "9": gradeText = "S10"; break;
+			case "10": gradeText = "S10E"; break;
+			case "11": gradeText = "TT6"; break;
+			case "12": gradeText = "TT8"; break;
+			case "13": gradeText = "TT8E"; break;
+			case "14": gradeText = "SRW4"; break;
+			case "15": gradeText = "SRW5"; break;
+			case "16": gradeText = "SRW6"; break;
+			case "17": gradeText = "SRW7"; break;
+			case "18": gradeText = "SRW8"; break;
+			case "19": gradeText = "JMSS"; break;
+			case "20": gradeText = "VCE"; 
+		}
+		return gradeText;
+	}
 	
 }

@@ -167,7 +167,13 @@ public interface JaeConstants {
 
 	String INVOICE_PAID_AMOUNT = "invoicePaidAmount";
 
+	String INVOICE_BRANCH = "invoiceBranch";
+
 	String STUDENT_INFO = "studentInfo";
+
+	String STUDENT_ANSWER = "studentAnswer";
+
+	String CORRECT_ANSWER = "correctAnswer";
 
 	String CRITERIA_INFO = "criteriaInfo";
 

@@ -29,17 +29,9 @@ public class GuestStudentAssessmentDTO{
 
 	private List<Integer> answers;
 
-	public void setAnswers(List<Integer> answers) {
-		this.answers = answers;
-	}
-
-	// public GuestStudentAssessmentDTO(Long id, Long guestStudentId, Long assessmentId, double score, LocalDate registerDate) {
-    //     this.id = id;
-	// 	this.guestStudentId = guestStudentId;
-    //     this.assessmentId = assessmentId;
-	// 	this.score = score;
-	// 	this.registerDate =  registerDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    // }
+	// public void setAnswers(List<Integer> answers) {
+	// 	this.answers = answers;
+	// }
 
 	public GuestStudentAssessmentDTO(Long id, LocalDate registerDate, double score, Long guestStudentId, Long assessmentId) {
         this.id = id;
