@@ -39,11 +39,36 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jae.js"></script>
 <script>
-let selectedCount = 0;
-const totalCount = 3;
+var selectedCount = 0;
+var totalCount = 2;
 // Extract 'id' and 'grade' from the current URL
 let currentId = getQueryParam('id');
 let currentGrade = getQueryParam('grade');
+
+$(document).ready(function () {
+    $.ajax({
+        url: '${pageContext.request.contextPath}/assessment/listSubject/' + currentGrade,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+            // console.log(data);
+            if(data>=3){
+                // display GA
+                document.getElementById('gaTest').style.display = 'block';
+                totalCount = 3;
+            }else{
+                // hide GA
+                document.getElementById('gaTest').style.display = 'none';
+                // totalCount = 2;
+            }
+        },
+        error: function (xhr, status, error) {
+            console.log('Error Details: ' + error);
+        }
+    });
+
+});
 
 function updateSelectionCount() {
     const submitCount = document.getElementById('selectionCount');

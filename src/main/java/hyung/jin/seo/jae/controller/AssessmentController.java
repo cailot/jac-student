@@ -1,6 +1,5 @@
 package hyung.jin.seo.jae.controller;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,31 +21,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hyung.jin.seo.jae.dto.AssessmentAnswerDTO;
 import hyung.jin.seo.jae.dto.AssessmentDTO;
-import hyung.jin.seo.jae.dto.BranchDTO;
-import hyung.jin.seo.jae.dto.EnrolmentDTO;
 import hyung.jin.seo.jae.dto.GuestStudentAssessmentDTO;
 import hyung.jin.seo.jae.dto.GuestStudentDTO;
-import hyung.jin.seo.jae.dto.InvoiceDTO;
-import hyung.jin.seo.jae.dto.MaterialDTO;
-import hyung.jin.seo.jae.dto.MoneyDTO;
-import hyung.jin.seo.jae.dto.OutstandingDTO;
-import hyung.jin.seo.jae.dto.SimpleBasketDTO;
-import hyung.jin.seo.jae.dto.StudentDTO;
 import hyung.jin.seo.jae.model.Assessment;
 import hyung.jin.seo.jae.model.AssessmentAnswer;
 import hyung.jin.seo.jae.model.AssessmentAnswerItem;
 import hyung.jin.seo.jae.model.Grade;
 import hyung.jin.seo.jae.model.GuestStudent;
 import hyung.jin.seo.jae.model.GuestStudentAssessment;
-import hyung.jin.seo.jae.model.Invoice;
-import hyung.jin.seo.jae.model.Student;
 import hyung.jin.seo.jae.model.Subject;
 import hyung.jin.seo.jae.service.AssessmentService;
 import hyung.jin.seo.jae.service.CodeService;
@@ -123,6 +110,15 @@ public class AssessmentController {
 		Assessment work = assessmentService.getAssessment(id);
 		AssessmentDTO dto = new AssessmentDTO(work);
 		return dto;
+	}
+
+	@GetMapping("/listSubject/{grade}")
+	@ResponseBody
+	public int listSuject(@PathVariable String grade) {
+		List<AssessmentDTO> dtos = new ArrayList();
+		dtos = assessmentService.listAssessment(grade);		
+		// return count
+		return dtos.size();
 	}
 
 	// update existing practice
@@ -282,9 +278,10 @@ public class AssessmentController {
 		ingredients.put(JaeConstants.STUDENT_ANSWER, gsas);
 		ingredients.put(JaeConstants.CORRECT_ANSWER, aas);
 		// 5. create PDF
-		byte[] pdfData = pdfService.generateAssessmentPdf(ingredients);
+		//byte[] pdfData = pdfService.generateAssessmentPdf(ingredients);
+		pdfService.generateTestPdf(ingredients);
 		// 6. send email
-		emailService.sendEmailWithAttachment("jin@gmail.com", "cailot@naver.com", "Sending from Spring Boot", "This is a test messasge", "receipt.pdf", pdfData);
+		// emailService.sendEmailWithAttachment("kellyl@jamesancollegevic.com.au", "cailot@naver.com", "Sending from Spring Boot", "This is a test messasge", "receipt.pdf", pdfData);
 
 		// AssessmentAnswerDTO answer = assessmentService.getAssessmentAnswer(studentId);
 		return ResponseEntity.ok("\"Assessment result proccessed successfully\"");

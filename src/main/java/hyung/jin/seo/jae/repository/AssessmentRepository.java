@@ -26,7 +26,7 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Long>{
 	List<AssessmentDTO> findAssessmentByGradeNSubject(String grade, long subject);
 	
 	// bring AssessmentDTO by grade
-	@Query("SELECT new hyung.jin.seo.jae.dto.AssessmentDTO(a.id, a.pdfPath, a.active, a.grade.code, a.subject.id, a.registerDate) FROM Assessment a WHERE ?1 = '0' OR a.grade.code = ?1")
+	@Query("SELECT new hyung.jin.seo.jae.dto.AssessmentDTO(a.id, a.pdfPath, a.active, a.grade.code, a.subject.id, a.registerDate) FROM Assessment a WHERE (?1 = '0' OR a.grade.code = ?1) AND a.active = true")
 	List<AssessmentDTO> findAssessmentByGrade(String grade);
 
 	// bring AssessmentDTO by subject

@@ -1,5 +1,6 @@
 package hyung.jin.seo.jae.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -69,7 +70,7 @@ public class PdfServiceImpl implements PdfService {
 			List<AssessmentAnswerDTO> aas = (List<AssessmentAnswerDTO>) data.get(JaeConstants.CORRECT_ANSWER);
 			
 			// 1. button section
-			Image buttons = imageButtons();
+			Image buttons = imageLogo();
 			float x = wholeWidth/2 - 90;
 			float y = wholeHeight/2 + 380;
 			buttons.setFixedPosition(x, y);
@@ -112,6 +113,78 @@ public class PdfServiceImpl implements PdfService {
 			return null;
 		}
 	}
+
+	@Override
+	public void generateTestPdf(Map<String, Object> data) {
+		try {
+			// pdf directory - resources/pdf
+			String projectRootPath = new File("").getAbsolutePath();
+			String pdfDirectoryPath = projectRootPath + "/src/main/resources/pdf/";
+			File pdfDirectory = new File(pdfDirectoryPath);
+			if (!pdfDirectory.exists()) {
+				pdfDirectory.mkdirs();
+			}
+			String fullPath = pdfDirectoryPath + "test.pdf";
+
+			PdfWriter pdfWriter = new PdfWriter(fullPath);
+			PdfDocument pdfDocument = new PdfDocument(pdfWriter);
+			pdfDocument.setDefaultPageSize(PageSize.A4);
+			Document document = new Document(pdfDocument);
+			Paragraph onespace = new Paragraph("\n");
+			float wholeWidth = pdfDocument.getDefaultPageSize().getWidth(); // whole width
+			float wholeHeight = pdfDocument.getDefaultPageSize().getHeight(); // whole height
+			
+			// prepare ingredients
+			GuestStudent student = (GuestStudent) data.get(JaeConstants.STUDENT_INFO);
+			List<GuestStudentAssessmentDTO> gsas = (List<GuestStudentAssessmentDTO>) data.get(JaeConstants.STUDENT_ANSWER);
+			List<AssessmentAnswerDTO> aas = (List<AssessmentAnswerDTO>) data.get(JaeConstants.CORRECT_ANSWER);
+			
+			// 1. button section
+			Image buttons = imageLogo();
+			float x = 0;//wholeWidth/2 - 90;
+			float y = 0;//wholeHeight/2 + 380;
+			buttons.setFixedPosition(x, y);
+			document.add(buttons);
+			document.add(onespace);
+			document.add(onespace);
+
+			// 3. title section
+			// Table title = getReceiptTitleTable(wholeWidth, data);
+			// document.add(title);
+			// document.add(onespace);
+
+			// // 4. header section
+			// Table header = getHeaderTable(wholeWidth, data);
+			// document.add(header);
+
+			// // 5. detail section
+			// Object[] details = getReceiptDetailTable(wholeWidth, data);
+			// Table detail = (Table) details[0];
+			// double finalTotal = (double) details[1];
+			// double paidTotal = (double) details[2];
+			// document.add(detail);
+			// document.add(onespace);
+
+			// // 6. paid section
+			// Table paid = getReceiptPaidTable(wholeWidth, finalTotal, paidTotal);
+			// document.add(paid);
+			// document.add(onespace);
+			// document.add(onespace);
+
+			// // 7. note section
+			// Table note = getBranchNoteTable(wholeWidth, data);
+			// document.add(note);
+			document.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+
+
+
 
 	private Table getGreetingTable(float wholeWidth, GuestStudent data) throws MalformedURLException, URISyntaxException, IOException {
 		// float one = wholeWidth*2/3;
@@ -279,16 +352,8 @@ public class PdfServiceImpl implements PdfService {
 		return new Cell().add(contents).setFontSize(7f).setTextAlignment(TextAlignment.RIGHT).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER);
 	}
 
-	private Image imageButtons() throws URISyntaxException, MalformedURLException, IOException {
-		Resource resource = resourceLoader.getResource("classpath:static/assets/image/cc.png");
-		ImageData imageData = ImageDataFactory.create(resource.getFile().getAbsolutePath());
-		Image img = new Image(imageData);
-		img.scale(0.5f, 0.5f);
-		return img;
-	}
-
-	private Image imageInvoiceLogo() throws URISyntaxException, MalformedURLException, IOException {
-		Resource resource = resourceLoader.getResource("classpath:static/assets/image/cc.png");
+	private Image imageLogo() throws URISyntaxException, MalformedURLException, IOException {
+		Resource resource = resourceLoader.getResource("classpath:static/assets/image/logo_title.jpg");
 		ImageData imageData = ImageDataFactory.create(resource.getFile().getAbsolutePath());
 		Image img = new Image(imageData);
 		img.setAutoScale(true);
