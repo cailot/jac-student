@@ -223,6 +223,23 @@ function  gradeName(value){
 	return gradeText;
 }
 
+// get day name
+function  dayName(value){
+	var dayText = '';
+	switch(value) {
+		case '0': dayText = 'All'; break;
+		case '1': dayText = 'Monday'; break;
+		case '2': dayText = 'Tuesday'; break;
+		case '3': dayText = 'Wednesday'; break;
+		case '4': dayText = 'Thursday'; break;
+		case '5': dayText = 'Friday'; break;
+		case '6': dayText = 'SATAM'; break;
+		case '7': dayText = 'SATPM'; break;
+		case '8': dayText = 'SUNAM'; break;
+		case '9': dayText = 'SUNPM'; break;
+	}
+	return dayText;
+}
 
 // get the context path dynamically
 function getContextPath(){

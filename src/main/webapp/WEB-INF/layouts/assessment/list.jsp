@@ -38,139 +38,6 @@
     </style>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jae.js"></script>
-<script>
-var selectedCount = 0;
-var totalCount = 2;
-// Extract 'id' and 'grade' from the current URL
-let currentId = getQueryParam('id');
-let currentGrade = getQueryParam('grade');
-
-$(document).ready(function () {
-    $.ajax({
-        url: '${pageContext.request.contextPath}/assessment/listSubject/' + currentGrade,
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function (data) {
-            // console.log(data);
-            if(data>=3){
-                // display GA
-                document.getElementById('gaTest').style.display = 'block';
-                totalCount = 3;
-            }else{
-                // hide GA
-                document.getElementById('gaTest').style.display = 'none';
-                // totalCount = 2;
-            }
-        },
-        error: function (xhr, status, error) {
-            console.log('Error Details: ' + error);
-        }
-    });
-
-});
-
-function updateSelectionCount() {
-    const submitCount = document.getElementById('selectionCount');
-    submitCount.textContent = selectedCount + ' / ' + totalCount;
-    if(selectedCount == totalCount){
-        // enable button click
-        submitCount.classList.remove('btn-secondary');
-        submitCount.className = 'btn btn-primary';
-        submitCount.disabled = false;
-        submitCount.addEventListener('click', sendEmail);
-        // how to change label
-        submitCount.textContent = 'SUBMIT';
-    }
-}
-
-function getQueryParam(param) {
-    var urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-window.showWarning = function(id) {
-    // Show the warning modal
-    $('#testWarningModal').modal('show');
-    // Attach the click event handler to the "I agree" button
-    $('#agreeTestWarning').one('click', function() {
-        // if id = 1, link to /assessment/math, if id = 2, link to /assessment/english, if id = 3, link to /assessment/ga
-        if (id == 1) {
-            window.location.href = '${pageContext.request.contextPath}/assessment/math?id=' + currentId + '&grade=' + currentGrade;
-        } else if (id == 2) {
-            window.location.href = '${pageContext.request.contextPath}/assessment/english?id=' + currentId + '&grade=' + currentGrade;
-        } else if (id == 3) {
-            window.location.href = '${pageContext.request.contextPath}/assessment/ga?id=' + currentId + '&grade=' + currentGrade;
-        }
-    
-        $('#testWarningModal').modal('hide');
-    });
-}
-
-// Function to disable and change the 'mathTest' button's color if 'math=true' in the URL
-function modifyButtonBasedOnUrl() {
-    var mathParam = getQueryParam('math');
-    if(mathParam === 'true') {
-        var button = document.getElementById('mathTest');
-        button.className = 'btn btn-secondary'; // Change color to grey
-        button.disabled = true; // Disable the button
-        button.onclick = null; // Remove onclick event to disable it
-        selectedCount++;
-    }
-
-    var engParam = getQueryParam('english');
-    if(engParam === 'true') {
-        var button = document.getElementById('englishTest');
-        button.className = 'btn btn-secondary'; // Change color to grey
-        button.disabled = true; // Disable the button
-        button.onclick = null; // Remove onclick event to disable it
-        selectedCount++;
-    }
-
-    var gaParam = getQueryParam('ga');
-    if(gaParam === 'true') {
-        // Select the 'mathTest' button by its ID
-        var button = document.getElementById('gaTest');
-        button.className = 'btn btn-secondary'; // Change color to grey
-        button.disabled = true; // Disable the button
-        button.onclick = null; // Remove onclick event to disable it
-        selectedCount++;
-    }
-    updateSelectionCount();
-}
-
-// Call the function when the window loads
-window.onload = modifyButtonBasedOnUrl;
-
-//////////////////////////////////////////////////////////////////////////////
-// request sending results via email
-//////////////////////////////////////////////////////////////////////////////
-function sendEmail() {
-    // Send AJAX to server
-    $.ajax({
-        url: '${pageContext.request.contextPath}/assessment/sendResult/' + currentId,
-        type: 'GET',
-        dataType: 'json',
-        contentType: 'application/json',
-        success: function (data) {
-            // Display the success alert
-			$('#success-alert .modal-body').html('Sending result is now requested. You can close this window and check your email later. Thank you for participating in the assessment.');
-			$('#success-alert').modal('show');
-			$('#success-alert').on('hidden.bs.modal', function (e) {
-                document.getElementById('mathTest').disabled = true;
-                document.getElementById('englishTest').disabled = true;
-                document.getElementById('gaTest').disabled = true;
-                document.getElementById('selectionCount').disabled = true;
-			});
-        },
-        error: function (xhr, status, error) {
-            console.log('Error Details: ' + error);
-        }
-    });
-}
-
-
-</script>
 
 </head>
 <body>
@@ -179,8 +46,7 @@ function sendEmail() {
     <button class="btn btn-primary" id="mathTest" onclick="showWarning(1)">MATHS</button>
     <button class="btn btn-primary" id="englishTest" onclick="showWarning(2)">ENGLISH</button>
     <button class="btn btn-primary" id="gaTest" onclick="showWarning(3)">GA</button>
-    
-    <button class="btn btn-secondary disabled mt-3" id="selectionCount">0 / 3</button>
+    <button class="btn btn-secondary disabled mt-3" id="selectionCount"><span id="selectCountDisplay">0</span> / <span id="totalCountDisplay">0</span></button>
 </div>
 
 <!--Test Warning Modal -->
@@ -223,3 +89,141 @@ function sendEmail() {
 </div>
 </body>
 </html>
+<script>
+var selectedCount = 0;
+// Extract 'id' and 'grade' from the current URL
+let currentId = getQueryParam('id');
+let currentGrade = getQueryParam('grade');
+
+$(document).ready(function () {
+    $.ajax({
+        url: '${pageContext.request.contextPath}/assessment/listSubject/' + currentGrade,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+            if (data > 2) {
+                // display GA
+                document.getElementById('gaTest').style.display = 'block';
+                updateTotalCountDisplay(3);
+            } else {
+                // hide GA
+                document.getElementById('gaTest').style.display = 'none';
+                updateTotalCountDisplay(2);
+            }
+            updateSelectionCount(); // Call updateSelectionCount after updating totalCountDisplay
+        },
+        error: function (xhr, status, error) {
+            console.log('Error Details: ' + error);
+        }
+    });
+
+    if ((getQueryParam('math') != null) || (getQueryParam('english') != null) || (getQueryParam('ga') != null)) {
+        modifyButtonBasedOnUrl();
+    }
+});
+
+// update totalCount
+function updateTotalCountDisplay(count) {
+    console.log('Updating total count display to:', count); // Debugging log
+    document.getElementById('totalCountDisplay').textContent = count;
+}
+
+// update selectionCount
+function updateSelectionCount() {
+    const submitCount = document.getElementById('selectCountDisplay');
+    submitCount.textContent = selectedCount;
+    const totalCount = parseInt(document.getElementById('totalCountDisplay').textContent, 10);
+
+    console.log(selectedCount + '---> ' + totalCount);
+    if (selectedCount === totalCount) {
+        // enable button click
+        const selectionCountButton = document.getElementById('selectionCount');
+        selectionCountButton.classList.remove('btn-secondary');
+        selectionCountButton.className = 'btn btn-primary';
+        selectionCountButton.disabled = false;
+        selectionCountButton.addEventListener('click', sendEmail);
+        // change label
+        selectionCountButton.textContent = 'SUBMIT';
+    }
+}
+
+function getQueryParam(param) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+window.showWarning = function(id) {
+    // Show the warning modal
+    $('#testWarningModal').modal('show');
+    // Attach the click event handler to the "I agree" button
+    $('#agreeTestWarning').one('click', function() {
+        // Redirect based on the test id
+        if (id == 1) {
+            window.location.href = '${pageContext.request.contextPath}/assessment/math?id=' + currentId + '&grade=' + currentGrade;
+        } else if (id == 2) {
+            window.location.href = '${pageContext.request.contextPath}/assessment/english?id=' + currentId + '&grade=' + currentGrade;
+        } else if (id == 3) {
+            window.location.href = '${pageContext.request.contextPath}/assessment/ga?id=' + currentId + '&grade=' + currentGrade;
+        }
+        $('#testWarningModal').modal('hide');
+    });
+}
+
+// Function to disable and change the 'mathTest' button's color if 'math=true' in the URL
+function modifyButtonBasedOnUrl() {
+    var mathParam = getQueryParam('math');
+    if (mathParam === 'true') {
+        var button = document.getElementById('mathTest');
+        button.className = 'btn btn-secondary'; // Change color to grey
+        button.disabled = true; // Disable the button
+        button.onclick = null; // Remove onclick event to disable it
+        selectedCount++;
+    }
+
+    var engParam = getQueryParam('english');
+    if (engParam === 'true') {
+        var button = document.getElementById('englishTest');
+        button.className = 'btn btn-secondary'; // Change color to grey
+        button.disabled = true; // Disable the button
+        button.onclick = null; // Remove onclick event to disable it
+        selectedCount++;
+    }
+
+    var gaParam = getQueryParam('ga');
+    if (gaParam === 'true') {
+        // Select the 'mathTest' button by its ID
+        var button = document.getElementById('gaTest');
+        button.className = 'btn btn-secondary'; // Change color to grey
+        button.disabled = true; // Disable the button
+        button.onclick = null; // Remove onclick event to disable it
+        selectedCount++;
+    }
+    updateSelectionCount();
+}
+
+// request sending results via email
+function sendEmail() {
+    // Send AJAX to server
+    $.ajax({
+        url: '${pageContext.request.contextPath}/assessment/sendResult/' + currentId,
+        type: 'GET',
+        dataType: 'json',
+        contentType: 'application/json',
+        success: function (data) {
+            // Display the success alert
+            $('#success-alert .modal-body').html('Sending result is now requested. You can close this window and check your email later. Thank you for participating in the assessment.');
+            $('#success-alert').modal('show');
+            $('#success-alert').on('hidden.bs.modal', function (e) {
+                document.getElementById('mathTest').disabled = true;
+                document.getElementById('englishTest').disabled = true;
+                document.getElementById('gaTest').disabled = true;
+                document.getElementById('selectionCount').disabled = true;
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log('Error Details: ' + error);
+        }
+    });
+}
+</script>
