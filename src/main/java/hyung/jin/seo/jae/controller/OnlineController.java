@@ -25,9 +25,6 @@ public class OnlineController {
 	@GetMapping("/getLive/{id}/{year}/{week}")
 	@ResponseBody
 	public OnlineSessionDTO getOnlineLive(@PathVariable("id") long id, @PathVariable("year") int year, @PathVariable("week") int week) {	
-		// if week is first week of academic year, check student's register date is more than a month.
-		// if yes, then get previous grade's last week content.
-		
 		// 1. get clazzId via Enrolment with parameters - studentId, year, week, online
 		Long clazzId = enrolmentService.findClazzId4OnlineSession(id, year, week);
 		// 2. get OnlineSession by clazzId, set (week-1)
@@ -40,6 +37,10 @@ public class OnlineController {
 	@GetMapping("/getRecord/{id}/{year}/{week}/{set}")
 	@ResponseBody
 	public OnlineSessionDTO getOnlineRecorded(@PathVariable("id") long id, @PathVariable("year") int year, @PathVariable("week") int week, @PathVariable("set") int set) {	
+		// if week is first week of academic year, check student's register date is more than a month.
+		// if yes, then get previous grade's last week content.
+		
+
 		// 1. get clazzId via Enrolment with parameters - studentId, year, week, online
 		Long clazzId = enrolmentService.findClazzId4OnlineSession(id, year, week);
 		// 2. get OnlineSession by clazzId, set (week-1)

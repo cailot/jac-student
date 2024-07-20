@@ -325,8 +325,8 @@ function getTimeForDayAndTime(day, time) {
 		width: 1000px;
 		height: 550px;
 		border: none;
-		background: url('${pageContext.request.contextPath}/image/video-thumbnail.png') center center no-repeat;
-		background-size: 40%;
+		background: url('${pageContext.request.contextPath}/image/lecture.jpg') center center no-repeat;
+		background-size: 60%;
 	}
 
 </style>
