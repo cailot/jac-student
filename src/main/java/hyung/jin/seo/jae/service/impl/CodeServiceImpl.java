@@ -351,4 +351,15 @@ public class CodeServiceImpl implements CodeService {
 		return dtos;
 	}
 
+	@Override
+	public String getPreviousGrade(String code) {
+		String previous = "0";
+		try{
+			previous = gradeRepository.getPrevious(code);
+		}catch(Exception e){
+			System.out.println("No Grade found");
+		}
+		return previous;
+	}
+
 }

@@ -331,22 +331,24 @@ function getTimeForDayAndTime(day, time) {
 
 </style>
 <div class="container-fluid pl-0 pr-0">
-        <div class="card-body jae-background-color text-center pt-4">
-            <img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light align-middle h1">Jac-eLearning Student Lecture</span>           
-        </div>
-		<sec:authorize access="isAuthenticated()">
-			<div class="card-body jae-background-color text-right" style="display: flex; align-items: center; justify-content: space-between; padding-top: 0px;">
-				<div>
+        <sec:authorize access="isAuthenticated()">
+			<div class="card-body jae-background-color" style="display: flex; align-items: center; justify-content: space-between; padding-top: 0px;">
+				<div class="content-container">
 					<span class="card-text text-warning font-weight-bold font-italic h5" style="margin-left: 25px;" id="studentName" onclick="clearPassword();retrieveStudentInfo()">${firstName} ${lastName}</span>
 					<span style="color: white;">&nbsp;&nbsp;(</span>
 					<span class="card-text" id="studentGrade" name="studentGrade" style="color: white;"></span>
 					<span style="color: white;">)  </span>
 					<script>document.getElementById("studentGrade").textContent = displayGrade();</script>
 				</div>
-				<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
-					<button class="btn" style="margin-right: 20px;"><i class="bi bi-box-arrow-right custom-icon text-warning" title="Log Out"></i></button>
-				</form:form>
+				<div class="card-body jae-background-color text-center">
+					<img src="${pageContext.request.contextPath}/image/logo.png" style="filter: brightness(0) invert(1);width:75px;" >
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="text-light align-middle h1">Jac-eLearning Student Lecture</span>           
+				</div>
+				<div>
+					<form:form action="${pageContext.request.contextPath}/online/logout" method="POST" id="logout">
+						<button class="btn" style="margin-right: 20px;"><i class="bi bi-box-arrow-right custom-icon text-warning" title="Log Out"></i></button>
+					</form:form>
+				</div>
 			</div>
 		</sec:authorize>
         <!-- HTML with additional container -->

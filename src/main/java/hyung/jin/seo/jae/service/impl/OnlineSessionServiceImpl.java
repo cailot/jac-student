@@ -174,4 +174,15 @@ public class OnlineSessionServiceImpl implements OnlineSessionService {
 		return dto;
     }
 
+	@Override
+	public OnlineSessionDTO getOnlineSessionByGradeNSetNYear(String grade, int set, int year) {
+		OnlineSessionDTO dto = null;
+		try{
+			dto = onlineSessionRepository.filterOnlineSessionByGradeNSetNYear(grade, set, year);
+		}catch(Exception e){
+			System.out.println("No OnlineSession found");
+		}
+		return dto;
+	}
+
 }

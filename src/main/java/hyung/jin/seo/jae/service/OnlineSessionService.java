@@ -42,4 +42,7 @@ public interface OnlineSessionService {
 	// find session by id
 	OnlineSessionDTO getOnlineSession(Long id);
 
+	// find session by grade, set and year
+	OnlineSessionDTO getOnlineSessionByGradeNSetNYear(String grade, int set, int year); 
+
 }

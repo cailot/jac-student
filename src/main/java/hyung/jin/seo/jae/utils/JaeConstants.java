@@ -75,9 +75,12 @@ public interface JaeConstants {
 	String JMSS = "jmss";
 	
 	String VCE = "vce";
+
+	String TT8_CODE = "12";
+
+	String NO_PREVIOUS_GRADE = "0";
 	
-	
-	
+	///////////////////////////////////////////////////////////////////////
 	
 	String STUDENT_LIST = "StudentList";
 	

@@ -32,6 +32,9 @@ public class Grade {
     @Column(length = 2, nullable = false)
     private String code;
     
+    @Column(length = 2, nullable = false)
+    private String previous;
+    
     @Column(length = 10, nullable = false)
     private String name;
     

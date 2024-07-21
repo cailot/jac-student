@@ -39,4 +39,8 @@ public interface OnlineSessionRepository extends JpaRepository<OnlineSession, Lo
     @Query("SELECT o FROM OnlineSession o WHERE o.clazz.id = ?1 AND o.week = ?2 AND o.active = true")
 	OnlineSessionDTO getOnlineSessionByClazzNWeek(@Param("clazzId") long clazzId, @Param("week") int week);
 
+	// get Online by grade, set & year
+	@Query("SELECT new hyung.jin.seo.jae.dto.OnlineSessionDTO(o.id, o.active, o.week, o.address, o.clazz.course.grade, o.day, o.startTime, o.endTime, o.clazz.course.cycle.year, o.registerDate, o.clazz.id) FROM OnlineSession o WHERE (?1 = '0' OR o.clazz.course.grade = ?1) AND (?2 = 0 OR o.week = ?2) AND (?3 = 0 OR o.clazz.course.cycle.year = ?3)")
+	OnlineSessionDTO filterOnlineSessionByGradeNSetNYear(String grade, int set, int year);
+
 }

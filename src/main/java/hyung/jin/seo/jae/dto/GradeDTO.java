@@ -20,11 +20,14 @@ public class GradeDTO implements Serializable{
 
 	private String code;
 
+	private String previous;
+
 	private String name;
 
 	public GradeDTO(Grade grade){
 		this.id = (grade.getId()!=null) ? grade.getId().toString() : "";
 		this.code = (grade.getCode()!=null) ? grade.getCode() : "";
+		this.previous = (grade.getPrevious()!=null) ? grade.getPrevious() : "";
 		this.name = (grade.getName()!=null) ? grade.getName() : "";
 	}
 

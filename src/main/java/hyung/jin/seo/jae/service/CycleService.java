@@ -26,6 +26,9 @@ public interface CycleService {
 	// get academic week by date
 	int academicWeeks(String date);
 
+	// get last academic week
+	int lastAcademicWeek(int year);
+
 	// check if todate belongs to holiday
 	boolean isBelongToHoliday();
 

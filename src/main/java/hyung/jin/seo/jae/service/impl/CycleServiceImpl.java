@@ -7,7 +7,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 
-import static java.time.temporal.TemporalAdjusters.next;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -201,97 +200,6 @@ public class CycleServiceImpl implements CycleService {
 		return weeks + 1;
 	}
 
-	/*
-	// return weeks number based on academic year
-	// week starts from Sunday to Monday
-	@Override
-	public int academicWeeks(){
-		LocalDate today = LocalDate.now();
-		int currentYear = today.getYear();
-		int academicYear = academicYear();
-		int weeks = 0;
-		String academicDate = "";
-		String vacationStartDate = "";
-		String vacationEndDate = "";
-		// bring academic start date
-		for(CycleDTO dto : cycles){
-			if(dto.getYear().equals(Integer.toString(academicYear))){
-				academicDate = dto.getStartDate();
-				vacationStartDate = dto.getVacationStartDate();
-				vacationEndDate = dto.getVacationEndDate();
-				break;
-			}
-		}
-		LocalDate academicStart = LocalDate.parse(academicDate);
-		LocalDate vacationStart = LocalDate.parse(vacationStartDate);
-		LocalDate vacationEnd = LocalDate.parse(vacationEndDate);
-		
-		if(currentYear==academicYear) { // from June to December
-			// compare today's date with vacation start date
-			if(today.isBefore(vacationStart)) { // simply calculate weeks
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, today);
-			}else { // set weeks as xmas week
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, vacationStart) - 1;
-			}
-		}else { // from January to June
-			// simply calculate since last year starting date - 3 weeks (xmas holidays)
-			// compare today's date with vacation end date
-			if(today.isBefore(vacationEnd)) { // until vacation start date
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, vacationStart) - 1;
-			}else{
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, today) - 3; // 3 weeks for xmas holidays
-			}		
-		}
-		return (weeks+1); // calculation must start from 1 not 0
-	}
-
-	// Week starts from Sunday to Saturday
-	@Override
-	public int academicWeeks(String date){
-		// if not formatted date passed, return 0
-		if(!JaeUtils.isValidDateFormat(date)) return 0;
-		LocalDate specificDate = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-		int currentYear = specificDate.getYear();
-		int academicYear = academicYear(date);
-		int weeks = 0;
-		String academicDate = "";
-		String vacationStartDate = "";
-		String vacationEndDate = "";
-
-		// bring academic start date & end date
-		for(CycleDTO dto : cycles){
-			if(dto.getYear().equals(Integer.toString(academicYear))){
-				academicDate = dto.getStartDate();
-				vacationStartDate = dto.getVacationStartDate();
-				vacationEndDate = dto.getVacationEndDate();
-				break;
-			}
-		}
-		// convert to LocalDate
-		LocalDate academicStart = LocalDate.parse(academicDate);
-		LocalDate vacationStart = LocalDate.parse(vacationStartDate);
-		LocalDate vacationEnd = LocalDate.parse(vacationEndDate);
-			
-		if(currentYear==academicYear) { // from June to December
-			// compare today's date with vacation start date
-			if(specificDate.isBefore(vacationStart)) { // simply calculate weeks
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, specificDate);
-			}else { // set weeks as xmas week
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, vacationStart) - 1;
-			}
-		}else { // from January to June
-			// simply calculate since last year starting date - 3 weeks (xmas holidays)
-			// compare today's date with vacation end date
-			if(specificDate.isBefore(vacationEnd)) { // until vacation start date
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, vacationStart) - 1;
-			}else{
-				weeks = (int) ChronoUnit.WEEKS.between(academicStart, specificDate) - 3; // 3 weeks for xmas holidays
-			}		
-		}
-		return (weeks+1); // calculation must start from 1 not 0
-	}
-	*/
-
 	@Override
 	public boolean isBelongToHoliday(){
 		boolean isBelongToHoliday = false;
@@ -379,35 +287,6 @@ public class CycleServiceImpl implements CycleService {
 		return cycle;
 	}
 
-	/*
-	@Override
-	public String academicStartSunday(int year, int week) {
-		String startDate = getStartDate(year);
-		String vacationStartDate = getVacationStartDate(year);
-		int vacationStartWeek = 0;
-		try {
-			vacationStartWeek = academicWeeks(JaeUtils.convertToddMMyyyyFormat(vacationStartDate));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		if(week <= vacationStartWeek){ // 1. before vacation starts
-			LocalDate academicYearStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-			LocalDate weekStartDay = academicYearStartDate.plusWeeks(week - 1);		
-			String formattedWeekStartDay = weekStartDay.format(dateFormatter);
-			return formattedWeekStartDay;
-		}else{ // 2. afterf vactation ends
-			String vacationEndDate = getVacationEndDate(year);
-			int delta = week - vacationStartWeek;
-			LocalDate academicYearVactoionEndDate = LocalDate.parse(vacationEndDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-			// get next sunday of vacation end date
-			LocalDate resumeStartDay = academicYearVactoionEndDate.with(next(DayOfWeek.SUNDAY));		
-			LocalDate weekStartDay = resumeStartDay.plusWeeks(delta - 1);				
-			String formattedWeekStartDay = weekStartDay.format(dateFormatter);
-			return formattedWeekStartDay;
-		}
-	}
-	*/
-
 	@Override
 	public String academicStartMonday(int year, int week) {
 		String startDate = getStartDate(year);
@@ -435,13 +314,8 @@ public class CycleServiceImpl implements CycleService {
 		}
 	}
 
-
-
-
-
-/* 
 	@Override
-	public String academicEndSaturday(int year, int week) {
+	public String academicEndSunday(int year, int week) {
 		String startDate = getStartDate(year);
 		String vacationStartDate = getVacationStartDate(year);
 		int vacationStartWeek = 0;
@@ -453,59 +327,21 @@ public class CycleServiceImpl implements CycleService {
 		if(week <= vacationStartWeek){ // 1. before vacation starts
 			LocalDate academicYearStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 			LocalDate weekStartDay = academicYearStartDate.plusWeeks(week - 1);
-			LocalDate weekEndDay = weekStartDay.plusDays(6);		
-			String formattedWeekStartDay = weekEndDay.format(dateFormatter);
-			return formattedWeekStartDay;
-		}else{ // 2. afterf vactation ends
+			LocalDate weekEndDay = weekStartDay.plusDays(6); // Adjusted to end on Sunday      
+			String formattedWeekEndDay = weekEndDay.format(dateFormatter);
+			return formattedWeekEndDay;
+		}else{ // 2. after vacation ends
 			String vacationEndDate = getVacationEndDate(year);
 			int delta = week - vacationStartWeek;
-			LocalDate academicYearVactoionEndDate = LocalDate.parse(vacationEndDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-			// get next sunday of vacation end date
-			LocalDate resumeStartDay = academicYearVactoionEndDate.with(next(DayOfWeek.SATURDAY));		
-			LocalDate weekStartDay = resumeStartDay.plusWeeks(delta - 1);				
-			String formattedWeekStartDay = weekStartDay.format(dateFormatter);
-			return formattedWeekStartDay;
+			LocalDate academicYearVacationEndDate = LocalDate.parse(vacationEndDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			// Adjust to get next Sunday of vacation end date
+			LocalDate resumeStartDay = academicYearVacationEndDate.plusDays(1).with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));     
+			LocalDate weekStartDay = resumeStartDay.plusWeeks(delta - 1);             
+			LocalDate weekEndDay = weekStartDay.plusDays(7); // Corrected to ensure it ends on Sunday
+			String formattedWeekEndDay = weekEndDay.format(dateFormatter);
+			return formattedWeekEndDay;
 		}
 	}
-*/
-
-@Override
-public String academicEndSunday(int year, int week) {
-	String startDate = getStartDate(year);
-	String vacationStartDate = getVacationStartDate(year);
-	int vacationStartWeek = 0;
-	try {
-		vacationStartWeek = academicWeeks(JaeUtils.convertToddMMyyyyFormat(vacationStartDate));
-	} catch (ParseException e) {
-		e.printStackTrace();
-	}
-	if(week <= vacationStartWeek){ // 1. before vacation starts
-		LocalDate academicYearStartDate = LocalDate.parse(startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		LocalDate weekStartDay = academicYearStartDate.plusWeeks(week - 1);
-		LocalDate weekEndDay = weekStartDay.plusDays(6); // Adjusted to end on Sunday      
-		String formattedWeekEndDay = weekEndDay.format(dateFormatter);
-		return formattedWeekEndDay;
-	}else{ // 2. after vacation ends
-		String vacationEndDate = getVacationEndDate(year);
-		int delta = week - vacationStartWeek;
-		LocalDate academicYearVacationEndDate = LocalDate.parse(vacationEndDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-		// Adjust to get next Sunday of vacation end date
-		LocalDate resumeStartDay = academicYearVacationEndDate.plusDays(1).with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));     
-		LocalDate weekStartDay = resumeStartDay.plusWeeks(delta - 1);             
-		LocalDate weekEndDay = weekStartDay.plusDays(7); // Corrected to ensure it ends on Sunday
-		String formattedWeekEndDay = weekEndDay.format(dateFormatter);
-		return formattedWeekEndDay;
-	}
-}
-
-
-
-
-
-
-
-
-
 
 	// get start date of academic year
 	private String getStartDate(int year){
@@ -571,22 +407,25 @@ public String academicEndSunday(int year, int week) {
 	public LocalDate getDateByWeekAndDay(int year, int week, String day) {
 		String start = academicStartMonday(year, week);
 		switch(day){
-			// case "Sunday":
 			// 	return start;
-			case "Monday":
-				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(1);
-			case "Tuesday":
-				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(2);
-			case "Wednesday":
-				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(3);
-			case "Thursday":
-				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(4);
-			case "Friday":
-				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(5);
-			case "Saturday":
-				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(6);
-			default: // Sunday or All
+			case "1":
 				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+			case "2":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(1);
+			case "3":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(2);
+			case "4":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(3);
+			case "5":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(4);
+			case "6":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(5);
+			case "7":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(5);
+			case "8":
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(6);
+			default:
+				return LocalDate.parse(start, DateTimeFormatter.ofPattern("dd/MM/yyyy")).plusDays(6);
 		}
 	}
 
@@ -644,5 +483,25 @@ public String academicEndSunday(int year, int week) {
 		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
 			System.out.println("Nothing to delete");
 		}
+	}
+
+	@Override
+	public int lastAcademicWeek(int year) {
+		int lastWeek = 0;
+		if(cycles==null) {
+			cycles = (List<CycleDTO>) applicationContext.getBean(JaeConstants.ACADEMIC_CYCLES);
+		}
+		for(CycleDTO dto : cycles){
+			if(dto.getYear().equals(Integer.toString(year))){
+				String endDate = dto.getEndDate();
+				try {
+					lastWeek = academicWeeks(JaeUtils.convertToddMMyyyyFormat(endDate));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				break;
+			}
+		}
+		return lastWeek;
 	}
 }

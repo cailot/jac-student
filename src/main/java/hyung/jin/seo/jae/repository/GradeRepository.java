@@ -12,4 +12,7 @@ public interface GradeRepository extends JpaRepository<Grade, Long>{
 	
 	@Query(value = "SELECT g.name, g.code FROM Grade g", nativeQuery = true)   
 	List<Object[]> loadGrade();
+
+	@Query(value = "SELECT g.previous FROM Grade g WHERE g.code = ?1")   
+	String getPrevious(String code);
 }

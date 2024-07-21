@@ -69,6 +69,9 @@ public interface CodeService {
 	// delete grade
 	void deleteGrade(Long id);
 
+	// get previous grade
+	String getPreviousGrade(String code);
+
 	// list all subjcet
 	List<SubjectDTO> allSubjects();
 
