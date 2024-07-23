@@ -140,22 +140,26 @@ public class PdfServiceImpl implements PdfService {
 			List<AssessmentAnswerDTO> aas = (List<AssessmentAnswerDTO>) data.get(JaeConstants.CORRECT_ANSWER);
 			
 			// 1. button section
-			Image buttons = imageLogo();
-			float x = 0;//wholeWidth/2 - 90;
-			float y = 0;//wholeHeight/2 + 380;
-			buttons.setFixedPosition(x, y);
-			document.add(buttons);
+			Image header = imageLogo();
+			// float imageWidth = header.getImageScaledWidth();
+			// float imageHeight = header.getImageScaledHeight();
+
+			float x = wholeWidth/2 - 250;
+			float y = wholeHeight/2 + 330;
+
+			header.setFixedPosition(x, y);
+			document.add(header);
 			document.add(onespace);
 			document.add(onespace);
 
-			// 3. title section
-			// Table title = getReceiptTitleTable(wholeWidth, data);
-			// document.add(title);
-			// document.add(onespace);
+			// 2. student info section
+			Table title = getStudentTable(wholeWidth, student, gsas);
+			document.add(title);
+			document.add(onespace);
 
-			// // 4. header section
-			// Table header = getHeaderTable(wholeWidth, data);
-			// document.add(header);
+			// 3. answer section// // 4. header section
+			Table answer = getAnswerTable(wholeWidth, gsas, aas);
+			document.add(answer);
 
 			// // 5. detail section
 			// Object[] details = getReceiptDetailTable(wholeWidth, data);
@@ -172,8 +176,8 @@ public class PdfServiceImpl implements PdfService {
 			// document.add(onespace);
 
 			// // 7. note section
-			// Table note = getBranchNoteTable(wholeWidth, data);
-			// document.add(note);
+			Table note = getBranchNoteTable(wholeWidth, student);
+			document.add(note);
 			document.close();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -185,19 +189,42 @@ public class PdfServiceImpl implements PdfService {
 
 
 
-
-	private Table getGreetingTable(float wholeWidth, GuestStudent data) throws MalformedURLException, URISyntaxException, IOException {
-		// float one = wholeWidth*2/3;
-		// float two = wholeWidth/3;
-		float columnWith[] = {wholeWidth};
-		//BranchDTO branch = data.get(JaeConstants.INVOICE_BRANCH) != null ? (BranchDTO) data.get(JaeConstants.INVOICE_BRANCH) : new BranchDTO();
-		Table table = new Table(columnWith);
-		table.addCell(new Cell().add("Dear....").setBorder(Border.NO_BORDER).setBold().setFontSize(20f).setVerticalAlignment(VerticalAlignment.MIDDLE));
+	// student info section
+	private Table getStudentTable(float wholeWidth, GuestStudent guest, List<GuestStudentAssessmentDTO> gsas){
+		int subjectCount = gsas.size();
+		double total = 0;
+		for(GuestStudentAssessmentDTO dto : gsas){
+			total += dto.getScore();
+		}
+		double average = total/subjectCount;
+		Table table = new Table(new float[]{wholeWidth});
+		table.addCell(new Cell().add("Dear " + guest.getFirstName() + " " + guest.getLastName()).setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
+		table.addCell(new Cell().add("Thank you for participating in the James An College " + JaeUtils.getGradeName(guest.getGrade()) + " Assessment Test.").setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
+		table.addCell(new Cell().add("Your marks are indicated below in detail. (Average score for " + subjectCount + " subject/s : " + average + "%)").setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
+		// subject table
+		float[] subjects = (subjectCount > 2) ? new float[]{wholeWidth/3, wholeWidth/3, wholeWidth/3} : new float[]{wholeWidth/2, wholeWidth/2};
+		Table subjectTable = new Table(subjects);		
+		for(GuestStudentAssessmentDTO dto : gsas){
+			subjectTable.addCell(new Cell().add(dto.getSubject() + " Mark : " + dto.getScore()).setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
+		}
+		table.addCell(new Cell().add(subjectTable).setBorder(Border.NO_BORDER));
 		return table;
 	}
 
-	private Table getHeaderTable(float wholeWidth, Map<String, Object> data) {
-		Table header = new Table(new float[]{wholeWidth/2, wholeWidth/2});
+	// answer section
+	private Table getAnswerTable(float wholeWidth, List<GuestStudentAssessmentDTO> gsas, List<AssessmentAnswerDTO> aas){ 
+		
+		for(GuestStudentAssessmentDTO dto : gsas){
+			// for(AssessmentAnswerDTO aadto : aas){
+			// 	if(dto.getSubject().equals(aadto.getSubject())){
+			// 		dto.setAnswers(aadto.getAnswers());
+			// 	}
+			// }
+			Table header = new Table(new float[]{wholeWidth});
+			header.addCell(boldCell(dto.getSubject()).setBorder(Border.NO_BORDER));
+			
+		}
+		
 		Table nested1 = new Table(new float[]{(wholeWidth/2)/4, (wholeWidth/2)*3/4});
 		MoneyDTO money = data.get(JaeConstants.PAYMENT_HEADER) != null ? (MoneyDTO) data.get(JaeConstants.PAYMENT_HEADER) : new MoneyDTO();
 		InvoiceDTO invoice = data.get(JaeConstants.INVOICE_INFO) != null ? (InvoiceDTO) data.get(JaeConstants.INVOICE_INFO) : new InvoiceDTO();
@@ -313,18 +340,12 @@ public class PdfServiceImpl implements PdfService {
 		return paid;
 	}
 
-	private Table getBranchNoteTable(float wholeWidth, Map<String, Object> data) {
-		BranchDTO branch = data.get(JaeConstants.INVOICE_BRANCH) != null ? (BranchDTO) data.get(JaeConstants.INVOICE_BRANCH) : new BranchDTO();
+	// branch note section
+	private Table getBranchNoteTable(float wholeWidth, GuestStudent guest) {
 		Table note = new Table(new float[]{wholeWidth}).setBorder(new SolidBorder(0.5f));
-		note.addCell(boldCell("Note :").setItalic().setFontSize(8f).setBold().setBorder(Border.NO_BORDER).setPaddingLeft(5));
-		//String content = "1. Total payment dute in 14 days<br>2. Please make payment to the following account<br>3. Please use the invoice number as the reference when making payment<br>4. If you have any questions about this invoice, please contact Jin Seo on 03 9361 0051";
-		String content = branch.getInfo();
-		String[] contents = StringUtils.splitByWholeSeparator(content, "<br/>");
-		if(contents != null){
-			for(String msg : contents){
-				note.addCell(new Cell().add(msg).setFontSize(8f).setBorder(Border.NO_BORDER).setPaddingLeft(10));
-			}
-		}
+		note.addCell(boldCell("Thank you once again for taking part in James An College Assessment Test.").setItalic().setFontSize(8f).setBold().setBorder(Border.NO_BORDER).setPaddingLeft(5));
+		String branch = JaeUtils.getBranchName(guest.getBranch());
+		note.addCell(boldCell(branch + " James An College").setItalic().setFontSize(8f).setBold().setBorder(Border.NO_BORDER).setPaddingLeft(5));
 		return note;
 	}
 

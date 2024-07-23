@@ -265,7 +265,7 @@ public class AssessmentController {
 		for(GuestStudentAssessmentDTO gsa : gsas){
 			List<Integer> gsAnswer = gsa.getAnswers();
 			// print out gsAnswer
-			System.out.println("gsAnswer : " + gsAnswer);
+			//System.out.println("gsAnswer : " + gsAnswer);
 			AssessmentAnswerDTO aa = assessmentService.getAssessmentAnswer(gsa.getAssessmentId());
 			aas.add(aa);
 		}
