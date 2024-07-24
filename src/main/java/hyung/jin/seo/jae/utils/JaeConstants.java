@@ -260,4 +260,14 @@ public interface JaeConstants {
 
 	String STAFF = "Staff";
 
+	////////////////////////////////////
+	//
+	//	SUBJECT
+	//
+	////////////////////////////////////
+	String SUBJECT_MATH = "Maths";
+
+	String SUBJECT_ENGLISH = "English";
+
+	String SUBJECT_GA = "General Ability";
 }

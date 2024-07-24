@@ -8,7 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.StyleConstants.ColorConstants;
+
+import java.awt.Color;
+
 import org.apache.commons.lang3.StringUtils;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtils;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -17,7 +32,8 @@ import org.springframework.stereotype.Service;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.io.source.ByteArrayOutputStream;
-import com.itextpdf.kernel.color.Color;
+// import com.itextpdf.kernel.color.Color;
+// import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -131,6 +147,7 @@ public class PdfServiceImpl implements PdfService {
 			pdfDocument.setDefaultPageSize(PageSize.A4);
 			Document document = new Document(pdfDocument);
 			Paragraph onespace = new Paragraph("\n");
+			Paragraph halfspace = new Paragraph(" ").setFixedLeading(5).setVerticalAlignment(VerticalAlignment.MIDDLE).setMargin(0);
 			float wholeWidth = pdfDocument.getDefaultPageSize().getWidth(); // whole width
 			float wholeHeight = pdfDocument.getDefaultPageSize().getHeight(); // whole height
 			
@@ -154,28 +171,15 @@ public class PdfServiceImpl implements PdfService {
 
 			// 2. student info section
 			Table title = getStudentTable(wholeWidth, student, gsas);
+			document.add(halfspace);
 			document.add(title);
-			document.add(onespace);
+			document.add(halfspace);
 
 			// 3. answer section// // 4. header section
 			Table answer = getAnswerTable(wholeWidth, gsas, aas);
 			document.add(answer);
 
-			// // 5. detail section
-			// Object[] details = getReceiptDetailTable(wholeWidth, data);
-			// Table detail = (Table) details[0];
-			// double finalTotal = (double) details[1];
-			// double paidTotal = (double) details[2];
-			// document.add(detail);
-			// document.add(onespace);
-
-			// // 6. paid section
-			// Table paid = getReceiptPaidTable(wholeWidth, finalTotal, paidTotal);
-			// document.add(paid);
-			// document.add(onespace);
-			// document.add(onespace);
-
-			// // 7. note section
+			// 4. branch note section
 			Table note = getBranchNoteTable(wholeWidth, student);
 			document.add(note);
 			document.close();
@@ -184,10 +188,6 @@ public class PdfServiceImpl implements PdfService {
 			e.printStackTrace();
 		}
 	}
-
-
-
-
 
 	// student info section
 	private Table getStudentTable(float wholeWidth, GuestStudent guest, List<GuestStudentAssessmentDTO> gsas){
@@ -198,179 +198,215 @@ public class PdfServiceImpl implements PdfService {
 		}
 		double average = total/subjectCount;
 		Table table = new Table(new float[]{wholeWidth});
-		table.addCell(new Cell().add("Dear " + guest.getFirstName() + " " + guest.getLastName()).setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		table.addCell(new Cell().add("Thank you for participating in the James An College " + JaeUtils.getGradeName(guest.getGrade()) + " Assessment Test.").setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		table.addCell(new Cell().add("Your marks are indicated below in detail. (Average score for " + subjectCount + " subject/s : " + average + "%)").setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		// subject table
-		float[] subjects = (subjectCount > 2) ? new float[]{wholeWidth/3, wholeWidth/3, wholeWidth/3} : new float[]{wholeWidth/2, wholeWidth/2};
-		Table subjectTable = new Table(subjects);		
-		for(GuestStudentAssessmentDTO dto : gsas){
-			subjectTable.addCell(new Cell().add(dto.getSubject() + " Mark : " + dto.getScore()).setBorder(Border.NO_BORDER).setBold().setFontSize(10f).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		}
-		table.addCell(new Cell().add(subjectTable).setBorder(Border.NO_BORDER));
+		table.addCell(studentCell("Dear " + guest.getFirstName() + " " + guest.getLastName()).setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setItalic();
+		table.addCell(studentCell("Thank you for participating in the James An College " + JaeUtils.getGradeName(guest.getGrade()) + " Assessment Test.").setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setItalic();
+		table.addCell(studentCell("Your marks are indicated below in detail. (Average score for " + subjectCount + " subject/s : " + average + "%)").setBorder(Border.NO_BORDER).setVerticalAlignment(VerticalAlignment.MIDDLE)).setItalic();
 		return table;
 	}
 
 	// answer section
-	private Table getAnswerTable(float wholeWidth, List<GuestStudentAssessmentDTO> gsas, List<AssessmentAnswerDTO> aas){ 
-		
+	private Table getAnswerTable(float wholeWidth, List<GuestStudentAssessmentDTO> gsas, List<AssessmentAnswerDTO> aas){ 	
+		Table body = new Table(new float[]{(wholeWidth/2), (wholeWidth/2)});
+		// English
 		for(GuestStudentAssessmentDTO dto : gsas){
-			// for(AssessmentAnswerDTO aadto : aas){
-			// 	if(dto.getSubject().equals(aadto.getSubject())){
-			// 		dto.setAnswers(aadto.getAnswers());
-			// 	}
-			// }
-			Table header = new Table(new float[]{wholeWidth});
-			header.addCell(boldCell(dto.getSubject()).setBorder(Border.NO_BORDER));
-			
+			if(JaeConstants.SUBJECT_ENGLISH.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
+				long assessmentId = dto.getAssessmentId();
+				AssessmentAnswerDTO answer = null;
+				for(AssessmentAnswerDTO aa : aas){
+					if(aa.getAssessmentId() == assessmentId){
+						answer = aa;
+						break;
+					}
+				}
+				Table subject = getSubjectTable(wholeWidth, dto, answer);
+				body.addCell(new Cell().add(subject).setBorder(Border.NO_BORDER));
+			}						
 		}
-		
-		Table nested1 = new Table(new float[]{(wholeWidth/2)/4, (wholeWidth/2)*3/4});
-		MoneyDTO money = data.get(JaeConstants.PAYMENT_HEADER) != null ? (MoneyDTO) data.get(JaeConstants.PAYMENT_HEADER) : new MoneyDTO();
-		InvoiceDTO invoice = data.get(JaeConstants.INVOICE_INFO) != null ? (InvoiceDTO) data.get(JaeConstants.INVOICE_INFO) : new InvoiceDTO();
-		StudentDTO student = data.get(JaeConstants.STUDENT_INFO) != null ? (StudentDTO) data.get(JaeConstants.STUDENT_INFO) : new StudentDTO();
-		nested1.addCell(boldCell("Date :").setBorder(Border.NO_BORDER));
-		nested1.addCell(boldCell(JaeUtils.getToday()).setBorder(Border.NO_BORDER));
-		nested1.addCell(boldCell("Name :").setBorder(Border.NO_BORDER));
-		nested1.addCell(boldCell(student.getFirstName() + " " + student.getLastName()).setBorder(Border.NO_BORDER));
-		nested1.addCell(boldCell("Student ID :").setBorder(Border.NO_BORDER));
-		nested1.addCell(boldCell(student.getId()).setBorder(Border.NO_BORDER));
-		header.addCell(new Cell().add(nested1).setBorder(Border.NO_BORDER));
-		Table nested2 = new Table(new float[]{(wholeWidth/2)/4, (wholeWidth/2)*3/4});
-		nested2.addCell(boldCell("Due Date :").setBorder(Border.NO_BORDER));
-		nested2.addCell(boldCell(money.getRegisterDate()).setBorder(Border.NO_BORDER));
-		nested2.addCell(boldCell("Grade :").setBorder(Border.NO_BORDER));
-		nested2.addCell(boldCell(JaeUtils.getGradeName(money.getInfo())).setBorder(Border.NO_BORDER));
-		nested2.addCell(boldCell("Invoice No :").setBorder(Border.NO_BORDER));
-		nested2.addCell(boldCell(invoice.getId()).setBorder(Border.NO_BORDER));
-		header.addCell(new Cell().add(nested2).setBorder(Border.NO_BORDER));
-		return header;
+		// Math
+		for(GuestStudentAssessmentDTO dto : gsas){
+			if(JaeConstants.SUBJECT_MATH.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
+				long assessmentId = dto.getAssessmentId();
+				AssessmentAnswerDTO answer = null;
+				for(AssessmentAnswerDTO aa : aas){
+					if(aa.getAssessmentId() == assessmentId){
+						answer = aa;
+						break;
+					}
+				}
+				Table subject = getSubjectTable(wholeWidth, dto, answer);
+				body.addCell(new Cell().add(subject).setBorder(Border.NO_BORDER));
+			}						
+		}
+		// GA
+		boolean gaExist = false;
+		for(GuestStudentAssessmentDTO dto : gsas){
+			if(JaeConstants.SUBJECT_GA.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
+				gaExist = true;
+				break;
+			}
+		}
+		if(gaExist){
+			for(GuestStudentAssessmentDTO dto : gsas){
+				if(JaeConstants.SUBJECT_GA.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
+					gaExist = true;
+					long assessmentId = dto.getAssessmentId();
+					AssessmentAnswerDTO answer = null;
+					for(AssessmentAnswerDTO aa : aas){
+						if(aa.getAssessmentId() == assessmentId){
+							answer = aa;
+							break;
+						}
+					}
+					Table subject = getSubjectTable(wholeWidth, dto, answer);
+					body.addCell(new Cell().add(subject).setBorder(Border.NO_BORDER));
+				}						
+			}
+		}else{ // GA does not exist
+			Table subject = getEmptySubjectTable(wholeWidth);
+			body.addCell(new Cell().add(subject).setBorder(Border.NO_BORDER));
+		}
+
+		// Sample data
+		Map<String, Double> studentMarks = Map.of("English", 15.0, "Maths", 15.0, "G.A", 5.0);
+		Map<String, Double> averageMarks = Map.of("English", 59.5, "Maths", 58.4, "G.A", 60.0);
+		// Create a chart and add it to the PDF
+        JFreeChart barChart = createChart(studentMarks, averageMarks);
+        ByteArrayOutputStream chartOutputStream = new ByteArrayOutputStream();
+        try {
+			// Adjust the width and height proportionally
+			int chartWidth = (int) (wholeWidth / 2.75);
+			int chartHeight = (int) (chartWidth * 1.25);//(int) (chartWidth * 0.75); // Adjust height to maintain aspect ratio
+			ChartUtils.writeChartAsPNG(chartOutputStream, barChart, chartWidth, chartHeight);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        ImageData imageData = ImageDataFactory.create(chartOutputStream.toByteArray());
+        Image chartImage = new Image(imageData);
+		// Center horizontally
+        chartImage.setHorizontalAlignment(com.itextpdf.layout.property.HorizontalAlignment.CENTER);
+        // Position at the bottom
+        float x = 310;
+        float y = 110; // Set the Y position to the bottom margin
+        chartImage.setFixedPosition(x, y);
+        // Add content to the document
+        body.addCell(chartImage);
+		return body;
+	}
+
+	private Table getSubjectTable(float wholeWidth, GuestStudentAssessmentDTO dto, AssessmentAnswerDTO answer) {
+		@SuppressWarnings("null")
+		int count = answer.getAnswers().size();
+
+		Table subject = new Table(new float[]{(wholeWidth/2)});
+		Table details = new Table(new float[]{(wholeWidth/2)/10, (wholeWidth/2)/10, (wholeWidth/2)/10, (wholeWidth/2)/10, ((wholeWidth/2)/10)*2, ((wholeWidth/2)/10)*4});
+		details.addCell(detailCell("Qn").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Resp").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Ans").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Correct").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Percent").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Topics").setBold().setBorder(Border.NO_BORDER));
+
+		int correctCnt = 0;
+		for (int i = 0; i < count; i++) {
+			int resp = dto.getAnswers().get(i);
+			int ans = answer.getAnswers().get(i).getAnswer();
+			String correct = (resp == ans) ? "O" : "X";
+			correctCnt += (resp == ans) ? 1 : 0;
+			String percent = String.valueOf(30 + new java.util.Random().nextInt(51)) + "%";
+			String topics = answer.getAnswers().get(i).getTopic();
+			// background color
+			com.itextpdf.kernel.color.Color backgroundColor = (i % 2 == 0) ? com.itextpdf.kernel.color.Color.LIGHT_GRAY : com.itextpdf.kernel.color.Color.WHITE;
+			Cell cell1 = detailCell((i + 1) + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setBold().setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell1);			
+			Cell cell2 = detailCell(resp + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell2);			
+			Cell cell3 = detailCell(ans + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell3);			
+			Cell cell4 = detailCell(correct).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell4);			
+			Cell cell5 = detailCell(percent).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell5);			
+			Cell cell6 = detailCell(topics).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor);
+			details.addCell(cell6);
+		}
+		// Your existing code
+		Cell subjectCell = new Cell();
+		subjectCell.add(dto.getSubject() + " : " + (int)(dto.getScore()) + "% (" + correctCnt + " out of " + count + ")");
+		subjectCell.setFontSize(9.5f);
+		subjectCell.setBorder(Border.NO_BORDER);
+		// Set background color to black
+		subjectCell.setBackgroundColor(com.itextpdf.kernel.color.Color.BLACK);
+		// Set font color to white
+		subjectCell.setFontColor(com.itextpdf.kernel.color.Color.WHITE);
+		// Set text alignment to center
+		subjectCell.setTextAlignment(TextAlignment.CENTER);
+		// Add cell to your table or document
+		subject.addCell(subjectCell);
+		subject.addCell(details.setMarginTop(1));
+		return subject;
+	}
+
+	private Table getEmptySubjectTable(float wholeWidth) {
+		@SuppressWarnings("null")
+		int count = 20;
+
+		Table subject = new Table(new float[]{(wholeWidth/2)});
+		Table details = new Table(new float[]{(wholeWidth/2)/10, (wholeWidth/2)/10, (wholeWidth/2)/10, (wholeWidth/2)/10, ((wholeWidth/2)/10)*2, ((wholeWidth/2)/10)*4});
+		details.addCell(detailCell("Qn").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Resp").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Ans").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Correct").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Percent").setBold().setBorder(Border.NO_BORDER)).setTextAlignment(TextAlignment.CENTER);
+		details.addCell(detailCell("Topics").setBold().setBorder(Border.NO_BORDER));
+
+		for (int i = 0; i < count; i++) {
+			com.itextpdf.kernel.color.Color backgroundColor = (i % 2 == 0) ? com.itextpdf.kernel.color.Color.LIGHT_GRAY : com.itextpdf.kernel.color.Color.WHITE;
+			Cell cell1 = detailCell("1").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setBold().setTextAlignment(TextAlignment.CENTER).setFontColor(backgroundColor);
+			details.addCell(cell1);			
+			Cell cell2 = detailCell("").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell2);			
+			Cell cell3 = detailCell("").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell3);			
+			Cell cell4 = detailCell("").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell4);			
+			Cell cell5 = detailCell("").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			details.addCell(cell5);			
+			Cell cell6 = detailCell("").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor);
+			details.addCell(cell6);
+		}
+		// Your existing code
+		Cell subjectCell = new Cell();
+		subjectCell.add("General Ability");
+		subjectCell.setFontSize(9.5f);
+		subjectCell.setBorder(Border.NO_BORDER);
+		// Set background color to black
+		subjectCell.setBackgroundColor(com.itextpdf.kernel.color.Color.BLACK);
+		// Set font color to white
+		subjectCell.setFontColor(com.itextpdf.kernel.color.Color.WHITE);
+		// Set text alignment to center
+		subjectCell.setTextAlignment(TextAlignment.CENTER);
+		// Add cell to your table or document
+		subject.addCell(subjectCell);
+		subject.addCell(details.setMarginTop(1));
+		return subject;
 	}
 	
-	private Object[] getInvoiceDetailTable(float wholeWidth, Map<String, Object> data) {
-		List<EnrolmentDTO> enrolments = data.get(JaeConstants.PAYMENT_ENROLMENTS) != null ? (List<EnrolmentDTO>) data.get(JaeConstants.PAYMENT_ENROLMENTS) : new ArrayList<>();
-		List<MaterialDTO> materials = data.get(JaeConstants.PAYMENT_MATERIALS) != null ? (List<MaterialDTO>) data.get(JaeConstants.PAYMENT_MATERIALS) : new ArrayList<>();
-		List<OutstandingDTO> outstandings = data.get(JaeConstants.PAYMENT_OUTSTANDINGS) != null ? (List<OutstandingDTO>) data.get(JaeConstants.PAYMENT_OUTSTANDINGS) : new ArrayList<>();
-		InvoiceDTO invoice = data.get(JaeConstants.INVOICE_INFO) != null ? (InvoiceDTO) data.get(JaeConstants.INVOICE_INFO) : new InvoiceDTO();
-		Table detail = new Table(new float[]{(wholeWidth)*3/12, (wholeWidth)*3/12, (wholeWidth)/12, (wholeWidth)*2/12, (wholeWidth)/12, (wholeWidth)*2/12});
-		detail.setBorder(new SolidBorder(1)); // Set the border to a solid line with a width of 2
-		detail.setMarginTop(5);
-
-		detail.addCell(new Cell(2, 0).add(tableHeaderCell("Title")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		detail.addCell(new Cell(2, 0).add(tableHeaderCell("Period/Date")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		detail.addCell(new Cell(0, 2).add(tableHeaderCell("Fee (Incl.GST)")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		detail.addCell(new Cell(2, 0).add(tableHeaderCell("Discount")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		detail.addCell(new Cell(2, 0).add(tableHeaderCell("Subtotal\n(Incl.GST)")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		detail.addCell(new Cell(0, 0).add(tableHeaderCell("Weeks\n(Qty)")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-		detail.addCell(new Cell(0, 0).add(tableHeaderCell("Weekly Fee\n(Unit price)")).setVerticalAlignment(VerticalAlignment.MIDDLE));
-
-		// data display
-		double finalTotal = 0;
-		// enrolements
-		for(EnrolmentDTO enrolment : enrolments){
-			detail.addCell(new Cell().add(boldCell("Class [" + JaeUtils.getGradeName(enrolment.getGrade()) + "] " + enrolment.getName())).setTextAlignment(TextAlignment.CENTER));
-			detail.addCell(new Cell().add(boldCell(StringUtils.defaultString(enrolment.getExtra()))).setTextAlignment(TextAlignment.CENTER));
-			detail.addCell(new Cell().add(boldCell(enrolment.getEndWeek()-enrolment.getStartWeek()+1+"")).setTextAlignment(TextAlignment.RIGHT));
-			detail.addCell(new Cell().add(boldCell(String.format("%.2f", enrolment.getPrice()))).setTextAlignment(TextAlignment.RIGHT));
-			String disStr = StringUtils.defaultString(enrolment.getDiscount(), "0");
-			double discount = 0;
-			if(StringUtils.contains(disStr, '%')){
-				discount = Double.parseDouble(StringUtils.substringBefore(disStr, "%"));
-				discount = ((enrolment.getEndWeek()-enrolment.getStartWeek()+1)-enrolment.getCredit())*enrolment.getPrice()*discount/100;
-			}else{
-				discount = Double.parseDouble(disStr);
-			}
-			detail.addCell(new Cell().add(boldCell(enrolment.getDiscount())).setTextAlignment(TextAlignment.RIGHT));
-			double total = (enrolment.getEndWeek()-enrolment.getStartWeek()+1-enrolment.getCredit())*enrolment.getPrice() - discount;
-			detail.addCell(new Cell().add(boldCell(String.format("%.2f", total))).setTextAlignment(TextAlignment.RIGHT));
-			finalTotal += total;
-		}
-		// materials
-		for(MaterialDTO material : materials){
-			detail.addCell(new Cell().add(boldCell("Book " + material.getName())).setTextAlignment(TextAlignment.CENTER));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.CENTER));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.RIGHT));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.RIGHT));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.RIGHT));
-			detail.addCell(new Cell().add(boldCell(String.format("%.2f", material.getPrice()))).setTextAlignment(TextAlignment.RIGHT));	
-			finalTotal += material.getPrice();
-		}
-		// outstandings
-		for(OutstandingDTO outstanding : outstandings){
-			detail.addCell(new Cell().add(boldCell("Payment")).setTextAlignment(TextAlignment.CENTER));
-			detail.addCell(new Cell().add(boldCell(outstanding.getRegisterDate()+"")).setTextAlignment(TextAlignment.CENTER));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.RIGHT));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.RIGHT));
-			detail.addCell(new Cell().add("").setTextAlignment(TextAlignment.RIGHT));
-			double paid = outstanding.getPaid();
-			String paidAmount = (paid > 0.00) ? " - " + String.format("%.2f", paid) : "0.00";
-			detail.addCell(new Cell().add(boldCell(paidAmount)).setTextAlignment(TextAlignment.RIGHT));
-		}
-		// note if invoice
-		detail.addCell(new Cell(0, 6).add(boldCell("* Other Information : " + StringUtils.defaultString(invoice.getInfo()))).setTextAlignment(TextAlignment.LEFT).setPaddingLeft(10));
-		// return table & finalTotal
-		return new Object[]{detail, finalTotal};
-	}
-
-	private Table getInvoicePaidTable(float wholeWidth, Map<String, Object> data, double finalTotal) {
-		InvoiceDTO invoice = data.get(JaeConstants.INVOICE_INFO) != null ? (InvoiceDTO) data.get(JaeConstants.INVOICE_INFO) : new InvoiceDTO();
-		Table paid = new Table(new float[]{wholeWidth/4, wholeWidth/4, wholeWidth/4, wholeWidth/4}).setBorder(Border.NO_BORDER);
-		paid.addCell(new Cell().setBorder(Border.NO_BORDER));
-		paid.addCell(new Cell().setBorder(Border.NO_BORDER));
-		paid.addCell(new Cell().setBorder(Border.NO_BORDER));
-		Table paidDetail = new Table(new float[]{(wholeWidth/4)*3/7, (wholeWidth/4)/7, (wholeWidth/4)*3/7}).setBorder(Border.NO_BORDER);
-		paidDetail.addCell(paidCell("FINAL TOTAL").setBorder(Border.NO_BORDER));
-		paidDetail.addCell(dollarCell().setBorder(Border.NO_BORDER));
-		paidDetail.addCell(paidCell(String.format("%.2f", finalTotal)).setBorder(Border.NO_BORDER));
-		paidDetail.addCell(paidCell("FEE PAID").setBorder(Border.NO_BORDER));
-		paidDetail.addCell(dollarCell().setBorder(Border.NO_BORDER));
-		double paidAmount = invoice.getPaidAmount();
-		String paidAmtStr = (paidAmount > 0.00) ? String.format(" - %.2f", paidAmount) : "0.00";
-		paidDetail.addCell(paidNoBoldCell(paidAmtStr).setBorder(Border.NO_BORDER));
-		paidDetail.addCell(paidCell("BALANCE").setBorder(Border.NO_BORDER));
-		paidDetail.addCell(dollarCell().setBorder(Border.NO_BORDER));
-		String remaining = "";
-		if(finalTotal - paidAmount <= 0){
-			remaining = "PAID IN FULL";
-		}else{
-			remaining = String.format("%.2f", (finalTotal - paidAmount));
-		}
-		paidDetail.addCell(paidNoBoldCell(remaining).setBorder(Border.NO_BORDER));
-		paid.addCell(new Cell().add(paidDetail).setBorder(Border.NO_BORDER));
-		return paid;
-	}
 
 	// branch note section
 	private Table getBranchNoteTable(float wholeWidth, GuestStudent guest) {
-		Table note = new Table(new float[]{wholeWidth}).setBorder(new SolidBorder(0.5f));
-		note.addCell(boldCell("Thank you once again for taking part in James An College Assessment Test.").setItalic().setFontSize(8f).setBold().setBorder(Border.NO_BORDER).setPaddingLeft(5));
+		Table note = new Table(new float[]{wholeWidth});
+		note.addCell(detailCell("Thank you once again for taking part in James An College Assessment Test.").setItalic().setFontSize(7.5f).setBold().setBorder(Border.NO_BORDER));
 		String branch = JaeUtils.getBranchName(guest.getBranch());
-		note.addCell(boldCell(branch + " James An College").setItalic().setFontSize(8f).setBold().setBorder(Border.NO_BORDER).setPaddingLeft(5));
+		note.addCell(detailCell(branch.toUpperCase() + " James An College").setItalic().setFontSize(8f).setBold().setBorder(Border.NO_BORDER).setPaddingLeft(5));
 		return note;
 	}
 
-	private Cell boldTitleCell(String contents) {
-		return new Cell().add(contents).setBold().setFontSize(7f);
-	}
-
-	private Cell boldCell(String contents) {
+	private Cell studentCell(String contents) {
 		return new Cell().add(contents).setBold().setFontSize(7.5f);
 	}
 
-	private Cell tableHeaderCell(String contents) {
-		return new Cell().add(contents).setFontSize(7.5f).setTextAlignment(TextAlignment.CENTER);
-	}
-
-	private Cell dollarCell() {
-		return new Cell().add("$").setFontSize(7f).setTextAlignment(TextAlignment.LEFT).setFontColor(Color.GRAY).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER);
-	}
-
-	private Cell paidCell(String contents) {
-		return new Cell().add(contents).setFontSize(7f).setTextAlignment(TextAlignment.RIGHT).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER).setBold();
-	}
-
-	private Cell paidNoBoldCell(String contents) {
-		return new Cell().add(contents).setFontSize(7f).setTextAlignment(TextAlignment.RIGHT).setVerticalAlignment(VerticalAlignment.MIDDLE).setBorder(Border.NO_BORDER);
+	private Cell detailCell(String contents) {
+		return new Cell().add(contents).setFontSize(6.0f);
 	}
 
 	private Image imageLogo() throws URISyntaxException, MalformedURLException, IOException {
@@ -380,5 +416,68 @@ public class PdfServiceImpl implements PdfService {
 		img.setAutoScale(true);
 		return img;
 	}
+
+	// get dataset for bar chart
+	private CategoryDataset createDataset(Map<String, Double> studentMarks, Map<String, Double> averageMarks) {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        studentMarks.forEach((subject, mark) -> {
+            dataset.addValue(mark, "Student Mark", subject);
+        });
+
+        averageMarks.forEach((subject, mark) -> {
+            dataset.addValue(mark, "Average Mark", subject);
+        });
+
+        return dataset;
+    }
+
+	// create bar chart
+	private JFreeChart createChart(Map<String, Double> studentMarks, Map<String, Double> averageMarks) {
+        CategoryDataset dataset = createDataset(studentMarks, averageMarks);
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "",
+                null,
+                null,
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false);
+
+        barChart.setBackgroundPaint(Color.WHITE);
+        barChart.getTitle().setPaint(Color.BLACK);
+        
+		// Customize the plot
+		CategoryPlot plot = (CategoryPlot) barChart.getPlot();
+		plot.setBackgroundPaint(Color.WHITE); // Set plot background color
+		plot.setDomainGridlinePaint(Color.BLACK);
+		plot.setRangeGridlinePaint(Color.BLACK);
+
+		// Set the range axis (Y axis) to display up to 100%
+		NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+		rangeAxis.setRange(0.0, 100.0);
+		rangeAxis.setTickUnit(new NumberTickUnit(20));
+
+		// Set the font size for the range axis (Y axis)
+		rangeAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 9));
+		rangeAxis.setLabelFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 10));
+		
+		// Set the font size for the domain axis (X axis)
+		plot.getDomainAxis().setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 9));
+		plot.getDomainAxis().setLabelFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 10));
+
+		BarRenderer renderer = (BarRenderer) plot.getRenderer();
+		renderer.setDefaultItemLabelsVisible(true);
+		renderer.setDefaultItemLabelGenerator(new org.jfree.chart.labels.StandardCategoryItemLabelGenerator());
+		renderer.setBarPainter(new StandardBarPainter());
+
+		// Customize the color of the bars
+		renderer.setSeriesPaint(0, Color.BLUE);
+		renderer.setSeriesPaint(1, Color.CYAN);
+
+		// Set the font size for the legend
+		barChart.getLegend().setItemFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
+
+		return barChart;
+    }
 
 }
