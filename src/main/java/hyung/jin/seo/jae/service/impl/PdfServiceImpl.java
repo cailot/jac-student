@@ -158,9 +158,6 @@ public class PdfServiceImpl implements PdfService {
 			
 			// 1. button section
 			Image header = imageLogo();
-			// float imageWidth = header.getImageScaledWidth();
-			// float imageHeight = header.getImageScaledHeight();
-
 			float x = wholeWidth/2 - 250;
 			float y = wholeHeight/2 + 330;
 
@@ -322,7 +319,7 @@ public class PdfServiceImpl implements PdfService {
 			details.addCell(cell2);			
 			Cell cell3 = detailCell(ans + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
 			details.addCell(cell3);			
-			Cell cell4 = detailCell(correct).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			Cell cell4 =  (correct.equals("O")) ?  detailCell(correct).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER).setFontColor(com.itextpdf.kernel.color.Color.GREEN) : detailCell(correct).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER).setFontColor(com.itextpdf.kernel.color.Color.RED);
 			details.addCell(cell4);			
 			Cell cell5 = detailCell(percent).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
 			details.addCell(cell5);			
@@ -340,6 +337,7 @@ public class PdfServiceImpl implements PdfService {
 		subjectCell.setFontColor(com.itextpdf.kernel.color.Color.WHITE);
 		// Set text alignment to center
 		subjectCell.setTextAlignment(TextAlignment.CENTER);
+		subjectCell.setBold();
 		// Add cell to your table or document
 		subject.addCell(subjectCell);
 		subject.addCell(details.setMarginTop(1));
