@@ -270,4 +270,6 @@ public interface JaeConstants {
 	String SUBJECT_ENGLISH = "English";
 
 	String SUBJECT_GA = "General Ability";
+
+	String SUBJECT_GA_SHORT = "G.A";
 }

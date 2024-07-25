@@ -396,5 +396,18 @@ public class JaeUtils {
 		}
 		return branchText;
 	}
+
+	// return answer
+	public static String getAnswer(int value) {
+		String answer = "";
+		switch(value) {
+			case 1: answer = "A"; break;
+			case 2: answer = "B"; break;
+			case 3: answer = "C"; break;
+			case 4: answer = "D"; break;
+			case 5: answer = "E"; break;
+		}
+		return answer;
+	}
 	
 }

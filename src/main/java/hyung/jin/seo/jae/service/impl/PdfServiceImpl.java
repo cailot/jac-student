@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.swing.text.StyleConstants.ColorConstants;
 
 import java.awt.Color;
+import java.awt.RenderingHints;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jfree.chart.ChartFactory;
@@ -44,6 +45,7 @@ import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.HorizontalAlignment;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 
@@ -77,49 +79,45 @@ public class PdfServiceImpl implements PdfService {
 			pdfDocument.setDefaultPageSize(PageSize.A4);
 			Document document = new Document(pdfDocument);
 			Paragraph onespace = new Paragraph("\n");
+			Paragraph halfspace = new Paragraph(" ").setFixedLeading(5).setVerticalAlignment(VerticalAlignment.MIDDLE).setMargin(0);
 			float wholeWidth = pdfDocument.getDefaultPageSize().getWidth(); // whole width
 			float wholeHeight = pdfDocument.getDefaultPageSize().getHeight(); // whole height
-
+			
 			// prepare ingredients
 			GuestStudent student = (GuestStudent) data.get(JaeConstants.STUDENT_INFO);
 			List<GuestStudentAssessmentDTO> gsas = (List<GuestStudentAssessmentDTO>) data.get(JaeConstants.STUDENT_ANSWER);
 			List<AssessmentAnswerDTO> aas = (List<AssessmentAnswerDTO>) data.get(JaeConstants.CORRECT_ANSWER);
 			
 			// 1. button section
-			Image buttons = imageLogo();
-			float x = wholeWidth/2 - 90;
-			float y = wholeHeight/2 + 380;
-			buttons.setFixedPosition(x, y);
-			document.add(buttons);
+			Image header = imageLogo();
+			float x = wholeWidth/2 - 250;
+			float y = wholeHeight/2 + 330;
+
+			header.setFixedPosition(x, y);
+			document.add(header);
 			document.add(onespace);
+			// document.add(onespace);
 			document.add(onespace);
 
-			// 2. title section
-			// Table title = getGreetingTable(wholeWidth, student);
-			// document.add(title);
-			// document.add(onespace);
+			// Date
+			Cell dateCell = new Cell().add("Test Date : " + JaeUtils.convertToddMMyyyyFormat(student.getRegisterDate()+"")).setFontSize(10f).setBold().setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100);
+			document.add(dateCell);
+			
+			// 2. student info section
+			Table title = getStudentTable(wholeWidth, student, gsas);
+			document.add(halfspace);
+			document.add(title);
+			document.add(halfspace);
 
-			// 3. header section
-			// Table header = getHeaderTable(wholeWidth, data);
-			// document.add(header);
+			// 3. answer section// // 4. header section
+			Table answer = getAnswerTable(wholeWidth, gsas, aas);
+			document.add(answer);
 
-			// // 4. detail section
-			// Object[] details = getInvoiceDetailTable(wholeWidth, data);
-			// Table detail = (Table) details[0];
-			// double finalTotal = (double) details[1];
-			// document.add(detail);
-			// document.add(onespace);
+			// 4. branch note section
+			Table note = getBranchNoteTable(wholeWidth, student);
+			document.add(note);
+			document.close();
 
-			// // 5. paid section
-			// Table paid = getInvoicePaidTable(wholeWidth, data, finalTotal);
-			// document.add(paid);
-			// document.add(onespace);
-			// document.add(onespace);
-
-			// // 6. note section
-			// Table note = getBranchNoteTable(wholeWidth, data);
-			// document.add(note);
-			// document.close();
 
 			byte[] pdfData = baos.toByteArray();
 			return pdfData;
@@ -164,8 +162,13 @@ public class PdfServiceImpl implements PdfService {
 			header.setFixedPosition(x, y);
 			document.add(header);
 			document.add(onespace);
+			// document.add(onespace);
 			document.add(onespace);
 
+			// Date
+			Cell dateCell = new Cell().add("Test Date : " + JaeUtils.convertToddMMyyyyFormat(student.getRegisterDate()+"")).setFontSize(10f).setBold().setBorder(Border.NO_BORDER).setTextAlignment(TextAlignment.RIGHT).setMarginRight(100);
+			document.add(dateCell);
+			
 			// 2. student info section
 			Table title = getStudentTable(wholeWidth, student, gsas);
 			document.add(halfspace);
@@ -204,9 +207,13 @@ public class PdfServiceImpl implements PdfService {
 	// answer section
 	private Table getAnswerTable(float wholeWidth, List<GuestStudentAssessmentDTO> gsas, List<AssessmentAnswerDTO> aas){ 	
 		Table body = new Table(new float[]{(wholeWidth/2), (wholeWidth/2)});
+		double englishScore = 0;
+		double mathScore = 0;
+		double gaScore = 0;
 		// English
 		for(GuestStudentAssessmentDTO dto : gsas){
 			if(JaeConstants.SUBJECT_ENGLISH.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
+				englishScore = dto.getScore();
 				long assessmentId = dto.getAssessmentId();
 				AssessmentAnswerDTO answer = null;
 				for(AssessmentAnswerDTO aa : aas){
@@ -222,6 +229,7 @@ public class PdfServiceImpl implements PdfService {
 		// Math
 		for(GuestStudentAssessmentDTO dto : gsas){
 			if(JaeConstants.SUBJECT_MATH.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
+				mathScore = dto.getScore();
 				long assessmentId = dto.getAssessmentId();
 				AssessmentAnswerDTO answer = null;
 				for(AssessmentAnswerDTO aa : aas){
@@ -246,6 +254,7 @@ public class PdfServiceImpl implements PdfService {
 			for(GuestStudentAssessmentDTO dto : gsas){
 				if(JaeConstants.SUBJECT_GA.equalsIgnoreCase(StringUtils.defaultString(dto.getSubject()))){
 					gaExist = true;
+					gaScore = dto.getScore();
 					long assessmentId = dto.getAssessmentId();
 					AssessmentAnswerDTO answer = null;
 					for(AssessmentAnswerDTO aa : aas){
@@ -264,8 +273,8 @@ public class PdfServiceImpl implements PdfService {
 		}
 
 		// Sample data
-		Map<String, Double> studentMarks = Map.of("English", 15.0, "Maths", 15.0, "G.A", 5.0);
-		Map<String, Double> averageMarks = Map.of("English", 59.5, "Maths", 58.4, "G.A", 60.0);
+		Map<String, Double> studentMarks = Map.of(JaeConstants.SUBJECT_ENGLISH, englishScore, JaeConstants.SUBJECT_MATH, mathScore, JaeConstants.SUBJECT_GA_SHORT, gaScore);
+		Map<String, Double> averageMarks = Map.of(JaeConstants.SUBJECT_ENGLISH, 59.5, JaeConstants.SUBJECT_MATH, 58.4, JaeConstants.SUBJECT_GA_SHORT, (gaScore==0) ? 0.0 : 60);
 		// Create a chart and add it to the PDF
         JFreeChart barChart = createChart(studentMarks, averageMarks);
         ByteArrayOutputStream chartOutputStream = new ByteArrayOutputStream();
@@ -283,7 +292,7 @@ public class PdfServiceImpl implements PdfService {
         chartImage.setHorizontalAlignment(com.itextpdf.layout.property.HorizontalAlignment.CENTER);
         // Position at the bottom
         float x = 310;
-        float y = 110; // Set the Y position to the bottom margin
+        float y = 105; // Set the Y position to the bottom margin
         chartImage.setFixedPosition(x, y);
         // Add content to the document
         body.addCell(chartImage);
@@ -315,9 +324,9 @@ public class PdfServiceImpl implements PdfService {
 			com.itextpdf.kernel.color.Color backgroundColor = (i % 2 == 0) ? com.itextpdf.kernel.color.Color.LIGHT_GRAY : com.itextpdf.kernel.color.Color.WHITE;
 			Cell cell1 = detailCell((i + 1) + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setBold().setTextAlignment(TextAlignment.CENTER);
 			details.addCell(cell1);			
-			Cell cell2 = detailCell(resp + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			Cell cell2 = detailCell(JaeUtils.getAnswer(resp) + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
 			details.addCell(cell2);			
-			Cell cell3 = detailCell(ans + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
+			Cell cell3 = detailCell(JaeUtils.getAnswer(ans) + "").setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER);
 			details.addCell(cell3);			
 			Cell cell4 =  (correct.equals("O")) ?  detailCell(correct).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER).setFontColor(com.itextpdf.kernel.color.Color.GREEN) : detailCell(correct).setBorder(Border.NO_BORDER).setBackgroundColor(backgroundColor).setTextAlignment(TextAlignment.CENTER).setFontColor(com.itextpdf.kernel.color.Color.RED);
 			details.addCell(cell4);			
@@ -328,7 +337,7 @@ public class PdfServiceImpl implements PdfService {
 		}
 		// Your existing code
 		Cell subjectCell = new Cell();
-		subjectCell.add(dto.getSubject() + " : " + (int)(dto.getScore()) + "% (" + correctCnt + " out of " + count + ")");
+		subjectCell.add(dto.getSubject().toUpperCase() + " : " + (int)(dto.getScore()) + "% (" + correctCnt + " out of " + count + ")");
 		subjectCell.setFontSize(9.5f);
 		subjectCell.setBorder(Border.NO_BORDER);
 		// Set background color to black
@@ -374,7 +383,7 @@ public class PdfServiceImpl implements PdfService {
 		}
 		// Your existing code
 		Cell subjectCell = new Cell();
-		subjectCell.add("General Ability");
+		subjectCell.add("General Ability".toUpperCase());
 		subjectCell.setFontSize(9.5f);
 		subjectCell.setBorder(Border.NO_BORDER);
 		// Set background color to black
@@ -417,18 +426,17 @@ public class PdfServiceImpl implements PdfService {
 
 	// get dataset for bar chart
 	private CategoryDataset createDataset(Map<String, Double> studentMarks, Map<String, Double> averageMarks) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        studentMarks.forEach((subject, mark) -> {
-            dataset.addValue(mark, "Student Mark", subject);
-        });
+		studentMarks.forEach((subject, mark) -> {
+			if (averageMarks.containsKey(subject) && averageMarks.get(subject) != 0) {
+				dataset.addValue(mark, "Your Mark", subject);
+				dataset.addValue(averageMarks.get(subject), "Average Mark", subject);
+			}
+		});
 
-        averageMarks.forEach((subject, mark) -> {
-            dataset.addValue(mark, "Average Mark", subject);
-        });
-
-        return dataset;
-    }
+		return dataset;
+	}
 
 	// create bar chart
 	private JFreeChart createChart(Map<String, Double> studentMarks, Map<String, Double> averageMarks) {
@@ -444,6 +452,11 @@ public class PdfServiceImpl implements PdfService {
         barChart.setBackgroundPaint(Color.WHITE);
         barChart.getTitle().setPaint(Color.BLACK);
         
+		// Enable anti-aliasing
+		barChart.setAntiAlias(true);
+		barChart.setTextAntiAlias(true);
+		barChart.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON));
+	 
 		// Customize the plot
 		CategoryPlot plot = (CategoryPlot) barChart.getPlot();
 		plot.setBackgroundPaint(Color.WHITE); // Set plot background color
@@ -456,12 +469,12 @@ public class PdfServiceImpl implements PdfService {
 		rangeAxis.setTickUnit(new NumberTickUnit(20));
 
 		// Set the font size for the range axis (Y axis)
-		rangeAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 9));
-		rangeAxis.setLabelFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 10));
+		rangeAxis.setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 8));
+		rangeAxis.setLabelFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 8));
 		
 		// Set the font size for the domain axis (X axis)
-		plot.getDomainAxis().setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 9));
-		plot.getDomainAxis().setLabelFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 10));
+		plot.getDomainAxis().setTickLabelFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 8));
+		plot.getDomainAxis().setLabelFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 8));
 
 		BarRenderer renderer = (BarRenderer) plot.getRenderer();
 		renderer.setDefaultItemLabelsVisible(true);
@@ -473,7 +486,7 @@ public class PdfServiceImpl implements PdfService {
 		renderer.setSeriesPaint(1, Color.CYAN);
 
 		// Set the font size for the legend
-		barChart.getLegend().setItemFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 10));
+		barChart.getLegend().setItemFont(new java.awt.Font("SansSerif", java.awt.Font.PLAIN, 9));
 
 		return barChart;
     }

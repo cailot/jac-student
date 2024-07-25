@@ -362,4 +362,15 @@ public class CodeServiceImpl implements CodeService {
 		return previous;
 	}
 
+	@Override
+	public String getBranchEmail(String code) {
+		String email = "";
+		try{
+			email = branchRepository.getEmail(code).get();
+		}catch(Exception e){
+			System.out.println("No email found");
+		}
+		return email;
+	}
+
 }

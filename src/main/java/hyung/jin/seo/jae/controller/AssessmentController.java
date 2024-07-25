@@ -270,19 +270,50 @@ public class AssessmentController {
 			aas.add(aa);
 		}
 		//  correcct answers
-		for(AssessmentAnswerDTO aa : aas){
-			List<AssessmentAnswerItem> corrects = aa.getAnswers();
+		// for(AssessmentAnswerDTO aa : aas){
+		// 	List<AssessmentAnswerItem> corrects = aa.getAnswers();
 			// print out corrects
-			System.out.println("corrects : " + corrects);
-		}
+			// System.out.println("corrects : " + corrects);
+		// }
 		ingredients.put(JaeConstants.STUDENT_ANSWER, gsas);
 		ingredients.put(JaeConstants.CORRECT_ANSWER, aas);
 		// 5. create PDF
-		//byte[] pdfData = pdfService.generateAssessmentPdf(ingredients);
-		pdfService.generateTestPdf(ingredients);
+		byte[] pdfData = pdfService.generateAssessmentPdf(ingredients);
+		// pdfService.generateTestPdf(ingredients);
 		// 6. send email
-		// emailService.sendEmailWithAttachment("kellyl@jamesancollegevic.com.au", "cailot@naver.com", "Sending from Spring Boot", "This is a test messasge", "receipt.pdf", pdfData);
-
+		// String emailRecipient = codeService.getBranchEmail(guest.getBranch());
+		String emailRecipient = "cailot@naver.com";
+		String emailTitle = "Assessment Submitted " + guest.getRegisterDate();
+		StringBuilder emailBodyBuilder = new StringBuilder();
+		emailBodyBuilder.append("<html>")
+			.append("<body>")
+			.append("<p>There is an assessment test submitted:</p>")
+			.append("<p><b>Name:</b> ").append(guest.getFirstName()).append(" ").append(guest.getLastName()).append("</p>")
+			.append("<p><b>Email:</b> ").append(guest.getEmail()).append("</p>")
+			.append("<p><b>Contact:</b> ").append(guest.getContactNo()).append("</p>")
+			.append("<br>")
+			.append("<table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse;'>")
+			.append("<tr>")
+			.append("<th style='text-align: left;'>Title</th>")
+			.append("<th style='text-align: left;'>Score</th>")
+			.append("</tr>");	
+		for(GuestStudentAssessmentDTO dto : gsas){
+			String subject = dto.getSubject();
+			String grade = guest.getGrade();
+			int score = (int)((20 * dto.getScore()) / 100); // Assuming dto.getScore() returns a number
+			emailBodyBuilder.append("<tr>")
+				.append("<td>Assessment Test ").append(JaeUtils.getGradeName(grade)).append(" " + subject + "</td>") // Assuming you want to use the grade here
+				.append("<td>").append(score).append(" / 20</td>")
+				.append("</tr>");
+		}
+		
+		emailBodyBuilder.append("</table>")
+			.append("</body>")
+			.append("</html>");
+		
+		String emailBody = emailBodyBuilder.toString();
+		emailService.sendEmailWithAttachment("kellyl@jamesancollegevic.com.au", emailRecipient, emailTitle, emailBody, "assessment.pdf", pdfData);
+		// emailService.sendEmail("kellyl@jamesancollegevic.com.au", "jh05052008@gmail.com", "test title", "hey");
 		// AssessmentAnswerDTO answer = assessmentService.getAssessmentAnswer(studentId);
 		return ResponseEntity.ok("\"Assessment result proccessed successfully\"");
 	}
