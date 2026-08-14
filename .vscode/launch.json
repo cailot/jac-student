@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-JaeApplication<example>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "hyung.jin.seo.jae.JaeApplication",
+            "projectName": "example",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-JaeApplication<jac-study>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "hyung.jin.seo.jae.JaeApplication",
+            "projectName": "jac-study",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

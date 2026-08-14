@@ -1,0 +1,1 @@
+http://localhost:8085/assessment/sendResult/{guestId}

@@ -1,0 +1,11 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+프로덕션 코드니까 아주아주 신중하게 리뷰해주고 다른 기존의 로직에 영향이 없는지 철저하게 조심스럽게 체크해줘.
+You are working with production code. Always:
+- Review code changes very carefully
+- Check for impact on existing logic
+- Ensure no breaking changes
+- Test thoroughly before suggesting changes

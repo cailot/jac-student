@@ -1,0 +1,8 @@
+/target/
+*.war
+target/*.war
+/docs/
+src/main/resources/application.properties
+deploy.sh
+azure_docker
+2025
