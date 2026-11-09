@@ -146,7 +146,10 @@ public class OnlineController {
 			for (String gradeFolder : gradeFolders) {
 				int[] sessionLookup = resolveRecordedLessonSetLookupForGrade(
 						gradeFolder, lessonSet, lookupYear, today, suppressEarlyWeekFallback, !suppressEarlyWeekFallback);
-				int sessionSet = sessionLookup[0];
+				// JMSS starts its recorded lesson sequence at academic Set 21:
+				// academic Set 21 maps to JMSS Set 1. Apply this only after the
+				// normal day-of-week release rule so every other grade is unchanged.
+				int sessionSet = applyRecordedLessonSetOffset(gradeFolder, sessionLookup[0]);
 				int sessionLookupYear = sessionLookup[1];
 				if (sessionSet < 1) {
 					logger.warn("[RECORDED-DEBUG] skip invalid target set: studentId={}, year={}, week={}, gradeFolder={}, sessionSet={}, sessionLookupYear={}, suppressEarlyWeekFallback={}",
@@ -311,6 +314,13 @@ public class OnlineController {
 
 	private String buildRecordedLessonBlobPrefix(String gradeFolder, int lessonSet) {
 		return gradeFolder + "/Set" + lessonSet + "/";
+	}
+
+	static int applyRecordedLessonSetOffset(String gradeFolder, int sessionSet) {
+		if ("JMSS".equalsIgnoreCase(StringUtils.trimToEmpty(gradeFolder))) {
+			return sessionSet - 20;
+		}
+		return sessionSet;
 	}
 
 	private String resolveGradeLabel(String gradeCode) {
